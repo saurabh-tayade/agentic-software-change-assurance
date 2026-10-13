@@ -1,0 +1,141 @@
+# Agentic Software Change Assurance Platform
+
+An applied AI engineering and backend/platform project to produce evidence-backed
+change-risk reports from software changes and their surrounding system context.
+
+> Is this software change safe, what could it break, how do we know, and what must
+> be verified before release?
+
+## Problem and value
+
+Change review requires connecting evidence scattered across code, tests, API
+contracts, database migrations, event schemas, architecture decisions, incidents,
+and service dependencies. A passing test suite alone does not establish which
+consumers or operational assumptions a change might affect.
+
+The platform aims to help engineers and reviewers identify affected components,
+explain compatibility risks, and prioritize release verification. Its intended
+output is a structured report with cited evidence, uncertainty, and required
+checks. It supports human release decisions; it does not certify a change as safe.
+This is a change-assurance system, not a general-purpose repository chatbot.
+
+## Current implementation status
+
+**M0.1 — Repository Initialization & Project Charter:** documentation and repository
+hygiene only. The repository contains this charter, a roadmap, an Apache 2.0
+license, editor/ignore conventions, and existing IntelliJ project metadata.
+
+There is no application, build configuration, ingestion pipeline, model integration,
+dataset, infrastructure, or CI workflow yet. All capabilities and technologies
+below are planned. There are no application setup or run commands at this stage.
+
+## Planned capabilities
+
+- Retrieve Java and Markdown evidence with source locations and version provenance.
+- Produce structured answers with citations and explicit uncertainty.
+- Analyze API, database, and event contracts alongside dependency relationships.
+- Interpret diffs to identify affected components, compatibility risks, and missing
+  tests or verification steps.
+- Generate evidence-backed change-risk reports grounded in deterministic findings.
+- Use bounded, read-only agent tools with explicit approval requirements.
+- Measure retrieval, answer quality, safety, latency, and cost through repeatable
+  evaluation and observability.
+
+## Initial technical direction
+
+| Area | Planned direction |
+| --- | --- |
+| Application | Java 21, Spring Boot, Maven |
+| AI integration | Spring AI; local LLMs during development |
+| Retrieval and storage | PostgreSQL with pgvector and full-text search |
+| Local environment | Docker Compose |
+| Observability | OpenTelemetry and Micrometer |
+| Hosted validation | Limited AWS Bedrock validation |
+
+These are preferences, not installed dependencies or finalized architecture.
+Components will be introduced only when a milestone needs them.
+
+## Data strategy
+
+Two complementary corpora are planned:
+
+- **Real corpus:** the Distributed Data Intelligence Platform repository, including
+  Java code, tests, documentation, and Git history, to exercise realistic changes.
+- **Controlled corpus:** a fictional multi-service system with known compatibility,
+  dependency, authorization, and change-impact scenarios for repeatable evaluation.
+
+Neither corpus is included or ingested yet. Future ingestion must preserve source
+identity, revision, and location so evidence can be traced to a specific version.
+Corpus access and redistribution permissions must be established before inclusion
+in this public project.
+
+## Roadmap overview
+
+| Milestone | Focus |
+| --- | --- |
+| M0 — Project Foundation | Charter, repository hygiene, then application bootstrap, CI, and conventions |
+| M1 — RAG Foundation | Evaluation-driven Java/Markdown retrieval and cited answers |
+| M2 — Contract and Dependency Intelligence | Contracts, entities, dependencies, and compatibility checks |
+| M3 — Change-Impact Analysis | Diff-driven impact analysis and change-risk reports |
+| M4 — Controlled Agent | Bounded tools, MCP integration, trajectories, and approvals |
+| M5 — Production AI Engineering | Observability, versioning, security, cost, and limited AWS validation |
+
+See the [detailed roadmap](docs/roadmap.md) for deliverables and completion criteria.
+The first executable release will focus on evaluation-driven RAG; agent execution
+and full change-impact reporting come later.
+
+## Development approach
+
+Deterministic analysis establishes facts; AI interprets and explains them. Important
+conclusions must cite evidence, and unsupported conclusions must expose uncertainty.
+Retrieved content is untrusted input. Tool access should be read-only by default
+and use least-privileged execution.
+
+Work proceeds in small, measurable increments with evaluation as a first-class
+subsystem. Favor engineering depth over technology count, preserve provenance and
+version information, and distinguish implemented behavior from roadmap items.
+Future milestones will define reproducible checks and record results before
+claiming completion.
+
+## AI assistance disclosure
+
+This project uses AI tools provided by OpenAI: ChatGPT for architectural
+discussions, technical research, planning, documentation, and engineering guidance;
+Codex for implementation assistance, tests, refactoring, and code review.
+
+The project maintainer owns architectural decisions, engineering validation, and
+publication. AI-assisted changes undergo review and testing appropriate to their
+scope. AI assistance does not establish that a capability is implemented or correct.
+
+This is an independent project, not affiliated with, sponsored by, or endorsed by
+OpenAI.
+
+## License
+
+Licensed under the [Apache License 2.0](LICENSE).
+
+## AI Assistance & Development Transparency
+
+This project is independently developed and maintained with assistance
+from AI-powered development tools, primarily OpenAI's ChatGPT and Codex.
+
+AI tools are used throughout the development lifecycle, including:
+
+- **ChatGPT:** Technical research, architectural discussions,
+  design trade-off analysis, project planning, documentation,
+  and engineering guidance.
+- **Codex:** Assisting with code implementation, refactoring,
+  test development, and code review.
+
+AI serves as an engineering assistant, not an autonomous
+decision-maker.
+
+All architectural decisions, implementation choices, code reviews,
+testing, and final approvals remain the responsibility of the
+project maintainer.
+
+AI-generated contributions are subject to the same engineering
+standards, validation, and review processes as manually written code.
+
+This project is an independent initiative and is not affiliated
+with, sponsored by, or endorsed by OpenAI.

@@ -1,0 +1,43 @@
+# Java and Maven generated outputs
+*.class
+*.jar
+*.war
+*.ear
+target/
+out/
+hs_err_pid*
+replay_pid*
+.classpath
+.project
+.settings/
+
+# Preserve the Maven wrapper if introduced later
+!.mvn/wrapper/maven-wrapper.jar
+
+# IntelliJ IDEA (existing tracked metadata is unaffected)
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# macOS
+.DS_Store
+._*
+.Spotlight-V100/
+.Trashes/
+
+# Local environment, credentials, and secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
+*.local.*
+secrets/
+.secrets/
+.aws/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
