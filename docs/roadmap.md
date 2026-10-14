@@ -1,9 +1,11 @@
 # Project roadmap
 
 This roadmap describes planned work for the Agentic Software Change Assurance
-Platform. The current scope is **M0.2: application bootstrap**. Repository hygiene
-and a minimal executable application with context and HTTP health tests are in
-place. No AI or change-analysis capabilities exist yet, and M0 as a whole is not complete.
+Platform. The current scope is **M0.3: CI and engineering quality gates**. A minimal
+application, context and HTTP health tests, CI configuration, and offline repository
+checks are in place. GitHub-hosted CI validation is pending publication and a
+successful workflow run. No AI or change-analysis capabilities exist yet, and M0
+as a whole is not complete.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -25,7 +27,8 @@ and a minimal runnable application with automated checks.
   conventions.
 - M0.2: Java 21/Spring Boot/Maven bootstrap, context and HTTP health tests, and
   documented local build and run instructions.
-- Subsequent M0 work: CI and engineering conventions.
+- M0.3: GitHub Actions build/test verification, offline repository and documentation
+  checks, and documented dependency-update conventions; hosted verification pending.
 
 **Measurable completion criteria:**
 
@@ -35,7 +38,8 @@ and a minimal runnable application with automated checks.
   documented prerequisites and commands.
 - CI executes the documented build and checks successfully on a reference revision.
 
-M0.2 excludes AI functionality, persistence, CI, infrastructure, and datasets.
+M0.3 is limited to CI and repository quality; it adds no application functionality,
+runtime dependencies, deployment workflows, infrastructure, or datasets.
 
 ## M1 — RAG Foundation
 

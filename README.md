@@ -21,13 +21,15 @@ This is a change-assurance system, not a general-purpose repository chatbot.
 
 ## Current implementation status
 
-**M0.2 — Application Bootstrap:** a minimal Java 21 / Spring Boot 4.1.1 application,
+**M0.3 — CI & Engineering Quality Gates:** CI configuration and offline repository
+checks are in place alongside the Java 21 / Spring Boot 4.1.1 application,
 Maven Wrapper, application context test, and HTTP health integration test.
 Only the application foundation exists: it starts without external infrastructure
 and exposes the framework-provided `/actuator/health` endpoint.
 
-RAG, retrieval, AI analysis, ingestion, persistence, datasets, and CI are not
-implemented. The capabilities below remain planned; M0 as a whole is not complete.
+RAG, retrieval, AI analysis, ingestion, persistence, and datasets are not
+implemented. GitHub-hosted CI validation is pending publication and a successful
+workflow run; M0 as a whole is not yet complete.
 
 ## Local Development
 
@@ -62,6 +64,43 @@ Run tests, including the health test against an embedded server on a random port
 ```sh
 ./mvnw test
 ```
+
+## CI and quality checks
+
+The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `main`,
+pushes to `main`, and manual dispatch. One Ubuntu job uses Temurin Java 21,
+Maven caching, read-only repository permissions, and a 15-minute timeout.
+It requires no repository secrets or external application services.
+
+Reproduce its checks from the repository root with Java 21, Git, and Python 3.9+:
+
+```sh
+python3 scripts/check_repository.py
+./mvnw -B -ntp clean verify
+```
+
+The [repository check](scripts/check_repository.py) rejects tracked files matching
+Git ignore rules and verifies the Unix wrapper's executable Git mode. It checks
+all repository Markdown files for LF endings, a final newline, tabs, trailing
+whitespace (allowing two-space hard breaks), and unclosed code fences. It also
+checks relative file targets in inline Markdown links and images outside code.
+New non-ignored files are included locally. This is a small convention check,
+not a complete Markdown linter or secret scanner: reference-style links, HTML
+links, heading anchors, and external URLs are not validated. Use inline relative
+file links for repository documentation. No network requests are made by this check.
+
+Failures stop the job and appear in the PR checks and Actions step logs, with
+file/line diagnostics where applicable. Maven prints test failures in its log;
+local detailed reports are in `target/surefire-reports/`. Both application tests
+run during `verify`, including an HTTP request to a random-port embedded server.
+No GitHub-hosted success is claimed until the workflow runs after publication.
+The maintainer can then require the CI job in `main` branch protection.
+
+Dependency updates are reviewed in focused pull requests: update the Spring Boot
+parent to receive managed dependency versions, review release notes and Java
+compatibility, and rerun these checks. Review Maven/Wrapper and GitHub Actions
+versions periodically in the same way. Avoid independent transitive-version
+overrides unless a concrete need is documented. M0 adds no runtime dependencies.
 
 ## Planned capabilities
 
