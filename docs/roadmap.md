@@ -1,11 +1,11 @@
 # Project roadmap
 
 This roadmap describes planned work for the Agentic Software Change Assurance
-Platform. The current scope is **M0.3: CI and engineering quality gates**. A minimal
-application, context and HTTP health tests, CI configuration, and offline repository
-checks are in place. GitHub-hosted CI validation is pending publication and a
-successful workflow run. No AI or change-analysis capabilities exist yet, and M0
-as a whole is not complete.
+Platform. M0.1 through M0.3 are merged. The current scope is **M0.4: architecture
+and development conventions**, the final foundation issue. The minimal application,
+tests, CI, and repository checks are complemented by architecture guidance and ADRs.
+M0 closure requires review and successful CI on the accepted revision. No AI,
+retrieval, change-analysis, or agent capabilities exist yet.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -28,7 +28,9 @@ and a minimal runnable application with automated checks.
 - M0.2: Java 21/Spring Boot/Maven bootstrap, context and HTTP health tests, and
   documented local build and run instructions.
 - M0.3: GitHub Actions build/test verification, offline repository and documentation
-  checks, and documented dependency-update conventions; hosted verification pending.
+  checks, and documented dependency-update conventions.
+- M0.4: [architecture overview](architecture/overview.md),
+  [ADRs](adr/README.md), [development conventions](development.md), and M1 readiness.
 
 **Measurable completion criteria:**
 
@@ -37,14 +39,20 @@ and a minimal runnable application with automated checks.
 - A clean checkout can build, test, and start the minimal application using the
   documented prerequisites and commands.
 - CI executes the documented build and checks successfully on a reference revision.
+- Architecture and ADRs distinguish current behavior from future direction, and
+  M1 prerequisites and open decisions are documented and reviewed.
 
-M0.3 is limited to CI and repository quality; it adds no application functionality,
-runtime dependencies, deployment workflows, infrastructure, or datasets.
+M0.4 is documentation only; it adds no application functionality, runtime
+dependencies, deployment workflows, infrastructure, or datasets.
 
 ## M1 — RAG Foundation
 
 **Objective:** Deliver the first RAG release: evaluation-driven retrieval
 and evidence-grounded answers over Java and Markdown.
+
+Begin with the scoped local Git source and evaluation work described in the
+[M1 readiness section of the architecture overview](architecture/overview.md).
+Contracts, schemas, retrieval interfaces, and local model integration remain open.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.
