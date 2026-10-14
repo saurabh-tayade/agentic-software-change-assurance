@@ -21,15 +21,18 @@ This is a change-assurance system, not a general-purpose repository chatbot.
 
 ## Current implementation status
 
-**M0.3 — CI & Engineering Quality Gates:** CI configuration and offline repository
-checks are in place alongside the Java 21 / Spring Boot 4.1.1 application,
-Maven Wrapper, application context test, and HTTP health integration test.
+**M0.4 — Architecture & Development Conventions:** architecture guidance and ADRs
+now complement the merged CI and repository checks, Java 21 / Spring Boot 4.1.1
+application, Maven Wrapper, context test, and HTTP health integration test.
 Only the application foundation exists: it starts without external infrastructure
 and exposes the framework-provided `/actuator/health` endpoint.
 
 RAG, retrieval, AI analysis, ingestion, persistence, and datasets are not
-implemented. GitHub-hosted CI validation is pending publication and a successful
-workflow run; M0 as a whole is not yet complete.
+implemented. M0.4 is the final foundation issue; completion requires review and
+successful CI on the accepted revision.
+
+See the [architecture overview and M1 readiness](docs/architecture/overview.md),
+[development conventions](docs/development.md), and [ADR directory](docs/adr/).
 
 ## Local Development
 
@@ -93,8 +96,9 @@ Failures stop the job and appear in the PR checks and Actions step logs, with
 file/line diagnostics where applicable. Maven prints test failures in its log;
 local detailed reports are in `target/surefire-reports/`. Both application tests
 run during `verify`, including an HTTP request to a random-port embedded server.
-No GitHub-hosted success is claimed until the workflow runs after publication.
-The maintainer can then require the CI job in `main` branch protection.
+Check the GitHub-hosted result for the revision being reviewed; local verification
+does not establish a hosted result. The maintainer can require the CI job in
+`main` branch protection.
 
 Dependency updates are reviewed in focused pull requests: update the Spring Boot
 parent to receive managed dependency versions, review release notes and Java
