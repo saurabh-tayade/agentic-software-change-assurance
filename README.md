@@ -21,13 +21,47 @@ This is a change-assurance system, not a general-purpose repository chatbot.
 
 ## Current implementation status
 
-**M0.1 — Repository Initialization & Project Charter:** documentation and repository
-hygiene only. The repository contains this charter, a roadmap, an Apache 2.0
-license, editor/ignore conventions, and existing IntelliJ project metadata.
+**M0.2 — Application Bootstrap:** a minimal Java 21 / Spring Boot 4.1.1 application,
+Maven Wrapper, application context test, and HTTP health integration test.
+Only the application foundation exists: it starts without external infrastructure
+and exposes the framework-provided `/actuator/health` endpoint.
 
-There is no application, build configuration, ingestion pipeline, model integration,
-dataset, infrastructure, or CI workflow yet. All capabilities and technologies
-below are planned. There are no application setup or run commands at this stage.
+RAG, retrieval, AI analysis, ingestion, persistence, datasets, and CI are not
+implemented. The capabilities below remain planned; M0 as a whole is not complete.
+
+## Local Development
+
+Prerequisites: Java 21 (JDK) and network access for initial dependency downloads.
+The Maven Wrapper downloads Maven 3.9.16; a global Maven installation is not needed.
+Run these commands from the repository root.
+
+Build and verify:
+
+```sh
+./mvnw clean verify
+```
+
+Start the application (stop with Ctrl+C):
+
+```sh
+./mvnw spring-boot:run
+```
+
+In another terminal, verify health:
+
+```sh
+curl http://localhost:8080/actuator/health
+```
+
+Expected: HTTP 200 with a JSON body containing `"status":"UP"` (the default
+response also lists liveness and readiness groups). Only health is exposed over HTTP
+by Actuator's default configuration. No external services or credentials are needed.
+
+Run tests, including the health test against an embedded server on a random port:
+
+```sh
+./mvnw test
+```
 
 ## Planned capabilities
 
@@ -52,8 +86,9 @@ below are planned. There are no application setup or run commands at this stage.
 | Observability | OpenTelemetry and Micrometer |
 | Hosted validation | Limited AWS Bedrock validation |
 
-These are preferences, not installed dependencies or finalized architecture.
-Components will be introduced only when a milestone needs them.
+The application foundation is implemented, including Actuator's baseline
+Micrometer support. The remaining integrations are planned, not finalized
+architecture. Components will be introduced only when a milestone needs them.
 
 ## Data strategy
 
@@ -81,7 +116,7 @@ in this public project.
 | M5 — Production AI Engineering | Observability, versioning, security, cost, and limited AWS validation |
 
 See the [detailed roadmap](docs/roadmap.md) for deliverables and completion criteria.
-The first executable release will focus on evaluation-driven RAG; agent execution
+The first RAG release will focus on evaluation-driven retrieval; agent execution
 and full change-impact reporting come later.
 
 ## Development approach

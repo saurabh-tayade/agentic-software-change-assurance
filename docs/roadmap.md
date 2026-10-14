@@ -1,8 +1,9 @@
 # Project roadmap
 
 This roadmap describes planned work for the Agentic Software Change Assurance
-Platform. The current scope is **M0.1: documentation and repository hygiene**.
-No executable platform capabilities exist yet, and M0 as a whole is not complete.
+Platform. The current scope is **M0.2: application bootstrap**. Repository hygiene
+and a minimal executable application with context and HTTP health tests are in
+place. No AI or change-analysis capabilities exist yet, and M0 as a whole is not complete.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -16,14 +17,15 @@ each milestone, not implied by this roadmap.
 **Objective:** Establish a credible, reproducible foundation for incremental work.
 
 **Expected capabilities:** Clear project scope, consistent editing/build conventions,
-and eventually a minimal runnable application with automated checks.
+and a minimal runnable application with automated checks.
 
 **Deliverables:**
 
 - M0.1: project charter/README, roadmap, Apache 2.0 license, ignore rules, and editor
   conventions.
-- Subsequent M0 work: Java 21/Spring Boot/Maven bootstrap, documented local build
-  and run instructions, CI, and engineering conventions.
+- M0.2: Java 21/Spring Boot/Maven bootstrap, context and HTTP health tests, and
+  documented local build and run instructions.
+- Subsequent M0 work: CI and engineering conventions.
 
 **Measurable completion criteria:**
 
@@ -33,12 +35,11 @@ and eventually a minimal runnable application with automated checks.
   documented prerequisites and commands.
 - CI executes the documented build and checks successfully on a reference revision.
 
-M0.1 excludes application code, CI, infrastructure, and datasets; those are not
-required to complete this issue.
+M0.2 excludes AI functionality, persistence, CI, infrastructure, and datasets.
 
 ## M1 — RAG Foundation
 
-**Objective:** Deliver the first executable release: evaluation-driven retrieval
+**Objective:** Deliver the first RAG release: evaluation-driven retrieval
 and evidence-grounded answers over Java and Markdown.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
