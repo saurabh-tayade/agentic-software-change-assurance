@@ -1,0 +1,3 @@
+spring:
+  application:
+    name: agentic-software-change-assurance
