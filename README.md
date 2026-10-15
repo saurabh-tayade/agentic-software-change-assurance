@@ -24,23 +24,26 @@ questions about existing repositories and receive evidence-backed, cited answers
 ## Current implementation status
 
 **M0 — Project Foundation: Complete. M1 — Repository Intelligence MVP: Active.**
-M1.1 adds [conceptual contracts](docs/architecture/repository-intelligence.md), a
-[controlled evaluation corpus and scenarios](evaluation/README.md), and offline
-deterministic validation. The Java 21 / Spring Boot application still only provides
-startup and the framework `/actuator/health` endpoint.
+M1.1 established [conceptual contracts](docs/architecture/repository-intelligence.md)
+and a [controlled evaluation foundation](evaluation/README.md). M1.2 implements
+[read-only Git snapshot ingestion](docs/architecture/git-snapshot-ingestion.md):
+explicit local repositories/revisions, Java/Markdown artifact discovery, source
+provenance and integrity, and coverage diagnostics through a reusable Java component.
+The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Repository ingestion, parsing, retrieval, embeddings, and grounded Q&A are planned,
-not implemented. Application tests cover startup and HTTP health; evaluation checks
-cover fixture consistency and validator failure behavior. Neither establishes
-retrieval quality, production deployment, or operational availability. Hosted CI
-must be checked for the revision under review; local checks do not establish it.
+Parsing, chunking, persistence, search, retrieval, embeddings, and grounded Q&A are
+not implemented. Tests cover ingestion with temporary repositories, application
+startup/HTTP health, and evaluation-fixture consistency. These checks do not
+establish retrieval quality or production availability. Hosted CI must be checked
+for the revision under review; local verification does not establish it.
 
 See the [architecture overview](docs/architecture/overview.md),
 [development conventions](docs/development.md), and [ADR directory](docs/adr/).
 
 ## Local Development
 
-Prerequisites: Java 21 (JDK) and network access for initial dependency downloads.
+Prerequisites: Java 21 (JDK), Git 2.48+ on `PATH` for ingestion/tests, and network
+access for initial Maven dependency downloads.
 The Maven Wrapper downloads Maven 3.9.16; a global Maven installation is not needed.
 Run these commands from the repository root.
 
@@ -100,8 +103,9 @@ made by this check.
 
 Failures stop the job and appear in the PR checks and Actions step logs, with
 file/line diagnostics where applicable. Maven prints test failures in its log;
-local detailed reports are in `target/surefire-reports/`. Both application tests
-run during `verify`, including an HTTP request to a random-port embedded server.
+local detailed reports are in `target/surefire-reports/`. Application and ingestion
+tests run during `verify`, including an HTTP request to a random-port embedded
+server. Ingestion tests use local temporary Git repositories without network access.
 Check the GitHub-hosted result for the revision being reviewed; local verification
 does not establish a hosted result. The maintainer can require the CI job in
 `main` branch protection.
@@ -149,7 +153,8 @@ Two complementary corpora support the evaluation direction:
   provides small, versioned evidence scenarios. Broader change-impact cases come later.
 
 The real corpus is not included or ingested. Its access and redistribution permissions
-must be established before inclusion. No ingestion exists for either corpus yet.
+must be established before inclusion. The controlled corpus is also ingested from a
+temporary commit in tests; no real-corpus ingestion result is claimed.
 
 ## Roadmap overview
 

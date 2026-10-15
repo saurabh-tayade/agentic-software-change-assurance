@@ -1,8 +1,10 @@
 # Repository Intelligence contracts
 
-M1.1 establishes conceptual contracts, not production Java types or executable
-repository analysis. Repository Intelligence is the first independently usable
-capability planned for developers and non-technical stakeholders: ask questions
+M1.1 established these conceptual contracts. M1.2 implements their snapshot and
+source-artifact responsibilities in the [Git ingestion component](git-snapshot-ingestion.md);
+the remaining contracts do not imply executable parsing, retrieval, or answers.
+Repository Intelligence is the first independently usable capability planned for
+developers and non-technical stakeholders: ask questions
 about existing software and receive evidence-backed answers with verifiable
 citations. It supports the longer-term Change Assurance and Stakeholder Intelligence
 vision. The [overview](overview.md) and existing [ADRs](../adr/README.md) govern it.
@@ -24,9 +26,10 @@ here is a placeholder, not a claimed revision. A pricing claim would carry that
 reference; a chunk identifier or a floating branch name would not be ground truth.
 
 Snapshots select committed content. Dirty working-tree bytes must not be silently
-labelled with the HEAD commit. M1.2 must specify repository identity resolution,
-scope rules, and handling of dirty worktrees, symlinks, submodules, unavailable
-objects, and encodings. These are ingestion decisions, not implemented here.
+labelled with the HEAD commit. The [ingestion policy](git-snapshot-ingestion.md)
+specifies caller-provided identity, literal scope rules, committed-only reads,
+links/submodules, missing objects, and encodings. These implementation details
+refine the conceptual contracts without prescribing later retrieval or parsing.
 
 Before a future answer is accepted, resolve each citation against the selected
 snapshot, check file and line bounds, and compare cited material with the claim.
