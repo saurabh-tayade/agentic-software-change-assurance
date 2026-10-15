@@ -1,11 +1,10 @@
 # Project roadmap
 
 This roadmap describes planned work for the Agentic Software Change Assurance
-Platform. M0.1 through M0.3 are merged. The current scope is **M0.4: architecture
-and development conventions**, the final foundation issue. The minimal application,
-tests, CI, and repository checks are complemented by architecture guidance and ADRs.
-M0 closure requires review and successful CI on the accepted revision. No AI,
-retrieval, change-analysis, or agent capabilities exist yet.
+Platform. **M0 — Project Foundation is complete. M1 — Repository Intelligence MVP
+is active.** M1.1 establishes conceptual contracts, controlled fixtures, versioned
+scenarios, and deterministic validation. Ingestion, parsing, retrieval, answers,
+change analysis, and agents are not implemented.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -15,6 +14,8 @@ results and document failures and limitations. Thresholds are to be defined with
 each milestone, not implied by this roadmap.
 
 ## M0 — Project Foundation
+
+**Status: Complete.**
 
 **Objective:** Establish a credible, reproducible foundation for incremental work.
 
@@ -45,14 +46,19 @@ and a minimal runnable application with automated checks.
 M0.4 is documentation only; it adds no application functionality, runtime
 dependencies, deployment workflows, infrastructure, or datasets.
 
-## M1 — RAG Foundation
+## M1 — Repository Intelligence MVP
 
-**Objective:** Deliver the first RAG release: evaluation-driven retrieval
-and evidence-grounded answers over Java and Markdown.
+**Status: Active.**
+
+**Objective:** Deliver the first independently usable capability: natural-language repository
+understanding for developers and non-technical stakeholders, with evaluation-driven
+retrieval and evidence-grounded answers over Java and Markdown.
 
 Begin with the scoped local Git source and evaluation work described in the
 [M1 readiness section of the architecture overview](architecture/overview.md).
-Contracts, schemas, retrieval interfaces, and local model integration remain open.
+M1.1 provides [conceptual contracts](architecture/repository-intelligence.md) and the
+[evaluation foundation](../evaluation/README.md). M1.2 is Git Repository Ingestion;
+parsing, retrieval, and model integration follow in later scoped work.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.
@@ -73,10 +79,10 @@ retrieval, structured answers, citations, and explicit uncertainty.
   answer support, and behavior when evidence is insufficient; recorded results
   meet the milestone's predefined acceptance thresholds.
 
-## M2 — Contract and Dependency Intelligence
+## M2 — Stakeholder and Contract Intelligence
 
-**Objective:** Establish explicit contract and dependency facts for later impact
-analysis.
+**Objective:** Explain capabilities to stakeholders using explicit evidence dimensions,
+and establish contract and dependency facts for later impact analysis.
 
 **Expected capabilities:** OpenAPI, database migration, and event schema analysis;
 entity extraction; dependency relationships; and compatibility detection.
