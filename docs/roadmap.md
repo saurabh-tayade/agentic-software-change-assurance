@@ -3,8 +3,9 @@
 This roadmap describes planned work for the Agentic Software Change Assurance
 Platform. **M0 — Project Foundation is complete. M1 — Repository Intelligence MVP
 is active.** M1.1 establishes conceptual contracts, controlled fixtures, versioned
-scenarios, and deterministic validation. Ingestion, parsing, retrieval, answers,
-change analysis, and agents are not implemented.
+scenarios, and deterministic validation. M1.2 implements read-only local Git
+snapshot ingestion and Java/Markdown artifact discovery. Parsing, chunking,
+retrieval, answers, change analysis, and agents are not implemented.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -57,8 +58,10 @@ retrieval and evidence-grounded answers over Java and Markdown.
 Begin with the scoped local Git source and evaluation work described in the
 [M1 readiness section of the architecture overview](architecture/overview.md).
 M1.1 provides [conceptual contracts](architecture/repository-intelligence.md) and the
-[evaluation foundation](../evaluation/README.md). M1.2 is Git Repository Ingestion;
-parsing, retrieval, and model integration follow in later scoped work.
+[evaluation foundation](../evaluation/README.md). M1.2 implements
+[Git Repository Snapshot Ingestion](architecture/git-snapshot-ingestion.md).
+M1.3 is Java/Markdown Parsing & Chunking; retrieval and model integration follow
+in later scoped work.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

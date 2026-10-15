@@ -46,6 +46,10 @@ tests for their success, failure, and unsupported cases. The
 [evaluation guide](../evaluation/README.md) describes the controlled fixtures,
 JSON scenarios, and Python standard-library validator regression tests run by the
 existing repository check. Keep fixtures outside Maven source/resource roots.
+Ingestion integration tests create and commit only temporary local repositories,
+cleaned up by JUnit. They require Git 2.48+ and no network or external services;
+see the [ingestion guide](architecture/git-snapshot-ingestion.md) for policies and
+coverage. Production ingestion executes only read-only plumbing commands.
 For future Repository Intelligence work, extend versioned evaluation scenarios
 in addition to software tests, following
 [ADR-0003](adr/0003-evidence-provenance-and-reproducible-evaluation.md).
