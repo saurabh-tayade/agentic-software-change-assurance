@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "RI-001",
+      "question": "What does this repository provide?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "A single-module parcel quote library returning cents; callers use it directly, without an HTTP adapter."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "README.md",
+          "start_line": 3,
+          "end_line": 5,
+          "contains": "no HTTP adapter"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "id": "RI-002",
+      "question": "What is the price of a remote parcel weighing 1000 grams?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "The policy returns 800 cents: the inclusive 1000-gram boundary costs 500 plus a 300 remote surcharge."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "src/example/quotes/QuotePolicy.java",
+          "start_line": 4,
+          "end_line": 6,
+          "contains": "<= 1000 ? 500 : 900"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "id": "RI-003",
+      "question": "Does the library support currency conversion?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "Documentation explicitly places currency conversion outside the library scope; this does not establish anything about external systems."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "README.md",
+          "start_line": 12,
+          "end_line": 12,
+          "contains": "currency conversion"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "id": "RI-004",
+      "question": "Which test covers the remote small-parcel surcharge, and did it pass?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "QuotePolicyTest.remoteSmallParcelIncludesSurcharge defines an assertion of 800 cents for 1000 grams and a remote destination.",
+        "No execution report is supplied, so passing status is unknown."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "tests/example/quotes/QuotePolicyTest.java",
+          "start_line": 6,
+          "end_line": 10,
+          "contains": "assertEquals(800"
+        },
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "README.md",
+          "start_line": 15,
+          "end_line": 17,
+          "contains": "No test execution report"
+        }
+      ],
+      "expected_answerability": "partial"
+    },
+    {
+      "id": "RI-005",
+      "question": "Why are prices fixed in code?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "The documented decision keeps quotes deterministic for the demonstration."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "README.md",
+          "start_line": 7,
+          "end_line": 11,
+          "contains": "keep quotes deterministic"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "id": "RI-006",
+      "question": "How does quote input validation connect to pricing?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "QuoteService constructs Parcel before delegating to QuotePolicy.",
+        "Parcel rejects non-positive weight with IllegalArgumentException; valid parcels reach the pricing policy."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "src/example/quotes/QuoteService.java",
+          "start_line": 4,
+          "end_line": 7,
+          "contains": "new Parcel(weightGrams, remoteDestination)"
+        },
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "src/example/quotes/Parcel.java",
+          "start_line": 3,
+          "end_line": 7,
+          "contains": "weightGrams <= 0"
+        },
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "src/example/quotes/QuotePolicy.java",
+          "start_line": 4,
+          "end_line": 6,
+          "contains": "parcel.weightGrams()"
+        }
+      ],
+      "expected_answerability": "answerable"
+    },
+    {
+      "id": "RI-007",
+      "question": "Which production region hosts the service, and is it enabled for customers?",
+      "corpus_id": "parcel-quotes",
+      "corpus_version": "v1",
+      "expected_findings": [
+        "The corpus cannot establish a production region or customer enablement. Deployment and operational evidence are missing."
+      ],
+      "expected_evidence": [
+        {
+          "corpus_id": "parcel-quotes",
+          "corpus_version": "v1",
+          "path": "README.md",
+          "start_line": 14,
+          "end_line": 17,
+          "contains": "production telemetry"
+        }
+      ],
+      "expected_answerability": "insufficient"
+    }
+  ]
+}

@@ -17,21 +17,25 @@ The platform aims to help engineers and reviewers identify affected components,
 explain compatibility risks, and prioritize release verification. Its intended
 output is a structured report with cited evidence, uncertainty, and required
 checks. It supports human release decisions; it does not certify a change as safe.
-This is a change-assurance system, not a general-purpose repository chatbot.
+Repository Intelligence is the first independently usable capability planned for
+this vision: developers and non-technical stakeholders will ask natural-language
+questions about existing repositories and receive evidence-backed, cited answers.
 
 ## Current implementation status
 
-**M0.4 — Architecture & Development Conventions:** architecture guidance and ADRs
-now complement the merged CI and repository checks, Java 21 / Spring Boot 4.1.1
-application, Maven Wrapper, context test, and HTTP health integration test.
-Only the application foundation exists: it starts without external infrastructure
-and exposes the framework-provided `/actuator/health` endpoint.
+**M0 — Project Foundation: Complete. M1 — Repository Intelligence MVP: Active.**
+M1.1 adds [conceptual contracts](docs/architecture/repository-intelligence.md), a
+[controlled evaluation corpus and scenarios](evaluation/README.md), and offline
+deterministic validation. The Java 21 / Spring Boot application still only provides
+startup and the framework `/actuator/health` endpoint.
 
-RAG, retrieval, AI analysis, ingestion, persistence, and datasets are not
-implemented. M0.4 is the final foundation issue; completion requires review and
-successful CI on the accepted revision.
+Repository ingestion, parsing, retrieval, embeddings, and grounded Q&A are planned,
+not implemented. Application tests cover startup and HTTP health; evaluation checks
+cover fixture consistency and validator failure behavior. Neither establishes
+retrieval quality, production deployment, or operational availability. Hosted CI
+must be checked for the revision under review; local checks do not establish it.
 
-See the [architecture overview and M1 readiness](docs/architecture/overview.md),
+See the [architecture overview](docs/architecture/overview.md),
 [development conventions](docs/development.md), and [ADR directory](docs/adr/).
 
 ## Local Development
@@ -90,7 +94,9 @@ checks relative file targets in inline Markdown links and images outside code.
 New non-ignored files are included locally. This is a small convention check,
 not a complete Markdown linter or secret scanner: reference-style links, HTML
 links, heading anchors, and external URLs are not validated. Use inline relative
-file links for repository documentation. No network requests are made by this check.
+file links for repository documentation. It also validates controlled evaluation
+fixtures and runs validator regression tests; see the [evaluation guide](evaluation/README.md). No network requests are
+made by this check.
 
 Failures stop the job and appear in the PR checks and Actions step logs, with
 file/line diagnostics where applicable. Maven prints test failures in its log;
@@ -135,32 +141,30 @@ architecture. Components will be introduced only when a milestone needs them.
 
 ## Data strategy
 
-Two complementary corpora are planned:
+Two complementary corpora support the evaluation direction:
 
 - **Real corpus:** the Distributed Data Intelligence Platform repository, including
   Java code, tests, documentation, and Git history, to exercise realistic changes.
-- **Controlled corpus:** a fictional multi-service system with known compatibility,
-  dependency, authorization, and change-impact scenarios for repeatable evaluation.
+- **Controlled corpus:** the included fictional Parcel Quotes Java/Markdown library
+  provides small, versioned evidence scenarios. Broader change-impact cases come later.
 
-Neither corpus is included or ingested yet. Future ingestion must preserve source
-identity, revision, and location so evidence can be traced to a specific version.
-Corpus access and redistribution permissions must be established before inclusion
-in this public project.
+The real corpus is not included or ingested. Its access and redistribution permissions
+must be established before inclusion. No ingestion exists for either corpus yet.
 
 ## Roadmap overview
 
 | Milestone | Focus |
 | --- | --- |
-| M0 — Project Foundation | Charter, repository hygiene, then application bootstrap, CI, and conventions |
-| M1 — RAG Foundation | Evaluation-driven Java/Markdown retrieval and cited answers |
-| M2 — Contract and Dependency Intelligence | Contracts, entities, dependencies, and compatibility checks |
+| M0 — Project Foundation (Complete) | Charter, application bootstrap, CI, and conventions |
+| M1 — Repository Intelligence MVP (Active) | Evaluation-driven Java/Markdown retrieval and cited answers |
+| M2 — Stakeholder and Contract Intelligence | Contracts, entities, dependencies, and compatibility checks |
 | M3 — Change-Impact Analysis | Diff-driven impact analysis and change-risk reports |
 | M4 — Controlled Agent | Bounded tools, MCP integration, trajectories, and approvals |
 | M5 — Production AI Engineering | Observability, versioning, security, cost, and limited AWS validation |
 
 See the [detailed roadmap](docs/roadmap.md) for deliverables and completion criteria.
-The first RAG release will focus on evaluation-driven retrieval; agent execution
-and full change-impact reporting come later.
+The first Repository Intelligence release will focus on evaluation-driven retrieval;
+agent execution and full change-impact reporting come later.
 
 ## Development approach
 

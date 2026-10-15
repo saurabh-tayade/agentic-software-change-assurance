@@ -42,8 +42,12 @@ of external services and credentials; use random ports for HTTP integration test
 
 The existing context and health tests protect startup and HTTP health behavior.
 They do not establish retrieval or analysis quality. New capabilities need focused
-tests for their success, failure, and unsupported cases. For future RAG work, add
-versioned evaluation scenarios in addition to software tests, following
+tests for their success, failure, and unsupported cases. The
+[evaluation guide](../evaluation/README.md) describes the controlled fixtures,
+JSON scenarios, and Python standard-library validator regression tests run by the
+existing repository check. Keep fixtures outside Maven source/resource roots.
+For future Repository Intelligence work, extend versioned evaluation scenarios
+in addition to software tests, following
 [ADR-0003](adr/0003-evidence-provenance-and-reproducible-evaluation.md).
 
 ## Documentation and decisions

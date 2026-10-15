@@ -26,7 +26,8 @@ handling -> JSON health response. It performs no source ingestion or analysis.
 The Maven Wrapper builds an executable JAR. Automated tests verify context startup
 and HTTP health on a random port. GitHub Actions runs the build and offline
 repository/documentation checks. These checks verify the foundation, not future
-analysis quality. M0.1 through M0.3 are merged; this documentation is M0.4.
+analysis quality. M0 is complete; M1 is active. M1.1 adds conceptual contracts
+and controlled evaluation validation, with no runtime analysis functionality.
 
 ## Planned responsibilities and evidence flow
 
@@ -81,33 +82,22 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 
 ## M1 readiness
 
-The foundation provides a runnable application, repeatable build, tests, and CI
-configuration. Before closing M0, review M0.4 and confirm successful hosted CI on
-the revision being accepted. A merged issue is not itself evidence of a CI result.
-No M1 corpus, retrieval implementation, or evaluation dataset is present yet.
+The foundation provides a runnable application, repeatable build, tests, and CI.
+M1.1 establishes [Repository Intelligence contracts](repository-intelligence.md)
+and a [controlled evaluation foundation](../../evaluation/README.md). Repository
+Intelligence is the first independently usable capability planned for developers
+and non-technical stakeholders, supporting the long-term Change Assurance vision.
+The ADRs remain the governing decisions; these contracts refine their M1 direction.
 
-Start M1 with a small, measurable path through the following work:
+The next step is **M1.2 — Git Repository Ingestion**: select an authorized local Git
+repository, resolve a commit, define scope, and preserve reproducible provenance.
+Resolve dirty-worktree policy, symlinks/submodules, encoding failures, and unsupported
+artifacts explicitly. No external service or AI integration is a prerequisite.
 
-1. Select an authorized local Git repository and explicit commit, initially scoped
-   to Java and Markdown. Establish corpus access and redistribution permissions
-   before adding fixtures; preserve repository and commit provenance.
-2. Define versioned scenarios with queries, expected findings, and expected
-   supporting evidence before comparing retrieval approaches. Include insufficient
-   evidence cases and separate tuning cases from held-out evaluation cases.
-3. Implement ingestion, parsing, and chunking while retaining source locations.
-   Make the same input revision and configuration usable for repeatable runs.
-4. Establish keyword and vector retrieval baselines against those scenarios.
-   Choose basic metrics such as recall@k and precision@k, define relevance and
-   acceptance thresholds before evaluating, and retain measured results.
-5. Produce structured answers with citations, evidence limitations, and uncertainty.
-   Evaluate citation support and answer correctness alongside retrieval quality.
-6. Record latency and token usage with model/configuration identifiers and the
-   measurement conditions. Distinguish measured, estimated, and unavailable token
-   counts; do not report unsupported measurements as zero.
-
-Ingestion contracts, handling of dirty worktrees and unsupported files, parser and
-chunking strategies, retrieval interfaces and ranking, persistence schema,
-evaluation dataset layout, and local model/embedding integration remain open.
-Resolve them through scoped M1 implementation and experiments. These prerequisites
-do not prescribe a schema, provider, API, or new deployment topology. See the
+Later M1 work will add parsing and source-preserving chunking, compare retrieval
+baselines, and produce validated citations and answers with uncertainty. Before
+quality claims, define metrics, acceptance thresholds, held-out cases, and run
+metadata including source revisions, tool/model configuration, latency, and token
+usage. Persistence, ranking, parser strategy, and model integration remain open;
+the conceptual contracts do not prescribe those implementations. See the
 [roadmap](../roadmap.md) for milestone acceptance criteria.

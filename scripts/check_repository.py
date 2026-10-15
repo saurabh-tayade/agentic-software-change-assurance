@@ -6,6 +6,9 @@ import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
 
+sys.dont_write_bytecode = True
+from check_evaluation import validate
+
 
 def git_paths(*args):
     output = subprocess.check_output(["git", "ls-files", "-z", *args])
@@ -70,10 +73,18 @@ def main():
         if fence:
             errors.append(f"{path}: unclosed fenced code block")
 
+    errors.extend(validate(Path("evaluation")))
+    validation_tests = subprocess.run(
+        [sys.executable, "-B", "-m", "unittest", "discover", "-s", "scripts",
+         "-p", "test_check_evaluation.py"]
+    )
+    if validation_tests.returncode:
+        errors.append("Evaluation validator regression tests failed; see diagnostics above")
+
     if errors:
         print("\n".join(errors), file=sys.stderr)
         return 1
-    print(f"Repository hygiene and documentation checks passed ({len(markdown)} Markdown files).")
+    print(f"Repository hygiene, evaluation, and documentation checks passed ({len(markdown)} Markdown files).")
     return 0
 
 

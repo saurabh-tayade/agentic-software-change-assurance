@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "corpus_id": "parcel-quotes",
+  "corpus_version": "v1",
+  "files": {
+    "README.md": "cc91d4fc1ae795b409c8a35142fb4caca22c054a5da8f88720a0dd945ef1102b",
+    "src/example/quotes/Parcel.java": "b7e0a3bd6c8b35cfadfa58e5c00435b139778bf0b2227614572ce66a1e4d7b48",
+    "src/example/quotes/QuotePolicy.java": "9acf96e0ae4227f15d186bcf581add41d7d68476cc4172db97fcd30a019d61e5",
+    "src/example/quotes/QuoteService.java": "1f595c118eaec67271078b395703b6d5af38469492e8a326c7c1fb5079f4667e",
+    "tests/example/quotes/QuotePolicyTest.java": "e04c47de031328fedb596d83958062dbacb32b8a26e3093c85f228939b16741e"
+  }
+}
