@@ -31,13 +31,15 @@ explicit local repositories/revisions, Java/Markdown artifact discovery, source
 provenance and integrity, and coverage diagnostics through a reusable Java component.
 M1.3 adds [Java/Markdown parsing and deterministic evidence chunking](docs/architecture/artifact-processing.md),
 preserving original source lines, hashes, context, and ingestion coverage.
+M1.4 adds [PostgreSQL evidence persistence](docs/architecture/evidence-persistence.md),
+with atomic publications, preserved processing coverage, and exact-identity readback.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Database persistence, keyword/vector search, embeddings, grounded Q&A, Repository
+Keyword/vector search, embeddings, grounded Q&A, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
-and evaluation-fixture consistency. These checks do not
+PostgreSQL persistence/rollback, and evaluation-fixture consistency. These checks do not
 establish retrieval quality or production availability. Hosted CI must be checked
 for the revision under review; local verification does not establish it.
 
@@ -47,7 +49,9 @@ See the [architecture overview](docs/architecture/overview.md),
 ## Local Development
 
 Prerequisites: Java 21 (JDK), Git 2.48+ on `PATH` for ingestion/tests, and network
-access for initial Maven dependency downloads.
+access for initial Maven dependency downloads. Full `verify` also requires a running
+Docker engine for disposable PostgreSQL integration tests; `./mvnw test` remains
+database-independent.
 The Maven Wrapper downloads Maven 3.9.16; a global Maven installation is not needed.
 Run these commands from the repository root.
 
@@ -71,7 +75,10 @@ curl http://localhost:8080/actuator/health
 
 Expected: HTTP 200 with a JSON body containing `"status":"UP"` (the default
 response also lists liveness and readiness groups). Only health is exposed over HTTP
-by Actuator's default configuration. No external services or credentials are needed.
+by Actuator's default configuration. Default startup needs no external services or
+credentials. Enable the explicit
+`persistence` profile and follow the [database setup guide](docs/architecture/evidence-persistence.md)
+to connect PostgreSQL and run Flyway migrations.
 
 Run tests, including the health test against an embedded server on a random port:
 
@@ -84,7 +91,8 @@ Run tests, including the health test against an embedded server on a random port
 The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `main`,
 pushes to `main`, and manual dispatch. One Ubuntu job uses Temurin Java 21,
 Maven caching, read-only repository permissions, and a 15-minute timeout.
-It requires no repository secrets or external application services.
+It requires no repository secrets or cloud services. Testcontainers starts disposable
+PostgreSQL through the runner's Docker engine; missing Docker fails verification.
 
 Reproduce its checks from the repository root with Java 21, Git, and Python 3.9+:
 
@@ -107,10 +115,12 @@ made by this check.
 
 Failures stop the job and appear in the PR checks and Actions step logs, with
 file/line diagnostics where applicable. Maven prints test failures in its log;
-local detailed reports are in `target/surefire-reports/`. Application, ingestion,
+local detailed reports are in `target/surefire-reports/` and `target/failsafe-reports/`.
+Application, ingestion,
 and processing tests run during `verify`, including an HTTP request to a random-port
 embedded server. Ingestion/processing integration tests use local temporary Git
-repositories without network access.
+repositories without network access. PostgreSQL tests run in Failsafe during `verify`
+and need Docker (initial image downloads require network access).
 Check the GitHub-hosted result for the revision being reviewed; local verification
 does not establish a hosted result. The maintainer can require the CI job in
 `main` branch protection.
@@ -145,7 +155,8 @@ overrides unless a concrete need is documented. M0 adds no runtime dependencies.
 | Hosted validation | Limited AWS Bedrock validation |
 
 The application foundation is implemented, including Actuator's baseline
-Micrometer support. The remaining integrations are planned, not finalized
+Micrometer support, plus PostgreSQL persistence and local database Compose setup.
+The remaining integrations are planned, not finalized
 architecture. Components will be introduced only when a milestone needs them.
 
 ## Data strategy

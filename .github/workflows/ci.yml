@@ -34,5 +34,8 @@ jobs:
             pom.xml
             .mvn/wrapper/maven-wrapper.properties
 
-      - name: Build and test
+      - name: Verify Docker for PostgreSQL integration tests
+        run: docker info
+
+      - name: Build, unit tests, and PostgreSQL integration tests
         run: ./mvnw -B -ntp clean verify

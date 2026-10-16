@@ -9,6 +9,7 @@ their application to future features is incremental.
 | [ADR-0001](0001-modular-monolith.md) | Modular Monolith | Accepted |
 | [ADR-0002](0002-deterministic-analysis-before-ai-interpretation.md) | Deterministic Analysis Before AI Interpretation | Accepted |
 | [ADR-0003](0003-evidence-provenance-and-reproducible-evaluation.md) | Evidence, Provenance, and Reproducible Evaluation | Accepted |
+| [ADR-0004](0004-atomic-evidence-publications.md) | Atomic PostgreSQL Evidence Publications | Accepted |
 
 Use sequential four-digit identifiers and descriptive kebab-case filenames.
 Include Status, Context, Decision, Alternatives considered, Consequences, and

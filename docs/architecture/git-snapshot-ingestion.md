@@ -175,5 +175,6 @@ commit for ingestion testing; its existing validation remains independent.
 M1.3 [artifact processing](artifact-processing.md) consumes each artifact's exact
 text/bytes, format, path, and snapshot, then emits original source coordinates while
 retaining coverage limitations. It preserves these ingestion contracts unchanged
-and does not reinterpret test classification as a passing test. M1.4 persistence
-remains future work. Hosted CI and operational deployment require their own evidence.
+and does not reinterpret test classification as a passing test. M1.4
+[persists these contracts](evidence-persistence.md) without changing ingestion.
+Hosted CI and operational deployment require their own evidence.
