@@ -29,11 +29,15 @@ and a [controlled evaluation foundation](evaluation/README.md). M1.2 implements
 [read-only Git snapshot ingestion](docs/architecture/git-snapshot-ingestion.md):
 explicit local repositories/revisions, Java/Markdown artifact discovery, source
 provenance and integrity, and coverage diagnostics through a reusable Java component.
+M1.3 adds [Java/Markdown parsing and deterministic evidence chunking](docs/architecture/artifact-processing.md),
+preserving original source lines, hashes, context, and ingestion coverage.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Parsing, chunking, persistence, search, retrieval, embeddings, and grounded Q&A are
-not implemented. Tests cover ingestion with temporary repositories, application
-startup/HTTP health, and evaluation-fixture consistency. These checks do not
+Database persistence, keyword/vector search, embeddings, grounded Q&A, Repository
+Intelligence UI, and change-impact analysis are not implemented. Tests cover
+ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
+deterministic chunks, original source mappings, application startup/HTTP health,
+and evaluation-fixture consistency. These checks do not
 establish retrieval quality or production availability. Hosted CI must be checked
 for the revision under review; local verification does not establish it.
 
@@ -103,9 +107,10 @@ made by this check.
 
 Failures stop the job and appear in the PR checks and Actions step logs, with
 file/line diagnostics where applicable. Maven prints test failures in its log;
-local detailed reports are in `target/surefire-reports/`. Application and ingestion
-tests run during `verify`, including an HTTP request to a random-port embedded
-server. Ingestion tests use local temporary Git repositories without network access.
+local detailed reports are in `target/surefire-reports/`. Application, ingestion,
+and processing tests run during `verify`, including an HTTP request to a random-port
+embedded server. Ingestion/processing integration tests use local temporary Git
+repositories without network access.
 Check the GitHub-hosted result for the revision being reviewed; local verification
 does not establish a hosted result. The maintainer can require the CI job in
 `main` branch protection.

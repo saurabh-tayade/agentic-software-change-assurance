@@ -2,7 +2,8 @@
 
 M1.1 established these conceptual contracts. M1.2 implements their snapshot and
 source-artifact responsibilities in the [Git ingestion component](git-snapshot-ingestion.md);
-the remaining contracts do not imply executable parsing, retrieval, or answers.
+M1.3 implements [parsing and normalized evidence chunks](artifact-processing.md).
+The remaining contracts do not imply executable retrieval or answers.
 Repository Intelligence is the first independently usable capability planned for
 developers and non-technical stakeholders: ask questions
 about existing software and receive evidence-backed answers with verifiable
@@ -51,9 +52,9 @@ sources, and incomplete coverage as answer limitations.
 5. **Grounded question answering** synthesizes claims from evidence, validates
    citations, and states uncertainty. Retrieved content remains untrusted data.
 
-Java source/test files and Markdown are the initial target formats; no parser is
-implemented in M1.1. Python, TypeScript, OpenAPI, SQL/Flyway, and event schemas can
-later supply the same normalized evidence with format-specific derivation details.
+Java source/test files and Markdown are the initial formats implemented by M1.3;
+M1.1 itself established contracts and fixtures only. Python, TypeScript, OpenAPI,
+SQL/Flyway, and event schemas can later supply the same normalized evidence with format-specific derivation details.
 No parser registry, plugin system, or framework analyzer is needed now.
 
 Discovery should distinguish excluded artifacts from discovered but unsupported
