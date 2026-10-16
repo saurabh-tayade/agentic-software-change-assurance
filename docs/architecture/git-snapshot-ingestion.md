@@ -161,7 +161,7 @@ from deleting objects during ingestion; such read failures are surfaced. The
 implementation targets macOS and Linux. Local verification for this change ran on
 macOS; Linux hosted CI and Windows behavior were not verified by that run.
 
-## Verification and M1.3 handoff
+## Verification and M1.3 integration
 
 The existing `./mvnw clean verify` workflow includes temporary-repository tests for
 revision selection, dirty worktrees, deterministic ordering, classification,
@@ -172,9 +172,8 @@ exercise output overflow, timeout cleanup, nonzero exits, environment isolation,
 and interruption. The controlled M1.1 corpus is copied unchanged into a temporary
 commit for ingestion testing; its existing validation remains independent.
 
-M1.3 can consume each artifact's exact text/bytes, format, path, and snapshot,
-then emit original source coordinates while retaining coverage limitations.
-Parsing/chunking must not overwrite source provenance or reinterpret test
-classification as a passing test. There is no persistence or parser dependency
-blocking that work; parser selection and source-to-line mapping are its immediate
-design decisions. Hosted CI and operational deployment require their own evidence.
+M1.3 [artifact processing](artifact-processing.md) consumes each artifact's exact
+text/bytes, format, path, and snapshot, then emits original source coordinates while
+retaining coverage limitations. It preserves these ingestion contracts unchanged
+and does not reinterpret test classification as a passing test. M1.4 persistence
+remains future work. Hosted CI and operational deployment require their own evidence.

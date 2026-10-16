@@ -9,7 +9,7 @@ It supports human decisions; it does not certify a change as safe. The
 
 M0 establishes an executable foundation and development conventions. RAG,
 retrieval, AI analysis, change-impact analysis, and agent execution are not
-implemented. M1.2 adds a reusable Java ingestion component; the remaining logical
+implemented. M1.2 adds ingestion and M1.3 adds parsing/chunking; the remaining logical
 responsibilities guide future work, not separate services or deployment boundaries.
 
 ## Implemented foundation
@@ -31,7 +31,9 @@ and controlled evaluation validation. M1.2 adds
 [read-only Git snapshot ingestion](git-snapshot-ingestion.md) in
 `dev.changeassurance.ingestion`, independently executable through integration tests.
 It preserves committed Java/Markdown content and provenance with explicit coverage
-limitations. It adds no HTTP route or automatic startup ingestion.
+limitations. M1.3 adds [artifact processing](artifact-processing.md) in
+`dev.changeassurance.processing`, with Java/Markdown parsing, deterministic chunks,
+and original line provenance. Neither adds an HTTP route or automatic startup scan.
 
 ## Planned responsibilities and evidence flow
 
@@ -52,8 +54,8 @@ answers with citations and explicit uncertainty. Versioned evaluation scenarios
 exercise retrieval and answer generation and retain results for comparison.
 Later work adds deterministic contract/dependency findings and diff analysis to
 support risk reports; controlled agents may gather evidence within defined limits.
-Only the selected-commit to source-artifact ingestion step is implemented. Parsing,
-chunking, retrieval, and grounded answers remain planned.
+Selected-commit ingestion, parsing, and provenance-preserving chunking are
+implemented. Persistence, retrieval, and grounded answers remain planned.
 
 ## Architectural principles
 
@@ -81,6 +83,7 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Build and tests | Maven 3.9.16 via Wrapper, Boot-managed testing and JUnit | Additional test fixtures when needed |
 | Operations | Actuator health and baseline Micrometer support | OpenTelemetry and broader observability |
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
+| Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
 | AI | None | Spring AI and local models are preferences to evaluate in M1 |
 | Storage and retrieval | None | PostgreSQL, pgvector, and full-text search are preferences to evaluate in M1 |
 | Environment | Local JVM; no external services needed | Docker Compose only when dependencies warrant it; limited AWS validation later |
@@ -99,12 +102,12 @@ reports deterministic inventories with provenance and coverage. The
 [ingestion guide](git-snapshot-ingestion.md) documents scope, dirty-worktree policy,
 links/submodules, encodings, limits, and verification.
 
-The next step is **M1.3 — Java/Markdown Parsing & Chunking**: consume the unchanged
-source content and preserve original source locations and ingestion limitations.
-Parser selection and source-to-line mapping remain open. Later M1 work will compare
-retrieval baselines and produce validated citations and answers with uncertainty.
+M1.3 consumes unchanged source content and preserves original source locations and
+ingestion limitations; see the [processing guide](artifact-processing.md) for parser
+selection, chunking, and verification. The next step is **M1.4 — Evidence Persistence**.
+Later M1 work will compare retrieval baselines and produce validated citations and answers with uncertainty.
 Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
 metadata including source revisions, tool/model configuration, latency, and token
-usage. Persistence, ranking, parser strategy, and model integration remain open;
+usage. Persistence, ranking, and model integration remain open;
 the conceptual contracts do not prescribe those implementations. See the
 [roadmap](../roadmap.md) for milestone acceptance criteria.
