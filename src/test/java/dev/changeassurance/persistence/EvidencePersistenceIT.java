@@ -50,7 +50,7 @@ class EvidencePersistenceIT {
         dataSource = new DriverManagerDataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
         jdbc = new JdbcTemplate(dataSource);
         flyway = Flyway.configure().dataSource(dataSource).load();
-        assertEquals(1, flyway.migrate().migrationsExecuted);
+        assertEquals(2, flyway.migrate().migrationsExecuted);
         service = new EvidencePersistenceService(dataSource);
     }
 
@@ -67,7 +67,7 @@ class EvidencePersistenceIT {
     @Test
     void migrationsInitializeConstraintsAndAreRepeatable() {
         assertEquals(0, flyway.migrate().migrationsExecuted);
-        assertEquals(1, jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success", Integer.class));
+        assertEquals(2, jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success", Integer.class));
         assertEquals(5, jdbc.queryForObject("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name <> 'flyway_schema_history'", Integer.class));
         assertThrows(DataAccessException.class, () -> jdbc.update("INSERT INTO publication_chunk VALUES (?, ?, ?, 0)",
                 "a".repeat(64), "b".repeat(64), "c".repeat(64)));
@@ -193,7 +193,8 @@ class EvidencePersistenceIT {
                 .run("--EVIDENCE_DB_URL=" + POSTGRES.getJdbcUrl(), "--EVIDENCE_DB_USER=" + POSTGRES.getUsername(),
                         "--EVIDENCE_DB_PASSWORD=" + POSTGRES.getPassword())) {
             assertNotNull(context.getBean(EvidencePersistenceService.class));
-            assertEquals(1, context.getBean(Flyway.class).info().applied().length);
+            assertNotNull(context.getBean(dev.changeassurance.retrieval.KeywordRetrievalService.class));
+            assertEquals(2, context.getBean(Flyway.class).info().applied().length);
         }
     }
 

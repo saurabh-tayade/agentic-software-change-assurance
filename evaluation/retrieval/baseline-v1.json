@@ -1,0 +1,760 @@
+{
+  "dataset" : "keyword-v1",
+  "strategy" : "postgres-keyword-v1",
+  "definition_sha256" : "225166c71a7ce0fee376fcf024a401852f375c7cb9691ac6455cf481ef19826b",
+  "original_scenarios_sha256" : "5192b48a8e68a8f0ef110ce41e7705faba527c6e9d8ab126aaae64d211fcbd3e",
+  "corpus_manifest_sha256" : "6e7ece7b275dbd0cfe733e7104af73f7b22730a2914d87ab20560eb013d493d5",
+  "implementation_sha256" : {
+    "grader" : "9006ce03cb291e592961b11d21dd9a5aa591a83db01b37c2737bbca8f82e7db3",
+    "service" : "569899fe7ae881bc3fce589e3582aefe2815d06baf8eeff76105c37cc0c861e5",
+    "integrity" : "0d26a6d65e2de9f0b21c02c1943aa2dc0fadbee77c8e5cc8ba17cbde814e3cc1",
+    "migration" : "9e24b667b2898a9a451a1ebd9e56275434543df8b3a2c3c96e5e87f74553f8e2"
+  },
+  "commit" : "11687c956a11e50995dfca18e3b62e0a57347e96",
+  "top_k" : 5,
+  "query_count" : 15,
+  "queries_with_expected_evidence" : 14,
+  "macro_recall_at_k" : 0.5714285714285714,
+  "mrr" : 0.6369047619047619,
+  "latency_samples" : 150,
+  "mean_latency_ms" : 1.6102724933333334,
+  "median_latency_ms" : 1.579,
+  "p95_latency_ms" : 2.25875,
+  "environment" : {
+    "java" : "21.0.7",
+    "os" : "Mac OS X",
+    "architecture" : "aarch64",
+    "postgres" : "PostgreSQL 17.11 on aarch64-unknown-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit",
+    "connection_pool_size" : 2,
+    "warmup_runs_per_query" : 2,
+    "available_processors" : 10
+  },
+  "scenarios" : [ {
+    "id" : "RI-001",
+    "query" : "What does this repository provide?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 0.3333333333333333,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.10840495675802231,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 16
+    }, {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.06475289911031723,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.057308752089738846,
+      "rank" : 3,
+      "path" : "README.md",
+      "start_line" : 3
+    } ],
+    "mean_latency_ms" : 2.0023585
+  }, {
+    "id" : "RI-002",
+    "query" : "What is the price of a remote parcel weighing 1000 grams?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 0.5,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.19271428883075714,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 16
+    }, {
+      "chunk_id" : "7c3b6b165c7d94eccd82558f16ae88905ff58822e31a82b058b97dc833f7b6fd",
+      "end_line" : 7,
+      "score" : 0.17242386937141418,
+      "rank" : 2,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.15501484274864197,
+      "rank" : 3,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "28bd93aeb84b50eb4ea815c879aa71b538ae4c677072e06d0703376003fa1144",
+      "end_line" : 10,
+      "score" : 0.14905411005020142,
+      "rank" : 4,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "61b83fd8a87c9e0bb2741515fbbf9318d450c4c6c81ad256f8a9ba1ba987c388",
+      "end_line" : 3,
+      "score" : 0.11848001927137375,
+      "rank" : 5,
+      "path" : "src/example/quotes/Parcel.java",
+      "start_line" : 3
+    } ],
+    "mean_latency_ms" : 1.6485917999999997
+  }, {
+    "id" : "RI-003",
+    "query" : "Does the library support currency conversion?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.13193070888519287,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.09776392579078674,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.09199966490268707,
+      "rank" : 3,
+      "path" : "README.md",
+      "start_line" : 16
+    } ],
+    "mean_latency_ms" : 1.4860710000000001
+  }, {
+    "id" : "RI-004",
+    "query" : "Which test covers the remote small-parcel surcharge, and did it pass?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 0,
+      "expectedReferences" : 2
+    },
+    "matches" : [ {
+      "chunk_id" : "28bd93aeb84b50eb4ea815c879aa71b538ae4c677072e06d0703376003fa1144",
+      "end_line" : 10,
+      "score" : 0.2314586192369461,
+      "rank" : 1,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.14652691781520844,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 16
+    }, {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.12603317201137543,
+      "rank" : 3,
+      "path" : "README.md",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.10514895617961884,
+      "rank" : 4,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "61b83fd8a87c9e0bb2741515fbbf9318d450c4c6c81ad256f8a9ba1ba987c388",
+      "end_line" : 3,
+      "score" : 0.09263499826192856,
+      "rank" : 5,
+      "path" : "src/example/quotes/Parcel.java",
+      "start_line" : 3
+    } ],
+    "mean_latency_ms" : 1.6210293
+  }, {
+    "id" : "RI-005",
+    "query" : "Why are prices fixed in code?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.25560134649276733,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "d7f424ca9c72778dff685bf58ab907df0be59336a10601d93a1917bcf8856ed8",
+      "end_line" : 8,
+      "score" : 0.1179228350520134,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "b12fddc6d0cfab40612718375d53a4b5a05574ae206d87eeed7fd9c881f30d2d",
+      "end_line" : 13,
+      "score" : 0.11241406947374344,
+      "rank" : 3,
+      "path" : "README.md",
+      "start_line" : 13
+    }, {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.04821784421801567,
+      "rank" : 4,
+      "path" : "README.md",
+      "start_line" : 3
+    } ],
+    "mean_latency_ms" : 1.5981624
+  }, {
+    "id" : "RI-006",
+    "query" : "How does quote input validation connect to pricing?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 0.3333333333333333,
+      "coveredReferences" : 0,
+      "expectedReferences" : 3
+    },
+    "matches" : [ {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.13193070888519287,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.12146702408790588,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "569885d8e011ea1c7c248acaae53d41c61aafeeeb52db63095275627e908befe",
+      "end_line" : 8,
+      "score" : 0.11125900596380234,
+      "rank" : 3,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 6
+    }, {
+      "chunk_id" : "8dbe22b49eb175f4ce431c1ba48648b57da7d0d32bcdb29f353e61a2ca06ff2a",
+      "end_line" : 4,
+      "score" : 0.09497981518507004,
+      "rank" : 4,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "9080f8e0ec4fc0b055ffc775179f51c988b376e1a43dc0b1ea3bda5cbff56a07",
+      "end_line" : 3,
+      "score" : 0.09211234748363495,
+      "rank" : 5,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 3
+    } ],
+    "mean_latency_ms" : 1.8274664999999999
+  }, {
+    "id" : "RI-007",
+    "query" : "Which production region hosts the service, and is it enabled for customers?",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 0.5,
+      "coveredReferences" : 0,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "f5ab0d6f3ca005d401945cf8f67b1b54476b7a7271e96dbd0cf4d4d448315993",
+      "end_line" : 6,
+      "score" : 0.08780358731746674,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.07062409818172455,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 16
+    }, {
+      "chunk_id" : "d38b7686ae6df76a7113e4cca523bc0a3498c027a9a4dfaaacb1fe3be843749e",
+      "end_line" : 3,
+      "score" : 0.0628155991435051,
+      "rank" : 3,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "8dbe22b49eb175f4ce431c1ba48648b57da7d0d32bcdb29f353e61a2ca06ff2a",
+      "end_line" : 4,
+      "score" : 0.058248333632946014,
+      "rank" : 4,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "3a1695dd46953c2ddea8f5faea676212520d7828129a57ae4103cb8fe1455ce4",
+      "end_line" : 5,
+      "score" : 0.058248333632946014,
+      "rank" : 5,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 5
+    } ],
+    "mean_latency_ms" : 1.7068914
+  }, {
+    "id" : "KW-001",
+    "query" : "QuotePolicy",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "9080f8e0ec4fc0b055ffc775179f51c988b376e1a43dc0b1ea3bda5cbff56a07",
+      "end_line" : 3,
+      "score" : 1.5091431736946106,
+      "rank" : 1,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "7c3b6b165c7d94eccd82558f16ae88905ff58822e31a82b058b97dc833f7b6fd",
+      "end_line" : 7,
+      "score" : 1.4864862263202667,
+      "rank" : 2,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "f5abcab0db40d9a0bb44e058cb34590d8fd9f92d97d4e8e4a322ade7682ee175",
+      "end_line" : 8,
+      "score" : 1.4864862263202667,
+      "rank" : 3,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 8
+    }, {
+      "chunk_id" : "28bd93aeb84b50eb4ea815c879aa71b538ae4c677072e06d0703376003fa1144",
+      "end_line" : 10,
+      "score" : 0.42004477977752686,
+      "rank" : 4,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "12fd0c2d83f69a11f562c267ef985b55a0799c775406889b2038a899c461b640",
+      "end_line" : 6,
+      "score" : 0.38332706689834595,
+      "rank" : 5,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 6
+    } ],
+    "mean_latency_ms" : 1.8164706
+  }, {
+    "id" : "KW-002",
+    "query" : "quote policy",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 0.25,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "9080f8e0ec4fc0b055ffc775179f51c988b376e1a43dc0b1ea3bda5cbff56a07",
+      "end_line" : 3,
+      "score" : 0.5091431736946106,
+      "rank" : 1,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "12fd0c2d83f69a11f562c267ef985b55a0799c775406889b2038a899c461b640",
+      "end_line" : 6,
+      "score" : 0.5091431736946106,
+      "rank" : 2,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 6
+    }, {
+      "chunk_id" : "28bd93aeb84b50eb4ea815c879aa71b538ae4c677072e06d0703376003fa1144",
+      "end_line" : 10,
+      "score" : 0.5091431736946106,
+      "rank" : 3,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "7c3b6b165c7d94eccd82558f16ae88905ff58822e31a82b058b97dc833f7b6fd",
+      "end_line" : 7,
+      "score" : 0.4864862263202667,
+      "rank" : 4,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "f5abcab0db40d9a0bb44e058cb34590d8fd9f92d97d4e8e4a322ade7682ee175",
+      "end_line" : 8,
+      "score" : 0.4864862263202667,
+      "rank" : 5,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 8
+    } ],
+    "mean_latency_ms" : 1.5657
+  }, {
+    "id" : "KW-003",
+    "query" : "remoteSmallParcelIncludesSurcharge",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "28bd93aeb84b50eb4ea815c879aa71b538ae4c677072e06d0703376003fa1144",
+      "end_line" : 10,
+      "score" : 1.4032543897628784,
+      "rank" : 1,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 7
+    }, {
+      "chunk_id" : "4aee334aa8d601000bda6c60282241d0a109372f8fc5d0f72a6032864aafcef4",
+      "end_line" : 18,
+      "score" : 0.1902891993522644,
+      "rank" : 2,
+      "path" : "README.md",
+      "start_line" : 16
+    }, {
+      "chunk_id" : "61b83fd8a87c9e0bb2741515fbbf9318d450c4c6c81ad256f8a9ba1ba987c388",
+      "end_line" : 3,
+      "score" : 0.17307257652282715,
+      "rank" : 3,
+      "path" : "src/example/quotes/Parcel.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.15565377473831177,
+      "rank" : 4,
+      "path" : "README.md",
+      "start_line" : 9
+    }, {
+      "chunk_id" : "7cbb9cc8a662e5270e4214a18e784b9c15fb179bc0d6996fec212ed2c61f5ea6",
+      "end_line" : 7,
+      "score" : 0.1528564989566803,
+      "rank" : 5,
+      "path" : "src/example/quotes/Parcel.java",
+      "start_line" : 4
+    } ],
+    "mean_latency_ms" : 1.8653458
+  }, {
+    "id" : "KW-004",
+    "query" : "quote input validation",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 0,
+      "expectedReferences" : 2
+    },
+    "matches" : [ {
+      "chunk_id" : "569885d8e011ea1c7c248acaae53d41c61aafeeeb52db63095275627e908befe",
+      "end_line" : 8,
+      "score" : 0.260210782289505,
+      "rank" : 1,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 6
+    }, {
+      "chunk_id" : "8dbe22b49eb175f4ce431c1ba48648b57da7d0d32bcdb29f353e61a2ca06ff2a",
+      "end_line" : 4,
+      "score" : 0.22720420360565186,
+      "rank" : 2,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 4
+    }, {
+      "chunk_id" : "9080f8e0ec4fc0b055ffc775179f51c988b376e1a43dc0b1ea3bda5cbff56a07",
+      "end_line" : 3,
+      "score" : 0.22122594714164734,
+      "rank" : 3,
+      "path" : "src/example/quotes/QuotePolicy.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "d38b7686ae6df76a7113e4cca523bc0a3498c027a9a4dfaaacb1fe3be843749e",
+      "end_line" : 3,
+      "score" : 0.22122594714164734,
+      "rank" : 4,
+      "path" : "src/example/quotes/QuoteService.java",
+      "start_line" : 3
+    }, {
+      "chunk_id" : "12fd0c2d83f69a11f562c267ef985b55a0799c775406889b2038a899c461b640",
+      "end_line" : 6,
+      "score" : 0.22122594714164734,
+      "rank" : 5,
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "start_line" : 6
+    } ],
+    "mean_latency_ms" : 1.7956544
+  }, {
+    "id" : "KW-005",
+    "query" : "currency conversion",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 1.0,
+      "reciprocalRank" : 1.0,
+      "coveredReferences" : 1,
+      "expectedReferences" : 1
+    },
+    "matches" : [ {
+      "chunk_id" : "31c2669cc028225c0aab353ebdcf0d97c77ef29c32fc91abab9c3bd2c29c6a10",
+      "end_line" : 12,
+      "score" : 0.23310738801956177,
+      "rank" : 1,
+      "path" : "README.md",
+      "start_line" : 9
+    } ],
+    "mean_latency_ms" : 1.3315876
+  }, {
+    "id" : "KW-006",
+    "query" : "Kafka broker",
+    "publication" : "b8d21a4cdf3fdc15e29c71953c2b087f274a642a76381afebed867a6b1d54c5b",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : null,
+      "reciprocalRank" : null,
+      "coveredReferences" : 0,
+      "expectedReferences" : 0
+    },
+    "matches" : [ ],
+    "mean_latency_ms" : 1.3985665
+  }, {
+    "id" : "KW-007",
+    "query" : "currency conversion",
+    "publication" : "6861c00947144f45ccbb55a8a98f9ee62c4a5f2ad6d9aad6b29aaf63a02d3ef5",
+    "scope" : {
+      "includes" : [ "src" ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=10000",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "README.md",
+      "disposition" : "EXCLUDED",
+      "reason" : "OUTSIDE_SCOPE",
+      "detail" : "Outside included path prefixes"
+    }, {
+      "path" : "manifest.json",
+      "disposition" : "EXCLUDED",
+      "reason" : "OUTSIDE_SCOPE",
+      "detail" : "Outside included path prefixes"
+    }, {
+      "path" : "tests/example/quotes/QuotePolicyTest.java",
+      "disposition" : "EXCLUDED",
+      "reason" : "OUTSIDE_SCOPE",
+      "detail" : "Outside included path prefixes"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 0.0,
+      "coveredReferences" : 0,
+      "expectedReferences" : 1
+    },
+    "matches" : [ ],
+    "mean_latency_ms" : 1.2273915
+  }, {
+    "id" : "KW-008",
+    "query" : "priceCents",
+    "publication" : "c6952e458d432f1ff6465c563329378d7dc6a3af2b2b368c11302cd159f9e91c",
+    "scope" : {
+      "includes" : [ ],
+      "excludes" : [ ]
+    },
+    "configuration" : "source-lines-v1:lines=4:chunks=1",
+    "status" : "PARTIAL",
+    "ingestion_coverage" : [ {
+      "path" : "manifest.json",
+      "disposition" : "UNSUPPORTED",
+      "reason" : "FILE_TYPE",
+      "detail" : "Only regular .java and .md files supported"
+    } ],
+    "grade" : {
+      "recall" : 0.0,
+      "reciprocalRank" : 0.0,
+      "coveredReferences" : 0,
+      "expectedReferences" : 1
+    },
+    "matches" : [ ],
+    "mean_latency_ms" : 1.2628001
+  } ]
+}

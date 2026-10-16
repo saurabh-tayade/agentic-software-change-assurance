@@ -1,0 +1,66 @@
+{
+  "version": "keyword-v1",
+  "strategy": "postgres-keyword-v1",
+  "corpus": "parcel-quotes/v1",
+  "original_scenarios": "evaluation/scenarios/parcel-quotes-v1.json",
+  "top_k": 5,
+  "max_lines": 4,
+  "max_chunks": 10000,
+  "warmup_runs": 2,
+  "measured_runs": 10,
+  "scenarios": [
+    {
+      "id": "KW-001",
+      "query": "QuotePolicy",
+      "expected_evidence": [{"path": "src/example/quotes/QuotePolicy.java", "start_line": 3, "end_line": 6}],
+      "rationale": "Exact Java class identifier spanning declaration and method chunks."
+    },
+    {
+      "id": "KW-002",
+      "query": "quote policy",
+      "expected_evidence": [{"path": "src/example/quotes/QuotePolicy.java", "start_line": 4, "end_line": 6}],
+      "rationale": "Separate terms matching CamelCase."
+    },
+    {
+      "id": "KW-003",
+      "query": "remoteSmallParcelIncludesSurcharge",
+      "expected_evidence": [{"path": "tests/example/quotes/QuotePolicyTest.java", "start_line": 8, "end_line": 10}],
+      "rationale": "Exact Java test method; locating it does not establish a passing execution."
+    },
+    {
+      "id": "KW-004",
+      "query": "quote input validation",
+      "expected_evidence": [
+        {"path": "src/example/quotes/QuoteService.java", "start_line": 4, "end_line": 7},
+        {"path": "src/example/quotes/Parcel.java", "start_line": 3, "end_line": 7}
+      ],
+      "rationale": "Natural-language terms with multiple required source references."
+    },
+    {
+      "id": "KW-005",
+      "query": "currency conversion",
+      "expected_evidence": [{"path": "README.md", "start_line": 12, "end_line": 12}],
+      "rationale": "Documentation states an exclusion, not positive feature support."
+    },
+    {
+      "id": "KW-006",
+      "query": "Kafka broker",
+      "expected_evidence": [],
+      "rationale": "No relevant source exists; report matches separately, exclude from recall/MRR denominators."
+    },
+    {
+      "id": "KW-007",
+      "query": "currency conversion",
+      "scope_includes": ["src"],
+      "expected_evidence": [{"path": "README.md", "start_line": 12, "end_line": 12}],
+      "rationale": "Same corpus ground truth intentionally outside selected scope; score missing evidence without weakening expectations."
+    },
+    {
+      "id": "KW-008",
+      "query": "priceCents",
+      "max_chunks": 1,
+      "expected_evidence": [{"path": "src/example/quotes/QuotePolicy.java", "start_line": 4, "end_line": 6}],
+      "rationale": "Resource-limited PARTIAL publication cannot recover omitted pricing evidence."
+    }
+  ]
+}

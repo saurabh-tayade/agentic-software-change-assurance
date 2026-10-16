@@ -4,8 +4,8 @@ M1.1 established these conceptual contracts. M1.2 implements their snapshot and
 source-artifact responsibilities in the [Git ingestion component](git-snapshot-ingestion.md);
 M1.3 implements [parsing and normalized evidence chunks](artifact-processing.md).
 M1.4 [persists coherent evidence publications](evidence-persistence.md) and supports
-readback by explicit identity. The remaining contracts do not imply keyword/vector
-retrieval or answers.
+readback by explicit identity. M1.5 implements [keyword retrieval](keyword-retrieval.md)
+with ranked evidence and publication coverage. Vector retrieval and answers remain planned.
 Repository Intelligence is the first independently usable capability planned for
 developers and non-technical stakeholders: ask questions
 about existing software and receive evidence-backed answers with verifiable

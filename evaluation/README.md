@@ -64,3 +64,10 @@ Review original source spans manually: substring checks cannot prove that findin
 are semantically correct or complete. These seven visible cases are a development
 baseline, not a held-out benchmark. Later work must define held-out cases, metrics,
 thresholds, and run metadata before claiming retrieval or answer quality.
+
+## Keyword retrieval baseline
+
+M1.5 adds a [versioned PostgreSQL retrieval baseline](retrieval/README.md). It consumes
+the seven scenarios above unchanged, adds eight lexical/coverage cases, and measures
+source-reference Recall@5, MRR, and latency. This is separate from answer-quality
+evaluation; lexical overlap does not establish semantic support.

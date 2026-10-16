@@ -66,6 +66,11 @@ running; tests never silently skip for an unavailable daemon. Reports are in
 `target/failsafe-reports/`. See the [persistence guide](architecture/evidence-persistence.md)
 for environment variables, Compose, migrations, inspection, and local reset.
 Add a new versioned SQL migration for schema changes; never edit an applied migration.
+M1.5 retrieval tests run in the same mandatory Failsafe lifecycle, including the
+[15-query baseline](../evaluation/retrieval/README.md). Run only that evaluation with
+`./mvnw -Dit.test=KeywordEvaluationIT test-compile failsafe:integration-test failsafe:verify`;
+inspect `target/keyword-baseline.json`. See the [retrieval guide](architecture/keyword-retrieval.md)
+for query limits, ranking, integrity costs, and M1.6 integration.
 
 ## Documentation and decisions
 

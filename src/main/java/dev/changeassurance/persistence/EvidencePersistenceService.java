@@ -26,6 +26,7 @@ import static dev.changeassurance.ingestion.IngestionResult.*;
 public final class EvidencePersistenceService {
     private final JdbcTemplate jdbc;
     private final TransactionTemplate transaction;
+    private final TransactionTemplate readTransaction;
 
     public EvidencePersistenceService(DataSource dataSource) {
         jdbc = new JdbcTemplate(dataSource);
@@ -33,6 +34,11 @@ public final class EvidencePersistenceService {
         transaction.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
         transaction.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         transaction.setTimeout(120);
+        readTransaction = new TransactionTemplate(new JdbcTransactionManager(dataSource));
+        readTransaction.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        readTransaction.setIsolationLevel(TransactionDefinition.ISOLATION_REPEATABLE_READ);
+        readTransaction.setReadOnly(true);
+        readTransaction.setTimeout(30);
     }
 
     public PersistedPublication publish(IngestionResult ingestion, ProcessingResult processing) {
@@ -73,7 +79,9 @@ public final class EvidencePersistenceService {
                     statement.setString(8, source.content());
                 });
                 jdbc.batchUpdate("""
-                        INSERT INTO evidence_chunk VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb)
+                        INSERT INTO evidence_chunk (snapshot_id, chunk_id, path_key, start_line, end_line,
+                            content, content_hash, parser, configuration, context)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?::jsonb)
                         ON CONFLICT (snapshot_id, chunk_id) DO NOTHING
                         """, processing.chunks(), 256, (statement, chunk) -> {
                     statement.setString(1, snapshotId);
@@ -112,8 +120,11 @@ public final class EvidencePersistenceService {
             throw new IllegalArgumentException("Expected a full publication SHA-256 identity");
         }
         try {
-            return read(publicationId);
-        } catch (DataAccessException exception) {
+            return readTransaction.execute(status -> {
+                PublicationIntegrity.inspect(jdbc, publicationId);
+                return read(publicationId);
+            });
+        } catch (DataAccessException | TransactionException exception) {
             throw new EvidencePersistenceException("Could not read evidence publication", exception);
         }
     }

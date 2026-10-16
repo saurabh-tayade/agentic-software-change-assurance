@@ -18,7 +18,8 @@ class PersistenceConfigurationTests {
     void defaultApplicationDoesNotCreateDatabaseBeans() {
         runner.run(context -> {
             assertThat(context).hasNotFailed().doesNotHaveBean(DataSource.class)
-                    .doesNotHaveBean(EvidencePersistenceService.class);
+                    .doesNotHaveBean(EvidencePersistenceService.class)
+                    .doesNotHaveBean(dev.changeassurance.retrieval.KeywordRetrievalService.class);
         });
     }
 

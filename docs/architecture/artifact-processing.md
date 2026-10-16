@@ -218,6 +218,7 @@ Keep source content separate from contextual metadata, retain failures/coverage,
 and use the deterministic ID for idempotence within a derivation configuration.
 Publication membership has its own association because chunk identity is independent
 of scope. The persistence guide documents schema, transactions, immutable identities,
-and readback. Search indexing and retention remain future work.
-Keyword/vector search, embeddings, grounded Q&A, Repository
+and readback. M1.5 adds [keyword search indexing and retrieval](keyword-retrieval.md);
+retention remains future work.
+Vector search, embeddings, grounded Q&A, Repository
 Intelligence UI, and change-impact analysis remain **not implemented**.
