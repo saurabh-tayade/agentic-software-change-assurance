@@ -7,9 +7,9 @@ which evidence supports that assessment, and what must be verified before releas
 It supports human decisions; it does not certify a change as safe. The
 [project charter](../../README.md) defines the product scope.
 
-M0 establishes an executable foundation and development conventions. RAG,
-retrieval, AI analysis, change-impact analysis, and agent execution are not
-implemented. M1.2 adds ingestion and M1.3 adds parsing/chunking; the remaining logical
+M0 establishes an executable foundation and development conventions. AI answers,
+change-impact analysis, and agent execution are not implemented. M1.2 adds ingestion,
+M1.3 parsing/chunking, M1.4 persistence, and M1.5 keyword retrieval; the remaining logical
 responsibilities guide future work, not separate services or deployment boundaries.
 
 ## Implemented foundation
@@ -35,6 +35,8 @@ limitations. M1.3 adds [artifact processing](artifact-processing.md) in
 `dev.changeassurance.processing`, with Java/Markdown parsing, deterministic chunks,
 and original line provenance. M1.4 adds [PostgreSQL persistence](evidence-persistence.md)
 in `dev.changeassurance.persistence`, with atomic publication and identity readback.
+M1.5 adds [keyword retrieval](keyword-retrieval.md) in `dev.changeassurance.retrieval`,
+with explicit publication isolation, ranked evidence, and coverage.
 These components add no HTTP route or automatic repository scan.
 
 ## Planned responsibilities and evidence flow
@@ -57,7 +59,7 @@ exercise retrieval and answer generation and retain results for comparison.
 Later work adds deterministic contract/dependency findings and diff analysis to
 support risk reports; controlled agents may gather evidence within defined limits.
 Selected-commit ingestion, parsing, and provenance-preserving chunking are
-implemented, along with PostgreSQL evidence persistence. Keyword/vector retrieval
+implemented, along with PostgreSQL persistence and keyword retrieval. Vector retrieval
 and grounded answers remain planned.
 
 ## Architectural principles
@@ -88,7 +90,7 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
 | Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
 | AI | None | Spring AI and local models are preferences to evaluate in M1 |
-| Storage and retrieval | PostgreSQL evidence persistence via JDBC/Flyway | Keyword/vector retrieval and pgvector remain future work |
+| Storage and retrieval | PostgreSQL evidence persistence and keyword retrieval via JDBC/Flyway | Vector retrieval and pgvector remain future work |
 | Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
 
 ## M1 readiness
@@ -109,10 +111,11 @@ M1.3 consumes unchanged source content and preserves original source locations a
 ingestion limitations; see the [processing guide](artifact-processing.md) for parser
 selection, chunking, and verification. M1.4
 [persists those contracts](evidence-persistence.md) atomically.
-The next step is **M1.5 — Keyword Retrieval**.
+M1.5 [keyword retrieval](keyword-retrieval.md) now supplies ranked evidence and a
+controlled baseline. The next step is **M1.6 — Grounded Question Answering**.
 Later M1 work will compare retrieval baselines and produce validated citations and answers with uncertainty.
 Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
 metadata including source revisions, tool/model configuration, latency, and token
-usage. Ranking and model integration remain open;
+usage. Further ranking improvements and model integration remain open;
 the conceptual contracts do not prescribe those implementations. See the
 [roadmap](../roadmap.md) for milestone acceptance criteria.

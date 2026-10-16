@@ -33,14 +33,17 @@ M1.3 adds [Java/Markdown parsing and deterministic evidence chunking](docs/archi
 preserving original source lines, hashes, context, and ingestion coverage.
 M1.4 adds [PostgreSQL evidence persistence](docs/architecture/evidence-persistence.md),
 with atomic publications, preserved processing coverage, and exact-identity readback.
+M1.5 adds [publication-scoped PostgreSQL keyword retrieval](docs/architecture/keyword-retrieval.md),
+deterministic ranking, read-path integrity checks, and a [measured retrieval baseline](evaluation/retrieval/README.md).
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Keyword/vector search, embeddings, grounded Q&A, Repository
+Vector search, embeddings, grounded Q&A, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
-PostgreSQL persistence/rollback, and evaluation-fixture consistency. These checks do not
-establish retrieval quality or production availability. Hosted CI must be checked
+PostgreSQL persistence/rollback/retrieval, and evaluation-fixture consistency. The
+controlled retrieval baseline measures lexical evidence coverage, not answer quality
+or production availability. Hosted CI must be checked
 for the revision under review; local verification does not establish it.
 
 See the [architecture overview](docs/architecture/overview.md),
@@ -133,7 +136,7 @@ overrides unless a concrete need is documented. M0 adds no runtime dependencies.
 
 ## Planned capabilities
 
-- Retrieve Java and Markdown evidence with source locations and version provenance.
+- Extend implemented keyword retrieval with evaluated vector/hybrid approaches.
 - Produce structured answers with citations and explicit uncertainty.
 - Analyze API, database, and event contracts alongside dependency relationships.
 - Interpret diffs to identify affected components, compatibility risks, and missing

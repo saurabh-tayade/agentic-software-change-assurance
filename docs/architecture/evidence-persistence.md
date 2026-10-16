@@ -136,8 +136,9 @@ failures. Original unsupported, failed, resource-excluded, and intentionally exc
 coverage survives readback. Successful publication means database consistency, not
 complete parsing or verified software behavior.
 
-Reads are exact-identity operations over immutable committed records. They require
-no long-running read transaction because the service provides no updates/deletes.
+Reads are exact-identity operations over immutable committed records. M1.5 adds
+[focused read-path verification](keyword-retrieval.md) in a read-only repeatable-read
+transaction before reconstruction, detecting incomplete or inconsistent membership.
 The database and its administrators remain trusted: this is not tamper-proof storage
 against arbitrary privileged SQL. Schema modification, deletion, and retention are
 outside the service contract.
@@ -240,8 +241,9 @@ publish adds one bounded result copy; `findChunks` currently reconstructs the wh
 publication. No pagination, cache, async jobs, or indefinite retries are introduced.
 Transaction query timeout does not impose a hard CPU deadline on in-memory validation.
 
-M1.5 can select a publication ID, join its membership to chunk/source/snapshot rows,
-and inspect persisted statuses and diagnostics before selecting eligible evidence.
-All original text and provenance are available without reparsing. Keyword query
-semantics, ranking, indexes, pagination, and eligibility policy remain M1.5 work;
-there is no immediate persistence-contract blocker for that scoped milestone.
+M1.5 [keyword retrieval](keyword-retrieval.md) selects a publication ID, verifies
+consistency, and ranks its member chunks in PostgreSQL without loading full source
+bodies. V2 adds generated search vectors and indexes; V1 is unchanged. Public
+`PublicationSummary` and immutable `PublicationMetadata` expose identity and coverage
+without source bodies. Existing publication/read signatures and IDs are unchanged.
+Pagination and retention remain unimplemented.
