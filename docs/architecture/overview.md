@@ -17,8 +17,8 @@ responsibilities guide future work, not separate services or deployment boundari
 One Spring Boot application starts from `ChangeAssuranceApplication` in
 `dev.changeassurance`. Spring MVC runs with the embedded servlet container;
 Actuator supplies `GET /actuator/health`. Default HTTP exposure is limited to
-health. Configuration currently names the application. There are no business
-endpoints, persistence stores, model integrations, or external service requirements.
+health. There are no business endpoints or model integrations. Default startup needs no
+external services; the explicit `persistence` profile enables PostgreSQL and Flyway.
 
 The current request flow is HTTP client -> embedded server -> Actuator health
 handling -> JSON health response. It performs no source ingestion or analysis.
@@ -33,7 +33,9 @@ and controlled evaluation validation. M1.2 adds
 It preserves committed Java/Markdown content and provenance with explicit coverage
 limitations. M1.3 adds [artifact processing](artifact-processing.md) in
 `dev.changeassurance.processing`, with Java/Markdown parsing, deterministic chunks,
-and original line provenance. Neither adds an HTTP route or automatic startup scan.
+and original line provenance. M1.4 adds [PostgreSQL persistence](evidence-persistence.md)
+in `dev.changeassurance.persistence`, with atomic publication and identity readback.
+These components add no HTTP route or automatic repository scan.
 
 ## Planned responsibilities and evidence flow
 
@@ -55,7 +57,8 @@ exercise retrieval and answer generation and retain results for comparison.
 Later work adds deterministic contract/dependency findings and diff analysis to
 support risk reports; controlled agents may gather evidence within defined limits.
 Selected-commit ingestion, parsing, and provenance-preserving chunking are
-implemented. Persistence, retrieval, and grounded answers remain planned.
+implemented, along with PostgreSQL evidence persistence. Keyword/vector retrieval
+and grounded answers remain planned.
 
 ## Architectural principles
 
@@ -85,8 +88,8 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
 | Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
 | AI | None | Spring AI and local models are preferences to evaluate in M1 |
-| Storage and retrieval | None | PostgreSQL, pgvector, and full-text search are preferences to evaluate in M1 |
-| Environment | Local JVM; no external services needed | Docker Compose only when dependencies warrant it; limited AWS validation later |
+| Storage and retrieval | PostgreSQL evidence persistence via JDBC/Flyway | Keyword/vector retrieval and pgvector remain future work |
+| Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
 
 ## M1 readiness
 
@@ -104,10 +107,12 @@ links/submodules, encodings, limits, and verification.
 
 M1.3 consumes unchanged source content and preserves original source locations and
 ingestion limitations; see the [processing guide](artifact-processing.md) for parser
-selection, chunking, and verification. The next step is **M1.4 — Evidence Persistence**.
+selection, chunking, and verification. M1.4
+[persists those contracts](evidence-persistence.md) atomically.
+The next step is **M1.5 — Keyword Retrieval**.
 Later M1 work will compare retrieval baselines and produce validated citations and answers with uncertainty.
 Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
 metadata including source revisions, tool/model configuration, latency, and token
-usage. Persistence, ranking, and model integration remain open;
+usage. Ranking and model integration remain open;
 the conceptual contracts do not prescribe those implementations. See the
 [roadmap](../roadmap.md) for milestone acceptance criteria.

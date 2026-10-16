@@ -57,6 +57,16 @@ configuration, and limitations. For future Repository Intelligence work, extend
 versioned evaluation scenarios in addition to software tests, following
 [ADR-0003](adr/0003-evidence-provenance-and-reproducible-evaluation.md).
 
+## Database development and verification
+
+The explicit `persistence` profile enables PostgreSQL and Flyway; default startup
+and `./mvnw test` stay database-independent. `./mvnw clean verify` additionally runs
+mandatory Testcontainers PostgreSQL tests through Maven Failsafe. Docker must be
+running; tests never silently skip for an unavailable daemon. Reports are in
+`target/failsafe-reports/`. See the [persistence guide](architecture/evidence-persistence.md)
+for environment variables, Compose, migrations, inspection, and local reset.
+Add a new versioned SQL migration for schema changes; never edit an applied migration.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,

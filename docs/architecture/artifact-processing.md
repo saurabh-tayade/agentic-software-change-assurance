@@ -211,13 +211,13 @@ coverage. They map all 10 original evidence references across the seven unchange
 M1.1 scenarios through chunks, including references crossing chunk boundaries.
 This verifies source location validity, not retrieval relevance or answer support.
 
-M1.4 can persist snapshots, artifact identities/digests, chunks, derivation
-configuration, and coverage/outcomes directly. Indexable metadata includes repository,
+M1.4 [persists snapshots](evidence-persistence.md), artifact identities/digests, chunks,
+derivation configuration, and coverage/outcomes directly. Indexable metadata includes repository,
 commit, path, type/format, line range, context, parser/configuration, and hashes.
 Keep source content separate from contextual metadata, retain failures/coverage,
 and use the deterministic ID for idempotence within a derivation configuration.
-Scope/run membership needs its own association because chunk identity is independent
-of scope. No production contract blocker is known; database schemas, migrations,
-transactions, indexing, retention, and reprocessing policy remain M1.4 decisions.
-Database persistence, keyword/vector search, embeddings, grounded Q&A, Repository
+Publication membership has its own association because chunk identity is independent
+of scope. The persistence guide documents schema, transactions, immutable identities,
+and readback. Search indexing and retention remain future work.
+Keyword/vector search, embeddings, grounded Q&A, Repository
 Intelligence UI, and change-impact analysis remain **not implemented**.

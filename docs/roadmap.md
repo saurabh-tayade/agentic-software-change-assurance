@@ -6,7 +6,8 @@ is active.** M1.1 establishes conceptual contracts, controlled fixtures, version
 scenarios, and deterministic validation. M1.2 implements read-only local Git
 snapshot ingestion and Java/Markdown artifact discovery. M1.3 implements syntax-aware
 Java/Markdown parsing and deterministic evidence chunks with original provenance.
-Persistence, retrieval, answers, change analysis, and agents are not implemented.
+M1.4 implements PostgreSQL evidence persistence and reproducible publication readback.
+Keyword/vector retrieval, answers, change analysis, and agents are not implemented.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -62,8 +63,9 @@ M1.1 provides [conceptual contracts](architecture/repository-intelligence.md) an
 [evaluation foundation](../evaluation/README.md). M1.2 implements
 [Git Repository Snapshot Ingestion](architecture/git-snapshot-ingestion.md).
 M1.3 implements [Java/Markdown Parsing & Chunking](architecture/artifact-processing.md).
-M1.4 — Evidence Persistence is next; retrieval and model integration follow in
-later scoped work.
+M1.4 implements [Evidence Persistence](architecture/evidence-persistence.md).
+M1.5 — Keyword Retrieval is next; vector retrieval and model integration follow
+in later scoped work.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

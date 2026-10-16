@@ -1,3 +1,12 @@
 spring:
   application:
     name: agentic-software-change-assurance
+---
+spring:
+  config:
+    activate:
+      on-profile: '!persistence'
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
