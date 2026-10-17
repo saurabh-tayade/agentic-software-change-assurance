@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "claims", "uncertainties"],
+  "properties": {
+    "status": {"type": "string", "enum": ["SUPPORTED", "PARTIALLY_SUPPORTED", "INSUFFICIENT_EVIDENCE"],
+      "description": "INSUFFICIENT_EVIDENCE requires no claims and at least one uncertainty. SUPPORTED requires cited claims; PARTIALLY_SUPPORTED requires cited claims and at least one uncertainty."},
+    "claims": {
+      "type": "array", "maxItems": 8,
+      "description": "For INSUFFICIENT_EVIDENCE this must be empty. Do not make cited claims about missing information or cite unrelated evidence to imply repository-wide absence.",
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["text", "evidenceKeys"],
+        "properties": {
+          "text": {"type": "string", "minLength": 1, "maxLength": 1000},
+          "evidenceKeys": {"type": "array", "minItems": 1, "maxItems": 8,
+            "items": {"type": "string", "pattern": "^E[1-8]$"}}
+        }
+      }
+    },
+    "uncertainties": {"type": "array", "maxItems": 8,
+      "description": "For INSUFFICIENT_EVIDENCE include at least one explanation of what the selected evidence cannot establish; selected chunks do not prove repository-wide absence. PARTIALLY_SUPPORTED also requires at least one uncertainty.",
+      "items": {"type": "string", "minLength": 1, "maxLength": 500}}
+  }
+}

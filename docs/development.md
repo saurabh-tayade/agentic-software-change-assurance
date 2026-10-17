@@ -72,6 +72,16 @@ M1.5 retrieval tests run in the same mandatory Failsafe lifecycle, including the
 inspect `target/keyword-baseline.json`. See the [retrieval guide](architecture/keyword-retrieval.md)
 for query limits, ranking, integrity costs, and M1.6 integration.
 
+## Local grounded Q&A
+
+The [Q&A guide](architecture/grounded-question-answering.md) documents the
+`persistence,qa` CLI profiles, local Ollama setup, explicit publication selection,
+context and citation policy, and failure behavior. The local model is an opt-in
+dependency; default startup and mandatory CI tests use no Ollama server. Keep
+deterministic citation checks separate from human review of semantic support.
+The [evaluation definition](../evaluation/qa/README.md) preserves the original
+Parcel Quotes ground truth and records how live runs should be assessed.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,
