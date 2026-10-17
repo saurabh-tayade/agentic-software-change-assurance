@@ -1,0 +1,10 @@
+# Explicit opt-in with persistence; no model calls until a CLI operation is invoked.
+spring:
+  main:
+    web-application-type: none
+embeddings:
+  base-url: ${EMBEDDINGS_BASE_URL:http://localhost:11434}
+  model: ${EMBEDDINGS_MODEL:nomic-embed-text:v1.5}
+  max-input-bytes: ${EMBEDDINGS_MAX_INPUT_BYTES:8192}
+  connect-timeout-seconds: ${EMBEDDINGS_CONNECT_TIMEOUT_SECONDS:5}
+  timeout-seconds: ${EMBEDDINGS_TIMEOUT_SECONDS:60}

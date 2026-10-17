@@ -82,6 +82,15 @@ deterministic citation checks separate from human review of semantic support.
 The [evaluation definition](../evaluation/qa/README.md) preserves the original
 Parcel Quotes ground truth and records how live runs should be assessed.
 
+## Local embedding indexing
+
+M1.7a adds the opt-in `persistence,embeddings` CLI and a derived pgvector index.
+Follow the [indexing guide](architecture/embedding-indexing.md) before upgrading an
+existing local database: Compose uses a new volume, and existing publications need
+an explicit export/import. Never reuse the Alpine data directory directly with the
+Debian image. Model downloads and indexing are explicit; mandatory tests use no
+Ollama. Vector retrieval and Q&A strategy selection remain subsequent work.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,

@@ -40,9 +40,11 @@ through an opt-in local Ollama CLI, bounded keyword evidence, structured output,
 and deterministic citation validation. The [Q&A evaluation definition](evaluation/qa/README.md)
 is versioned; a separate local acceptance record distinguishes reported live
 observations from deterministic tests and pending scenarios.
+M1.7a adds [versioned embedding generation and persistence](docs/architecture/embedding-indexing.md)
+for existing publications through an opt-in CLI.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Vector search, embeddings, a public Q&A API, Repository
+Vector search, hybrid retrieval, a public Q&A API, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
@@ -145,6 +147,16 @@ parent to receive managed dependency versions, review release notes and Java
 compatibility, and rerun these checks. Review Maven/Wrapper and GitHub Actions
 versions periodically in the same way. Avoid independent transitive-version
 overrides unless a concrete need is documented. M0 adds no runtime dependencies.
+
+## Local embedding indexing
+
+M1.7a implements explicit, versioned Ollama embedding generation and pgvector
+persistence for existing publications. See the
+[indexing guide](docs/architecture/embedding-indexing.md) for model/profile setup,
+CLI commands, limits, and recovery. Existing PostgreSQL users must follow its
+export/import instructions: the new Compose volume preserves the old volume but
+does not automatically copy publications. Vector/hybrid retrieval and Q&A strategy
+selection remain planned. Default startup and CI require no Ollama server.
 
 ## Planned capabilities
 

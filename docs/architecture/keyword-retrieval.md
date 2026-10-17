@@ -4,8 +4,10 @@ M1.5 implements `dev.changeassurance.retrieval` inside the existing modular mono
 It searches [M1.4 publications](evidence-persistence.md) by explicit identity, without
 reingestion, parsing, filesystem access, or model calls. ADR-0001 through ADR-0004
 remain applicable; this adds no endpoint, dependency, database extension, or service.
-Vector retrieval, embeddings, generated answers, UI, and change-impact analysis
-remain unimplemented.
+This module performs no embedding generation or answer generation. See
+[grounded Q&A](grounded-question-answering.md) and [embedding indexing](embedding-indexing.md)
+for the separately implemented opt-in capabilities. Vector and hybrid retrieval
+remain planned.
 
 ## Service and outcomes
 

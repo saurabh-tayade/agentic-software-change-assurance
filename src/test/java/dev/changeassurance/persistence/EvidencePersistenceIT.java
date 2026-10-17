@@ -35,7 +35,7 @@ import static dev.changeassurance.persistence.PersistenceFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EvidencePersistenceIT {
-    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.11-alpine")
+    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer(PostgresTestImage.IMAGE)
             .withPassword(UUID.randomUUID().toString());
     private static DriverManagerDataSource dataSource;
     private static JdbcTemplate jdbc;
@@ -50,7 +50,7 @@ class EvidencePersistenceIT {
         dataSource = new DriverManagerDataSource(POSTGRES.getJdbcUrl(), POSTGRES.getUsername(), POSTGRES.getPassword());
         jdbc = new JdbcTemplate(dataSource);
         flyway = Flyway.configure().dataSource(dataSource).load();
-        assertEquals(2, flyway.migrate().migrationsExecuted);
+        assertEquals(3, flyway.migrate().migrationsExecuted);
         service = new EvidencePersistenceService(dataSource);
     }
 
@@ -61,14 +61,14 @@ class EvidencePersistenceIT {
 
     @BeforeEach
     void clearFixtures() {
-        jdbc.execute("TRUNCATE publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
+        jdbc.execute("TRUNCATE chunk_embedding, publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
     }
 
     @Test
     void migrationsInitializeConstraintsAndAreRepeatable() {
         assertEquals(0, flyway.migrate().migrationsExecuted);
-        assertEquals(2, jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success", Integer.class));
-        assertEquals(5, jdbc.queryForObject("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name <> 'flyway_schema_history'", Integer.class));
+        assertEquals(3, jdbc.queryForObject("SELECT count(*) FROM flyway_schema_history WHERE success", Integer.class));
+        assertEquals(7, jdbc.queryForObject("SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public' AND table_name <> 'flyway_schema_history'", Integer.class));
         assertThrows(DataAccessException.class, () -> jdbc.update("INSERT INTO publication_chunk VALUES (?, ?, ?, 0)",
                 "a".repeat(64), "b".repeat(64), "c".repeat(64)));
         assertThrows(DataAccessException.class, () -> jdbc.update("INSERT INTO repository_snapshot VALUES (?, ?, ?, '{}'::jsonb, ?)",
@@ -194,7 +194,7 @@ class EvidencePersistenceIT {
                         "--EVIDENCE_DB_PASSWORD=" + POSTGRES.getPassword())) {
             assertNotNull(context.getBean(EvidencePersistenceService.class));
             assertNotNull(context.getBean(dev.changeassurance.retrieval.KeywordRetrievalService.class));
-            assertEquals(2, context.getBean(Flyway.class).info().applied().length);
+            assertEquals(3, context.getBean(Flyway.class).info().applied().length);
         }
     }
 

@@ -9,7 +9,9 @@ Java/Markdown parsing and deterministic evidence chunks with original provenance
 M1.4 implements PostgreSQL evidence persistence and reproducible publication readback.
 M1.5 implements publication-scoped keyword retrieval and a measured controlled baseline.
 M1.6 implements opt-in local grounded Q&A over keyword evidence, with citation
-identity validation and a versioned evaluation definition. Vector retrieval, a
+identity validation and a versioned evaluation definition. M1.7a adds explicit
+[versioned embedding indexing](architecture/embedding-indexing.md) and pgvector
+persistence. Vector retrieval, a
 public Q&A API, change analysis, and agents are not implemented. Live-model quality
 and semantic support remain limited to the exploratory observations in the
 [M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md).
@@ -74,7 +76,8 @@ publication consistency checks and [versioned retrieval evaluation](../evaluatio
 M1.6 adds [grounded Q&A](architecture/grounded-question-answering.md) and a
 [Q&A evaluation definition](../evaluation/qa/README.md). M1.7 will compare vector
 and hybrid retrieval with the existing keyword baseline while preserving the answer
-and citation contracts.
+and citation contracts. M1.7a indexing is implemented; M1.7b semantic retrieval and
+M1.7c hybrid/Q&A strategy integration remain planned.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

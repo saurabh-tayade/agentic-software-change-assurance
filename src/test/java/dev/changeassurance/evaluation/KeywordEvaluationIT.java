@@ -55,7 +55,7 @@ class KeywordEvaluationIT {
         var rows = new ArrayList<Map<String, Object>>();
         var timings = new ArrayList<Double>();
         int topK = definition.get("top_k").asInt();
-        try (var postgres = new PostgreSQLContainer("postgres:17.11-alpine").withPassword(UUID.randomUUID().toString())) {
+        try (var postgres = new PostgreSQLContainer(dev.changeassurance.persistence.PostgresTestImage.IMAGE).withPassword(UUID.randomUUID().toString())) {
             postgres.start();
             var pool = new HikariConfig();
             pool.setJdbcUrl(postgres.getJdbcUrl()); pool.setUsername(postgres.getUsername()); pool.setPassword(postgres.getPassword());

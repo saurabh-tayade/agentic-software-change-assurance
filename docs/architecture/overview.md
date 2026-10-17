@@ -7,9 +7,10 @@ which evidence supports that assessment, and what must be verified before releas
 It supports human decisions; it does not certify a change as safe. The
 [project charter](../../README.md) defines the product scope.
 
-M0 establishes an executable foundation and development conventions. AI answers,
-change-impact analysis, and agent execution are not implemented. M1.2 adds ingestion,
-M1.3 parsing/chunking, M1.4 persistence, and M1.5 keyword retrieval; the remaining logical
+M0 establishes an executable foundation and development conventions. Change-impact
+analysis and agent execution are not implemented. M1.2 adds ingestion, M1.3
+parsing/chunking, M1.4 persistence, M1.5 keyword retrieval, M1.6 local grounded Q&A,
+and M1.7a embedding indexing; the remaining logical
 responsibilities guide future work, not separate services or deployment boundaries.
 
 ## Implemented foundation
@@ -17,7 +18,8 @@ responsibilities guide future work, not separate services or deployment boundari
 One Spring Boot application starts from `ChangeAssuranceApplication` in
 `dev.changeassurance`. Spring MVC runs with the embedded servlet container;
 Actuator supplies `GET /actuator/health`. Default HTTP exposure is limited to
-health. There are no business endpoints or model integrations. Default startup needs no
+health. Model integrations run through opt-in local profiles and CLI commands.
+Default startup needs no
 external services; the explicit `persistence` profile enables PostgreSQL and Flyway.
 
 The current request flow is HTTP client -> embedded server -> Actuator health
@@ -37,6 +39,8 @@ and original line provenance. M1.4 adds [PostgreSQL persistence](evidence-persis
 in `dev.changeassurance.persistence`, with atomic publication and identity readback.
 M1.5 adds [keyword retrieval](keyword-retrieval.md) in `dev.changeassurance.retrieval`,
 with explicit publication isolation, ranked evidence, and coverage.
+M1.6 adds [grounded Q&A](grounded-question-answering.md). M1.7a adds
+[versioned embedding indexing](embedding-indexing.md) with derived pgvector storage.
 These components add no HTTP route or automatic repository scan.
 
 ## Planned responsibilities and evidence flow
@@ -92,7 +96,7 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
 | Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
 | AI | Spring AI 2.0.1 and opt-in Ollama chat adapter for grounded Q&A | Model quality and further providers are not established |
-| Storage and retrieval | PostgreSQL evidence persistence and keyword retrieval via JDBC/Flyway | Vector retrieval and pgvector remain future work |
+| Storage and retrieval | PostgreSQL evidence persistence, keyword retrieval, and derived pgvector embeddings via JDBC/Flyway | Vector and hybrid retrieval remain future work |
 | Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
 
 ## M1 readiness

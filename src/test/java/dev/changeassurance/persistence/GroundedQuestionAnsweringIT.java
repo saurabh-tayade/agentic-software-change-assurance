@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /** Real PostgreSQL M1.4/M1.5 pipeline with a deterministic model double; never live model quality. */
 class GroundedQuestionAnsweringIT {
-    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.11-alpine")
+    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer(PostgresTestImage.IMAGE)
             .withPassword(UUID.randomUUID().toString());
     private static JdbcTemplate jdbc;
     private static EvidencePersistenceService persistence;
@@ -49,7 +49,7 @@ class GroundedQuestionAnsweringIT {
     @AfterAll static void stop() { POSTGRES.stop(); }
 
     @BeforeEach void prepare() {
-        jdbc.execute("TRUNCATE publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
+        jdbc.execute("TRUNCATE chunk_embedding, publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
         model = new Gateway();
         qa = new GroundedQuestionAnsweringService(retrieval, model);
     }
