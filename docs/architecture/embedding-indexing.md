@@ -2,7 +2,7 @@
 
 M1.7a adds explicit local embedding generation and PostgreSQL/pgvector storage for
 an existing publication. M1.7b adds [exact vector search](vector-retrieval.md);
-hybrid search and Q&A strategy selection remain M1.7c work. Embeddings are derived
+M1.7c adds [hybrid search and Q&A strategy selection](hybrid-retrieval.md). Embeddings are derived
 indexes; the existing evidence and publication contracts remain authoritative. See
 [ADR-0005](../adr/0005-versioned-derived-embedding-indexes.md).
 

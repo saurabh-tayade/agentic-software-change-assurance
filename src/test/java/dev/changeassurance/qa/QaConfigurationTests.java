@@ -43,6 +43,25 @@ class QaConfigurationTests {
     }
 
     @Test
+    void strategySelectionRejectsMissingProfilesUnknownStrategiesAndMissingVectorWiring() {
+        for (String strategy : new String[]{"VECTOR", "HYBRID", "unknown"})
+            enabled().withPropertyValues("qa.retrieval-strategy=" + strategy).run(context -> {
+                assertThat(context).hasFailed();
+                assertThat(context.getStartupFailure()).hasStackTraceContaining("INVALID_REQUEST");
+            });
+        for (String strategy : new String[]{"VECTOR", "HYBRID"})
+            enabled().withPropertyValues("qa.retrieval-strategy=" + strategy, "qa.embedding-profile-id=" + "a".repeat(64))
+                    .run(context -> {
+                        assertThat(context).hasFailed();
+                        assertThat(context.getStartupFailure()).hasStackTraceContaining("RETRIEVAL_NOT_CONFIGURED");
+                    });
+        enabled().withPropertyValues("qa.embedding-profile-id=" + "a".repeat(64)).run(context -> {
+            assertThat(context).hasFailed();
+            assertThat(context.getStartupFailure()).hasStackTraceContaining("INVALID_REQUEST");
+        });
+    }
+
+    @Test
     void invalidModelConfigurationFailsDuringStartup() {
         for (String property : new String[]{"qa.model=", "qa.temperature=0.9", "qa.max-output-tokens=-1",
                 "qa.context-tokens=512", "qa.timeout-seconds=0", "qa.base-url=https://remote.example"}) {

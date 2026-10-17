@@ -10,7 +10,7 @@ It supports human decisions; it does not certify a change as safe. The
 M0 establishes an executable foundation and development conventions. Change-impact
 analysis and agent execution are not implemented. M1.2 adds ingestion, M1.3
 parsing/chunking, M1.4 persistence, M1.5 keyword retrieval, M1.6 local grounded Q&A,
-M1.7a embedding indexing, and M1.7b vector retrieval; the remaining logical
+M1.7a embedding indexing, M1.7b vector retrieval, and M1.7c hybrid/Q&A selection; the remaining logical
 responsibilities guide future work, not separate services or deployment boundaries.
 
 ## Implemented foundation
@@ -42,6 +42,7 @@ with explicit publication isolation, ranked evidence, and coverage.
 M1.6 adds [grounded Q&A](grounded-question-answering.md). M1.7a adds
 [versioned embedding indexing](embedding-indexing.md) with derived pgvector storage.
 M1.7b adds [exact vector retrieval](vector-retrieval.md) scoped to a publication and profile.
+M1.7c adds [RRF hybrid retrieval](hybrid-retrieval.md) and explicit Q&A strategy selection.
 These components add no HTTP route or automatic repository scan.
 
 ## Planned responsibilities and evidence flow
@@ -66,8 +67,8 @@ support risk reports; controlled agents may gather evidence within defined limit
 Selected-commit ingestion, parsing, and provenance-preserving chunking are
 implemented, along with PostgreSQL persistence and keyword retrieval. Opt-in
 [grounded Q&A](grounded-question-answering.md) now validates citation identities
-over selected keyword evidence. Vector retrieval is available separately; hybrid
-fusion, Q&A strategy selection, and broader quality evaluation remain future work.
+over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrieval.
+Broader retrieval and answer-quality evaluation remain M1.8 work.
 
 ## Architectural principles
 
@@ -97,7 +98,7 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
 | Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
 | AI | Spring AI 2.0.1 and opt-in Ollama chat adapter for grounded Q&A | Model quality and further providers are not established |
-| Storage and retrieval | PostgreSQL evidence persistence, keyword/exact vector retrieval, and derived pgvector embeddings via JDBC/Flyway | Hybrid retrieval remains future work |
+| Storage and retrieval | PostgreSQL evidence persistence, keyword/exact vector/RRF hybrid retrieval, and derived pgvector embeddings via JDBC/Flyway | Measured retrieval improvements in M1.8 |
 | Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
 
 ## M1 readiness

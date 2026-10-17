@@ -92,7 +92,10 @@ Debian image. Model downloads and indexing are explicit; mandatory tests use no
 Ollama. M1.7b adds a separate [vector retrieval CLI](architecture/vector-retrieval.md)
 using the same opt-in profiles and an explicit stored profile ID. Its deterministic
 768-dimensional ranking tests run in Failsafe. Live retrieval acceptance is separate
-from CI; hybrid retrieval and Q&A strategy selection remain subsequent work.
+from CI. M1.7c adds [hybrid retrieval and Q&A strategy selection](architecture/hybrid-retrieval.md).
+Keyword remains the default. Opting into VECTOR/HYBRID requires the embeddings
+profile and an explicit compatible stored profile ID; do not index automatically
+or substitute keyword retrieval after a failure.
 
 ## Documentation and decisions
 

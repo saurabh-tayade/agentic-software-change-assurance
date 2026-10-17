@@ -3,7 +3,8 @@
 M1.7b adds `VectorRetrievalService` and a local CLI over the existing
 [versioned embedding index](embedding-indexing.md). It returns original evidence,
 not generated answers. Keyword retrieval and grounded Q&A still follow their
-existing paths; hybrid fusion and Q&A strategy selection belong to M1.7c.
+existing defaults; M1.7c adds [hybrid fusion and explicit Q&A selection](hybrid-retrieval.md)
+over this unchanged vector service.
 [ADR-0005](../adr/0005-versioned-derived-embedding-indexes.md) governs the derived
 index. No tables, migrations, dependencies, or approximate indexes are added.
 
@@ -183,5 +184,5 @@ Deterministic vectors verify mechanics, not the relevance of Nomic embeddings.
 Live model/runtime changes can alter query vectors and ranking despite the same
 model artifact. The adapter's observable digest checks cannot detect a tag changed
 and restored between checks. Database administrators remain trusted. There is no
-ANN index, query cache, hybrid fusion, reranker, Q&A integration, or broad retrieval
-benchmark. Those remain separate increments/milestones.
+ANN index, query cache, reranker, or broad retrieval benchmark. Hybrid/Q&A
+composition is documented separately in M1.7c; broad evaluation remains M1.8 work.

@@ -4,6 +4,9 @@ import dev.changeassurance.persistence.PublicationIntegrity;
 import dev.changeassurance.persistence.PublicationIntegrityException;
 import dev.changeassurance.processing.ProcessingResult;
 import dev.changeassurance.retrieval.KeywordRetrievalService;
+import dev.changeassurance.retrieval.EvidenceRetriever;
+import dev.changeassurance.retrieval.VectorRetrievalException;
+import dev.changeassurance.embedding.EmbeddingException;
 import dev.changeassurance.retrieval.RetrievalException;
 import dev.changeassurance.retrieval.RetrievalResult;
 import org.slf4j.Logger;
@@ -19,23 +22,30 @@ public final class GroundedQuestionAnsweringService {
     public static final String VERSION = "grounded-answer-v1";
     private static final Logger LOG = LoggerFactory.getLogger(GroundedQuestionAnsweringService.class);
     private static final int MAX_LOGGED_RESPONSE_BYTES = 8192;
-    private final KeywordRetrievalService retrieval;
+    private final EvidenceRetriever retrieval;
     private final ModelGateway model;
     private final boolean logMalformedModelResponse;
     private final EvidenceContextBuilder contexts = new EvidenceContextBuilder();
     private final ProposedAnswerValidator validator = new ProposedAnswerValidator();
 
-    public GroundedQuestionAnsweringService(KeywordRetrievalService retrieval, ModelGateway model) {
+    public GroundedQuestionAnsweringService(EvidenceRetriever retrieval, ModelGateway model) {
         this(retrieval, model, false);
     }
 
-    public GroundedQuestionAnsweringService(KeywordRetrievalService retrieval, ModelGateway model,
+    public GroundedQuestionAnsweringService(EvidenceRetriever retrieval, ModelGateway model,
                                             boolean logMalformedModelResponse) {
         this.retrieval = Objects.requireNonNull(retrieval); this.model = Objects.requireNonNull(model);
         this.logMalformedModelResponse = logMalformedModelResponse;
     }
 
     public GroundedAnswer answer(String publicationId, String question, AnsweringConfiguration configuration) {
+        return answerWithRetrieval(publicationId, question, configuration).answer();
+    }
+
+    /** CLI trace from the same invocation, without repeating retrieval or changing GroundedAnswer. */
+    public record AnswerRun(GroundedAnswer answer, RetrievalResult retrieval) { }
+
+    public AnswerRun answerWithRetrieval(String publicationId, String question, AnsweringConfiguration configuration) {
         long start = System.nanoTime();
         try { PublicationIntegrity.validateId(publicationId); }
         catch (IllegalArgumentException exception) { throw new QaException(QaException.Code.INVALID_REQUEST); }
@@ -55,6 +65,11 @@ public final class GroundedQuestionAnsweringService {
             context = contexts.build(result, configuration);
         } catch (PublicationIntegrityException exception) {
             throw new QaException(QaException.Code.PUBLICATION_INTEGRITY_FAILURE, exception);
+        } catch (EmbeddingException exception) {
+            throw QaException.embeddingFailure(exception);
+        } catch (VectorRetrievalException exception) {
+            throw new QaException(exception.code() == VectorRetrievalException.Code.INDEX_INCOMPLETE
+                    ? QaException.Code.EMBEDDING_INDEX_INCOMPLETE : QaException.Code.RETRIEVAL_FAILURE, exception);
         } catch (RetrievalException exception) {
             throw new QaException(QaException.Code.RETRIEVAL_FAILURE, exception);
         }
@@ -62,7 +77,9 @@ public final class GroundedQuestionAnsweringService {
         ModelGateway.Diagnostics invocation = null;
         if (result.matches().isEmpty()) {
             validated = new ProposedAnswerValidator.Validated(GroundedAnswer.Status.INSUFFICIENT_EVIDENCE,
-                    List.of(), List.of(), List.of("No keyword matches were retrieved. This does not prove feature absence."),
+                    List.of(), List.of(), List.of((KeywordRetrievalService.STRATEGY.equals(result.strategy())
+                            ? "No keyword matches were retrieved." : "No evidence candidates were retrieved.")
+                            + " This does not prove feature absence."),
                     "No matching evidence was retrieved for this question.");
         } else {
             if (context.entries().isEmpty()) throw new QaException(QaException.Code.CONTEXT_BUDGET_FAILURE);
@@ -83,11 +100,11 @@ public final class GroundedQuestionAnsweringService {
             uncertainties.add("Publication processing is " + result.publication().metadata().status() + "; repository evidence is incomplete.");
         }
         if (!context.selection().omissions().isEmpty()) uncertainties.add("Some retrieved evidence was omitted from the model context; inspect contextSelection.");
-        return new GroundedAnswer(VERSION, result.publication(), question, validated.answer(), validated.status(),
+        return new AnswerRun(new GroundedAnswer(VERSION, result.publication(), question, validated.answer(), validated.status(),
                 validated.claims(), validated.citations(), uncertainties, result.strategy(), result.limitations(),
                 context.selection(), configuration, QaPrompt.VERSION, QaPrompt.hash(QaPrompt.SYSTEM), QaPrompt.hash(QaPrompt.SCHEMA),
                 model.settings(), invocation, "CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED",
-                (System.nanoTime() - start) / 1_000_000);
+                (System.nanoTime() - start) / 1_000_000), result);
     }
 
     private void logMalformedResponse(QaException failure, String raw) {

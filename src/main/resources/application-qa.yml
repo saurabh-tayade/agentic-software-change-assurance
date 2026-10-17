@@ -3,6 +3,8 @@ spring:
   main:
     web-application-type: none
 qa:
+  retrieval-strategy: ${QA_RETRIEVAL_STRATEGY:KEYWORD}
+  embedding-profile-id: ${QA_EMBEDDING_PROFILE_ID:}
   log-malformed-model-response: ${QA_LOG_MALFORMED_MODEL_RESPONSE:false}
   base-url: ${QA_OLLAMA_BASE_URL:http://localhost:11434}
   model: ${QA_MODEL:qwen3:4b-instruct}

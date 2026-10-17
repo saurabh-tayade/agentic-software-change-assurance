@@ -7,8 +7,8 @@ remain applicable; this adds no endpoint, dependency, database extension, or ser
 This module performs no embedding generation or answer generation. See
 [grounded Q&A](grounded-question-answering.md) and [embedding indexing](embedding-indexing.md)
 for the separately implemented opt-in capabilities. M1.7b adds separate
-[vector retrieval](vector-retrieval.md); keyword behavior is unchanged and hybrid
-retrieval remains planned.
+[vector retrieval](vector-retrieval.md); M1.7c composes both through
+[hybrid retrieval](hybrid-retrieval.md). Keyword SQL and ranking behavior are unchanged.
 
 ## Service and outcomes
 

@@ -43,9 +43,11 @@ observations from deterministic tests and pending scenarios.
 M1.7a adds [versioned embedding generation and persistence](docs/architecture/embedding-indexing.md)
 for existing publications through an opt-in CLI. M1.7b adds
 [exact vector retrieval](docs/architecture/vector-retrieval.md) with explicit publication/profile selection.
+M1.7c adds [RRF hybrid retrieval and explicit Q&A strategy selection](docs/architecture/hybrid-retrieval.md),
+keeping keyword retrieval as the default. Live three-strategy Q&A acceptance is pending.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Hybrid retrieval, a public Q&A API, Repository
+A public Q&A API, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
@@ -157,12 +159,12 @@ persistence for existing publications. See the
 CLI commands, limits, and recovery. Existing PostgreSQL users must follow its
 export/import instructions: the new Compose volume preserves the old volume but
 does not automatically copy publications. M1.7b adds a separate
-[vector retrieval CLI](docs/architecture/vector-retrieval.md); hybrid retrieval and
-Q&A strategy selection remain planned. Default startup and CI require no Ollama server.
+[vector retrieval CLI](docs/architecture/vector-retrieval.md). M1.7c adds
+[KEYWORD/VECTOR/HYBRID Q&A selection](docs/architecture/grounded-question-answering.md). Default startup and CI require no Ollama server.
 
 ## Planned capabilities
 
-- Compare keyword/vector retrieval and add evaluated hybrid approaches.
+- Evaluate implemented keyword, vector, and hybrid retrieval against versioned scenarios.
 - Evaluate structured answers for semantic support, completeness, and uncertainty.
 - Analyze API, database, and event contracts alongside dependency relationships.
 - Interpret diffs to identify affected components, compatibility risks, and missing
