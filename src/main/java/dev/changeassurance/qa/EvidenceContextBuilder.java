@@ -87,7 +87,9 @@ public final class EvidenceContextBuilder {
         envelope.put("selection", Map.of("policy", POLICY, "retrievedCount", result.resultCount(),
                 "selectedCount", entries.size(), "notShownCount", result.resultCount() - entries.size(),
                 "retrievalStrategy", result.strategy(), "retrievalTopK", result.topK(),
-                "limitation", "Lexical topK search and bounded context cannot establish feature absence or deployment state."));
+                "limitation", (dev.changeassurance.retrieval.KeywordRetrievalService.STRATEGY.equals(result.strategy())
+                        ? "Lexical topK search" : "Ranked topK retrieval")
+                        + " and bounded context cannot establish feature absence or deployment state."));
         envelope.put("evidence", entries.stream().map(EvidenceContextBuilder::data).toList());
         return JSON.writeValueAsString(envelope);
     }

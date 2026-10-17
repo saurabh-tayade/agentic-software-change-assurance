@@ -21,7 +21,7 @@ import static dev.changeassurance.persistence.PersistenceFixtures.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class KeywordRetrievalIT {
-    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.11-alpine")
+    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer(PostgresTestImage.IMAGE)
             .withPassword(UUID.randomUUID().toString());
     private static JdbcTemplate jdbc;
     private static EvidencePersistenceService persistence;
@@ -36,7 +36,7 @@ class KeywordRetrievalIT {
         assertEquals(1, Flyway.configure().dataSource(ds).target("1").load().migrate().migrationsExecuted);
         var input = fixture("a", RepositorySelection.Scope.all());
         var saved = persistence.publish(input, process(input));
-        assertEquals(1, Flyway.configure().dataSource(ds).load().migrate().migrationsExecuted);
+        assertEquals(2, Flyway.configure().dataSource(ds).load().migrate().migrationsExecuted);
         retrieval = new KeywordRetrievalService(ds);
         assertFalse(retrieval.search(saved.id(), "ProductService", 10).orElseThrow().matches().isEmpty());
         assertEquals(saved, persistence.findPublication(saved.id()).orElseThrow());
@@ -44,7 +44,7 @@ class KeywordRetrievalIT {
 
     @AfterAll static void stop() { POSTGRES.stop(); }
     @BeforeEach void clear() {
-        jdbc.execute("TRUNCATE publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
+        jdbc.execute("TRUNCATE chunk_embedding, publication_chunk, processing_publication, evidence_chunk, source_artifact, repository_snapshot");
     }
 
     static IngestionResult fixture(String commit, RepositorySelection.Scope scope) {

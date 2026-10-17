@@ -40,8 +40,9 @@ Testcontainers 2.0.5. `spring-boot-starter-flyway` enables Boot's Flyway integra
 `flyway-database-postgresql` supplies the required
 [PostgreSQL database support](https://documentation.red-gate.com/flyway/reference/database-driver-reference/postgresql-database).
 No transitive versions are overridden. Local development and tests pin
-`postgres:17.11-alpine`, from the supported
-[PostgreSQL 17 release family](https://www.postgresql.org/support/versioning/).
+`pgvector/pgvector:0.8.7-pg17-bookworm` by multi-platform digest (PostgreSQL 17.11).
+See the [embedding guide](embedding-indexing.md#postgresql-setup-and-existing-data)
+for the required export/import when moving an existing Alpine volume.
 Review image/dependency updates together with migration and round-trip tests.
 
 | Table | Identity and responsibility |
@@ -161,7 +162,11 @@ The enabled profile adds normal database health behavior. External properties ar
 - `EVIDENCE_DB_PASSWORD`: database password.
 - `EVIDENCE_DB_PORT`: optional Compose host port, default 5432.
 
-For disposable local development, generate a password in your shell (not production
+**Existing pre-M1.7a databases:** follow the
+[database preservation procedure](embedding-indexing.md#postgresql-setup-and-existing-data)
+before recreating the Compose container. The new volume starts empty.
+
+For fresh disposable local development, generate a password in your shell (not production
 credentials). Keep these exports in the same shell; an ignored `.env` may also hold
 local values, but Compose's `.env` is not automatically exported to the JVM.
 

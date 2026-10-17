@@ -54,13 +54,23 @@ public final class QaCliRunner implements ApplicationRunner {
                             environment.getProperty("qa.max-evidence", Integer.class, defaults.maxEvidence()),
                             environment.getProperty("qa.max-context-bytes", Integer.class, defaults.maxContextBytes()),
                             environment.getProperty("qa.max-evidence-bytes", Integer.class, defaults.maxEvidenceBytes()));
-                    yield answering.answer(required("qa.publication-id"), required("qa.question"), configuration);
+                    var run = answering.answerWithRetrieval(required("qa.publication-id"), required("qa.question"), configuration);
+                    // Preserve the existing answer fields; add the actual retrieval trace from this invocation.
+                    var outputNode = (tools.jackson.databind.node.ObjectNode) new JsonMapper().valueToTree(run.answer());
+                    outputNode.put("requestedRetrievalStrategy", QaConfiguration.strategy(environment).name());
+                    if (QaConfiguration.strategy(environment) != dev.changeassurance.retrieval.RetrievalStrategy.KEYWORD)
+                        outputNode.put("embeddingProfileId", required("qa.embedding-profile-id"));
+                    outputNode.set("retrieval", new JsonMapper().valueToTree(run.retrieval()));
+                    yield outputNode;
                 }
                 default -> throw new QaException(QaException.Code.INVALID_REQUEST);
             };
             System.out.println(json.writeValueAsString(output));
         } catch (QaException exception) {
-            System.err.println(json.writeValueAsString(Map.of("failure", exception.code())));
+            Object failure = exception.getCause() instanceof dev.changeassurance.retrieval.VectorRetrievalException vector
+                    && vector.coverage() != null ? Map.of("failure", exception.code(), "coverage", vector.coverage())
+                    : Map.of("failure", exception.code());
+            System.err.println(json.writeValueAsString(failure));
             // Keep provider/SQL bodies and nested exception details out of the command's public error.
             throw new QaException(exception.code());
         } finally {

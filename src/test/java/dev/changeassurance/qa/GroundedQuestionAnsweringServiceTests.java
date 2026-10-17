@@ -210,6 +210,31 @@ class GroundedQuestionAnsweringServiceTests {
         return (value.length() - value.replace(fragment, "").length()) / fragment.length();
     }
 
+    @Test void embeddingFailuresHaveSafeDistinctCodesAndNeverInvokeTheAnswerModel() {
+        var codes = java.util.Map.of(
+                dev.changeassurance.embedding.EmbeddingException.Code.MODEL_UNAVAILABLE, QaException.Code.EMBEDDING_MODEL_UNAVAILABLE,
+                dev.changeassurance.embedding.EmbeddingException.Code.MODEL_TIMEOUT, QaException.Code.EMBEDDING_MODEL_TIMEOUT,
+                dev.changeassurance.embedding.EmbeddingException.Code.INVALID_VECTOR, QaException.Code.EMBEDDING_INVALID_VECTOR,
+                dev.changeassurance.embedding.EmbeddingException.Code.PROFILE_MISMATCH, QaException.Code.EMBEDDING_PROFILE_MISMATCH,
+                dev.changeassurance.embedding.EmbeddingException.Code.INVALID_PROVIDER_RESPONSE, QaException.Code.EMBEDDING_INVALID_RESPONSE,
+                dev.changeassurance.embedding.EmbeddingException.Code.INDEX_INTEGRITY_FAILURE, QaException.Code.EMBEDDING_INDEX_INTEGRITY_FAILURE,
+                dev.changeassurance.embedding.EmbeddingException.Code.PERSISTENCE_FAILURE, QaException.Code.RETRIEVAL_FAILURE,
+                dev.changeassurance.embedding.EmbeddingException.Code.OVERSIZED_INPUT, QaException.Code.EMBEDDING_INPUT_REJECTED,
+                dev.changeassurance.embedding.EmbeddingException.Code.MODEL_INPUT_REJECTED, QaException.Code.EMBEDDING_INPUT_REJECTED);
+        codes.forEach((input, expected) -> {
+            var answering = new GroundedQuestionAnsweringService((id, q, k) -> {
+                throw new dev.changeassurance.embedding.EmbeddingException(input);
+            }, gateway);
+            assertCode(expected, () -> answering.answer(PUBLICATION, evidence.query(), options));
+        });
+        var answering = new GroundedQuestionAnsweringService((id, q, k) -> {
+            throw new dev.changeassurance.retrieval.VectorRetrievalException(
+                    dev.changeassurance.retrieval.VectorRetrievalException.Code.DATABASE_FAILURE, null);
+        }, gateway);
+        assertCode(QaException.Code.RETRIEVAL_FAILURE, () -> answering.answer(PUBLICATION, evidence.query(), options));
+        assertEquals(0, gateway.calls);
+    }
+
     static QaException assertCode(QaException.Code code, org.junit.jupiter.api.function.Executable operation) {
         var failure = assertThrows(QaException.class, operation);
         assertEquals(code, failure.code());

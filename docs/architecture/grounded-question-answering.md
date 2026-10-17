@@ -1,7 +1,8 @@
 # Evidence-grounded question answering (M1.6)
 
 The opt-in Q&A path answers questions about one explicit, already-persisted evidence
-publication. It calls the [M1.5 keyword retriever](keyword-retrieval.md), selects
+publication. It defaults to the [M1.5 keyword retriever](keyword-retrieval.md);
+M1.7c adds explicit VECTOR/HYBRID selection. It selects
 complete chunks for the model, asks the local Ollama model for a structured proposal,
 and validates references before returning an answer. The [M1.4 publication](evidence-persistence.md)
 retains snapshot identity and processing coverage. The Q&A service does not ingest,
@@ -155,10 +156,46 @@ sharing captured logs. Omit the environment variable or set it to `false` on the
 next run to disable raw-response logging again. This flag does not alter validation,
 retry behavior, or public error messages.
 
-## Next retrieval step
+## Retrieval strategy selection (M1.7c)
 
-M1.7 can introduce vector or hybrid retrieval behind the ranked-evidence boundary.
-It must retain the explicit publication, immutable chunk provenance, context-key
-allowlist, answer contract, and separate retrieval strategy identity. Compare both
-retrieved and selected evidence against the existing references before comparing
-answer quality. Vector storage, embeddings, and hybrid scoring are not part of M1.6.
+`--qa.retrieval-strategy=KEYWORD|VECTOR|HYBRID` selects one strategy; omitted means
+KEYWORD. `QA_RETRIEVAL_STRATEGY` is the environment equivalent. VECTOR/HYBRID require
+`persistence,qa,embeddings` and `--qa.embedding-profile-id=<full-profile-id>`
+(or `QA_EMBEDDING_PROFILE_ID`). The profile must already exist, match the configured
+Nomic model digest/options, and completely index the selected publication. Missing
+indexes fail explicitly; answering never indexes or falls back. KEYWORD rejects a
+nonempty embedding-profile setting. See the [hybrid design](hybrid-retrieval.md) for
+RRF parameters, consistency, failure categories, and configuration behavior.
+
+Use the existing database credentials and installed models (`ollama list`). These
+examples deliberately use the same question, publication, and topK=12 for all three
+strategies; the example IDs are local inputs. If an embedding-profile environment
+variable is exported, clear it for the keyword command.
+
+```sh
+./mvnw spring-boot:run -Dspring-boot.run.profiles=persistence,qa \
+  -Dspring-boot.run.arguments='--qa.command=answer --qa.retrieval-strategy=KEYWORD --qa.embedding-profile-id= --qa.publication-id=40b677d1bb8efeb02506e0de2ef624acb046a26cc2b57a65a8d7d9ab906c702c --qa.question="Where is the shipping cost calculated?" --qa.top-k=12'
+
+./mvnw spring-boot:run -Dspring-boot.run.profiles=persistence,qa,embeddings \
+  -Dspring-boot.run.arguments='--qa.command=answer --qa.retrieval-strategy=VECTOR --qa.embedding-profile-id=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b --qa.publication-id=40b677d1bb8efeb02506e0de2ef624acb046a26cc2b57a65a8d7d9ab906c702c --qa.question="Where is the shipping cost calculated?" --qa.top-k=12'
+
+./mvnw spring-boot:run -Dspring-boot.run.profiles=persistence,qa,embeddings \
+  -Dspring-boot.run.arguments='--qa.command=answer --qa.retrieval-strategy=HYBRID --qa.embedding-profile-id=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b --qa.publication-id=40b677d1bb8efeb02506e0de2ef624acb046a26cc2b57a65a8d7d9ab906c702c --qa.question="Where is the shipping cost calculated?" --qa.top-k=12'
+```
+
+The existing top-level answer fields are preserved. Additional CLI diagnostics show
+`requestedRetrievalStrategy`, `embeddingProfileId` when applicable, and the actual
+`retrieval` result. Inspect `retrieval.matches` for source paths/lines, original
+chunks, ranks, and scores; compare with `contextSelection.selected` and `citations`.
+Uncited retrieved evidence was not necessarily used to support the answer. Scores
+have different meanings by strategy and are not answer confidence. Hybrid candidate
+depth is 48 for these commands, with fixed equal weights and k=60.
+
+`invocation` describes the answer-model call; `durationMillis` covers the whole Q&A
+operation, including retrieval. No embedding token counts or isolated embedding
+latency are fabricated. The [initial observations](../../evaluation/retrieval/m1-7-observations.md)
+distinguish the prior reported vector run, deterministic tests, and pending live
+Q&A comparisons. Default startup remains model-free; the standalone vector CLI is
+unchanged. Compare retrieval, selected context, citation validity, and human-reviewed
+semantic support separately. Hybrid retrieval does not fix the observed numerical
+unit errors in M1.6. Broader evaluation belongs to M1.8.

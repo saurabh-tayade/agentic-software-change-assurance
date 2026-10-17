@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 /** Explicit-publication, database-side search. No filesystem, parsers, or answer generation. */
-public final class KeywordRetrievalService {
+public final class KeywordRetrievalService implements EvidenceRetriever {
     public static final String STRATEGY = "postgres-keyword-v1";
     public static final int MAX_QUERY_LENGTH = 512;
     public static final int MAX_TOP_K = 100;

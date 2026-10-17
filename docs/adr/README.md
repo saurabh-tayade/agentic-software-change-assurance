@@ -10,6 +10,7 @@ their application to future features is incremental.
 | [ADR-0002](0002-deterministic-analysis-before-ai-interpretation.md) | Deterministic Analysis Before AI Interpretation | Accepted |
 | [ADR-0003](0003-evidence-provenance-and-reproducible-evaluation.md) | Evidence, Provenance, and Reproducible Evaluation | Accepted |
 | [ADR-0004](0004-atomic-evidence-publications.md) | Atomic PostgreSQL Evidence Publications | Accepted |
+| [ADR-0005](0005-versioned-derived-embedding-indexes.md) | Versioned Derived Embedding Indexes | Accepted |
 
 Use sequential four-digit identifiers and descriptive kebab-case filenames.
 Include Status, Context, Decision, Alternatives considered, Consequences, and

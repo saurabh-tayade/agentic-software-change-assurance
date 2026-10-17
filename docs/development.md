@@ -82,6 +82,21 @@ deterministic citation checks separate from human review of semantic support.
 The [evaluation definition](../evaluation/qa/README.md) preserves the original
 Parcel Quotes ground truth and records how live runs should be assessed.
 
+## Local embedding indexing
+
+M1.7a adds the opt-in `persistence,embeddings` CLI and a derived pgvector index.
+Follow the [indexing guide](architecture/embedding-indexing.md) before upgrading an
+existing local database: Compose uses a new volume, and existing publications need
+an explicit export/import. Never reuse the Alpine data directory directly with the
+Debian image. Model downloads and indexing are explicit; mandatory tests use no
+Ollama. M1.7b adds a separate [vector retrieval CLI](architecture/vector-retrieval.md)
+using the same opt-in profiles and an explicit stored profile ID. Its deterministic
+768-dimensional ranking tests run in Failsafe. Live retrieval acceptance is separate
+from CI. M1.7c adds [hybrid retrieval and Q&A strategy selection](architecture/hybrid-retrieval.md).
+Keyword remains the default. Opting into VECTOR/HYBRID requires the embeddings
+profile and an explicit compatible stored profile ID; do not index automatically
+or substitute keyword retrieval after a failure.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,
