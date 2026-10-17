@@ -1,15 +1,20 @@
-# Grounded Q&A evaluation v1
+# Grounded Q&A evaluation v2
 
-The [definition](qa-v1.json) imports all seven original [Parcel Quotes scenarios](../scenarios/parcel-quotes-v1.json)
+The [current definition](qa-v2.json) imports all seven original [Parcel Quotes scenarios](../scenarios/parcel-quotes-v1.json)
 and the existing `KW-006` Kafka zero-match case from the [keyword definition](../retrieval/keyword-v1.json).
 It adds one adversarial question variant, for **nine cases**. The corpus, original
 findings, source spans, and retrieval ground truth are unchanged and pinned by
 SHA256. These visible development cases are not a held-out benchmark. This is a
 definition and review protocol, not a recorded model-quality baseline.
 
-The separate [M1.6 local-model acceptance record](live-acceptance-m1-6-v1.md)
-captures two maintainer-reported live observations and one pending incorrect-premise
-test. It does not change this definition or its source ground truth.
+The [qa-v1 definition](qa-v1.json) and `repository-qa-v1` prompt remain unchanged
+for earlier live runs. Apart from its own version, the current `qa-v2` definition
+changes only the prompt version to `repository-qa-v2`; imported scenarios and
+source ground truth are the same. The separate
+[M1.6 local-model acceptance record](live-acceptance-m1-6-v1.md)
+captures four maintainer-reported live observations, including separate v1 and v2
+semantic-support failures for the same incorrect-premise question. The v2 prompt
+did not resolve the observed unit errors.
 
 Use the original scenario's question, findings, evidence, and answerability directly.
 For `KW-006`, use its original query, `Kafka broker`, and empty expected evidence.

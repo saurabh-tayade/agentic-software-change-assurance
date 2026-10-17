@@ -30,7 +30,7 @@ class QaDefinitionTests {
     @Test void importsTheUnchangedSevenScenariosAndVerifiableOriginalReferences() throws Exception {
         var definition = definition();
         assertEquals(1, definition.get("schema_version").asInt());
-        assertEquals("qa-v1", definition.get("version").asString());
+        assertEquals("qa-v2", definition.get("version").asString());
         assertEquals("parcel-quotes/v1", definition.get("corpus").asString());
         assertEquals(definition.get("corpus_manifest_sha256").asString(), sha(CORPUS.resolve("manifest.json")));
         var imported = definition.get("original_scenarios");
@@ -119,8 +119,22 @@ class QaDefinitionTests {
                 "answer_completeness", "model_reliability", "latency_and_usage"), new HashSet<>(strings(definition.get("dimensions"))));
     }
 
+    @Test void preservesThePriorEvaluationAndPromptVersion() throws Exception {
+        var prior = JSON.readTree(Files.readString(Path.of("evaluation/qa/qa-v1.json")));
+        var current = definition();
+        assertEquals("qa-v1", prior.get("version").asString());
+        assertEquals("repository-qa-v1", prior.get("prompt_version").asString());
+        assertTrue(Files.readString(Path.of("src/main/resources/qa/repository-qa-v1.txt"))
+                .contains("Distinguish implementation, test definitions"));
+        for (String name : prior.propertyNames()) {
+            if (!name.equals("version") && !name.equals("prompt_version")) {
+                assertEquals(prior.get(name), current.get(name), "Evaluation ground truth changed: " + name);
+            }
+        }
+    }
+
     private static JsonNode definition() throws Exception {
-        return JSON.readTree(Files.readString(Path.of("evaluation/qa/qa-v1.json")));
+        return JSON.readTree(Files.readString(Path.of("evaluation/qa/qa-v2.json")));
     }
 
     private static JsonNode verifiedImport(JsonNode imported) throws Exception {

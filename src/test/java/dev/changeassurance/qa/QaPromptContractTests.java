@@ -33,4 +33,15 @@ class QaPromptContractTests {
         assertTrue(accepted.citations().isEmpty());
         assertFalse(accepted.uncertainties().isEmpty());
     }
+
+    @Test void numericalFactsPreserveSourceUnitsAndUncertaintiesDoNotInventConclusions() {
+        assertEquals("repository-qa-v2", QaPrompt.VERSION);
+        assertTrue(QaPrompt.SYSTEM.contains("establish its unit from the quoted source and nearby source context"));
+        assertTrue(QaPrompt.SYSTEM.contains("a bare numeric literal does not establish a unit"));
+        assertTrue(QaPrompt.SYSTEM.contains("Preserve the source quantity and unit in each claim"));
+        assertTrue(QaPrompt.SYSTEM.contains("calculate the conversion correctly"));
+        assertTrue(QaPrompt.SYSTEM.contains("Never relabel a source value with a different unit"));
+        assertTrue(QaPrompt.SYSTEM.contains("state that limitation rather than inventing a numerical conclusion"));
+        assertTrue(QaPrompt.SYSTEM.contains("without adding unsupported factual conclusions"));
+    }
 }

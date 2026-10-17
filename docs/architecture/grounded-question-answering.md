@@ -64,7 +64,7 @@ evidence may make an otherwise answerable question partial or unanswerable.
 
 Spring AI 2.0.1 is managed by its BOM alongside Spring Boot 4.1.1. The Ollama
 adapter is behind `ModelGateway`; no provider objects enter the answer contract.
-It sends a versioned system prompt (`repository-qa-v1`) and a JSON data envelope
+It sends a versioned system prompt (`repository-qa-v2`) and a JSON data envelope
 as separate messages. The provider receives the versioned proposed-output JSON
 schema through Ollama's native schema option. Application validation still treats
 all output as untrusted. The adapter disables automatic model pulls and thinking,

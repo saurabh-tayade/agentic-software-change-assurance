@@ -7,8 +7,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HexFormat;
 
 public final class QaPrompt {
-    public static final String VERSION = "repository-qa-v1";
-    public static final String SYSTEM = resource("/qa/repository-qa-v1.txt");
+    public static final String VERSION = "repository-qa-v2";
+    public static final String SYSTEM = resource("/qa/repository-qa-v2.txt");
     public static final String SCHEMA = resource("/qa/proposed-answer-v1.json");
     private QaPrompt() { }
     static String hash(String text) {
