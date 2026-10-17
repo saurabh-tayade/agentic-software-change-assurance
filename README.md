@@ -35,9 +35,14 @@ M1.4 adds [PostgreSQL evidence persistence](docs/architecture/evidence-persisten
 with atomic publications, preserved processing coverage, and exact-identity readback.
 M1.5 adds [publication-scoped PostgreSQL keyword retrieval](docs/architecture/keyword-retrieval.md),
 deterministic ranking, read-path integrity checks, and a [measured retrieval baseline](evaluation/retrieval/README.md).
+M1.6 adds [evidence-grounded Q&A](docs/architecture/grounded-question-answering.md)
+through an opt-in local Ollama CLI, bounded keyword evidence, structured output,
+and deterministic citation validation. The [Q&A evaluation definition](evaluation/qa/README.md)
+is versioned; a separate local acceptance record distinguishes reported live
+observations from deterministic tests and pending scenarios.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Vector search, embeddings, grounded Q&A, Repository
+Vector search, embeddings, a public Q&A API, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
@@ -89,6 +94,13 @@ Run tests, including the health test against an embedded server on a random port
 ./mvnw test
 ```
 
+For opt-in Q&A, use the [local Ollama and CLI guide](docs/architecture/grounded-question-answering.md).
+Default startup and mandatory tests do not require Ollama. Spring AI 2.0.1 is
+managed through its BOM; the initial model is `qwen3:4b-instruct` with an 8,192-token
+context setting and bounded output. Citation validation verifies immutable source
+identity, not semantic support for generated claims. Local model results and human
+review must be recorded separately from deterministic tests.
+
 ## CI and quality checks
 
 The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `main`,
@@ -137,7 +149,7 @@ overrides unless a concrete need is documented. M0 adds no runtime dependencies.
 ## Planned capabilities
 
 - Extend implemented keyword retrieval with evaluated vector/hybrid approaches.
-- Produce structured answers with citations and explicit uncertainty.
+- Evaluate structured answers for semantic support, completeness, and uncertainty.
 - Analyze API, database, and event contracts alongside dependency relationships.
 - Interpret diffs to identify affected components, compatibility risks, and missing
   tests or verification steps.

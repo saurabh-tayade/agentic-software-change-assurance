@@ -1,0 +1,13 @@
+# Explicit opt-in: activate persistence,qa together. No model is downloaded or called at startup.
+spring:
+  main:
+    web-application-type: none
+qa:
+  log-malformed-model-response: ${QA_LOG_MALFORMED_MODEL_RESPONSE:false}
+  base-url: ${QA_OLLAMA_BASE_URL:http://localhost:11434}
+  model: ${QA_MODEL:qwen3:4b-instruct}
+  temperature: ${QA_TEMPERATURE:0.0}
+  context-tokens: ${QA_CONTEXT_TOKENS:8192}
+  max-output-tokens: ${QA_MAX_OUTPUT_TOKENS:768}
+  connect-timeout-seconds: ${QA_CONNECT_TIMEOUT_SECONDS:5}
+  timeout-seconds: ${QA_TIMEOUT_SECONDS:120}

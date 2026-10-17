@@ -59,8 +59,10 @@ exercise retrieval and answer generation and retain results for comparison.
 Later work adds deterministic contract/dependency findings and diff analysis to
 support risk reports; controlled agents may gather evidence within defined limits.
 Selected-commit ingestion, parsing, and provenance-preserving chunking are
-implemented, along with PostgreSQL persistence and keyword retrieval. Vector retrieval
-and grounded answers remain planned.
+implemented, along with PostgreSQL persistence and keyword retrieval. Opt-in
+[grounded Q&A](grounded-question-answering.md) now validates citation identities
+over selected keyword evidence. Vector retrieval and live-model quality measurement
+remain future work.
 
 ## Architectural principles
 
@@ -89,7 +91,7 @@ The rationale is recorded in the [architecture decisions](../adr/README.md).
 | Operations | Actuator health and baseline Micrometer support | OpenTelemetry and broader observability |
 | Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
 | Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
-| AI | None | Spring AI and local models are preferences to evaluate in M1 |
+| AI | Spring AI 2.0.1 and opt-in Ollama chat adapter for grounded Q&A | Model quality and further providers are not established |
 | Storage and retrieval | PostgreSQL evidence persistence and keyword retrieval via JDBC/Flyway | Vector retrieval and pgvector remain future work |
 | Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
 
@@ -112,10 +114,12 @@ ingestion limitations; see the [processing guide](artifact-processing.md) for pa
 selection, chunking, and verification. M1.4
 [persists those contracts](evidence-persistence.md) atomically.
 M1.5 [keyword retrieval](keyword-retrieval.md) now supplies ranked evidence and a
-controlled baseline. The next step is **M1.6 — Grounded Question Answering**.
-Later M1 work will compare retrieval baselines and produce validated citations and answers with uncertainty.
+controlled baseline. M1.6 [grounds structured answers](grounded-question-answering.md)
+in bounded keyword evidence with deterministic citation identity checks. M1.7 will
+compare vector/hybrid retrieval against the keyword baseline; M1.8 will expand
+answer quality evaluation and human-reviewed semantic support.
 Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
 metadata including source revisions, tool/model configuration, latency, and token
-usage. Further ranking improvements and model integration remain open;
+usage. Further ranking improvements and model-quality claims remain open;
 the conceptual contracts do not prescribe those implementations. See the
 [roadmap](../roadmap.md) for milestone acceptance criteria.
