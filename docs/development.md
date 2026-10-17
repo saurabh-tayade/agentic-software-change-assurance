@@ -89,7 +89,10 @@ Follow the [indexing guide](architecture/embedding-indexing.md) before upgrading
 existing local database: Compose uses a new volume, and existing publications need
 an explicit export/import. Never reuse the Alpine data directory directly with the
 Debian image. Model downloads and indexing are explicit; mandatory tests use no
-Ollama. Vector retrieval and Q&A strategy selection remain subsequent work.
+Ollama. M1.7b adds a separate [vector retrieval CLI](architecture/vector-retrieval.md)
+using the same opt-in profiles and an explicit stored profile ID. Its deterministic
+768-dimensional ranking tests run in Failsafe. Live retrieval acceptance is separate
+from CI; hybrid retrieval and Q&A strategy selection remain subsequent work.
 
 ## Documentation and decisions
 

@@ -1,9 +1,9 @@
 # Versioned embedding indexing
 
 M1.7a adds explicit local embedding generation and PostgreSQL/pgvector storage for
-an existing publication. Vector search, hybrid search, and Q&A strategy selection
-remain M1.7b/M1.7c work. Embeddings are derived indexes; the existing evidence and
-publication contracts remain authoritative. See
+an existing publication. M1.7b adds [exact vector search](vector-retrieval.md);
+hybrid search and Q&A strategy selection remain M1.7c work. Embeddings are derived
+indexes; the existing evidence and publication contracts remain authoritative. See
 [ADR-0005](../adr/0005-versioned-derived-embedding-indexes.md).
 
 ## Architecture and identity
@@ -32,8 +32,9 @@ not a retrieval-quality result.
 `nomic-document-v1` is exactly `search_document: ` followed by complete original
 chunk content. No trimming, newline conversion, Unicode normalization, parser
 metadata, path, or line-number decoration is added. SHA-256 covers the exact UTF-8
-bytes sent to Ollama, including the prefix. `nomic-query-v1` reserves the matching
-`search_query: ` recipe identity; query generation is not implemented in M1.7a.
+bytes sent to Ollama, including the prefix. `nomic-query-v1` defines the matching
+`search_query: ` recipe, implemented for query generation in M1.7b. Neither recipe
+nor the existing profile identities changed when query generation was added.
 
 The default input cap is 8,192 bytes including the prefix. It is not an exact token
 budget. Ollama truncation is explicitly disabled, so an input within the byte cap
@@ -230,6 +231,7 @@ and 14 focused PostgreSQL tests. Full `clean verify` passed 194 tests (147 Suref
 six Python evaluation-validator tests, and staged/unstaged whitespace checks passed.
 No live Ollama indexing run or existing local database migration was performed.
 
-No live embedding quality result is claimed. This implementation supplies derived
-vectors for M1.7b; it performs no similarity search, hybrid fusion, Q&A strategy
-selection, semantic-grounding improvement, or full retrieval benchmarking.
+No live embedding quality result is claimed. This indexing component supplies
+derived vectors for the separate M1.7b retrieval service; indexing itself performs
+no similarity search, hybrid fusion, Q&A strategy selection, semantic-grounding
+improvement, or full retrieval benchmarking.

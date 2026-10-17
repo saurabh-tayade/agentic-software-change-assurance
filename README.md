@@ -41,10 +41,11 @@ and deterministic citation validation. The [Q&A evaluation definition](evaluatio
 is versioned; a separate local acceptance record distinguishes reported live
 observations from deterministic tests and pending scenarios.
 M1.7a adds [versioned embedding generation and persistence](docs/architecture/embedding-indexing.md)
-for existing publications through an opt-in CLI.
+for existing publications through an opt-in CLI. M1.7b adds
+[exact vector retrieval](docs/architecture/vector-retrieval.md) with explicit publication/profile selection.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
-Vector search, hybrid retrieval, a public Q&A API, Repository
+Hybrid retrieval, a public Q&A API, Repository
 Intelligence UI, and change-impact analysis are not implemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
@@ -155,12 +156,13 @@ persistence for existing publications. See the
 [indexing guide](docs/architecture/embedding-indexing.md) for model/profile setup,
 CLI commands, limits, and recovery. Existing PostgreSQL users must follow its
 export/import instructions: the new Compose volume preserves the old volume but
-does not automatically copy publications. Vector/hybrid retrieval and Q&A strategy
-selection remain planned. Default startup and CI require no Ollama server.
+does not automatically copy publications. M1.7b adds a separate
+[vector retrieval CLI](docs/architecture/vector-retrieval.md); hybrid retrieval and
+Q&A strategy selection remain planned. Default startup and CI require no Ollama server.
 
 ## Planned capabilities
 
-- Extend implemented keyword retrieval with evaluated vector/hybrid approaches.
+- Compare keyword/vector retrieval and add evaluated hybrid approaches.
 - Evaluate structured answers for semantic support, completeness, and uncertainty.
 - Analyze API, database, and event contracts alongside dependency relationships.
 - Interpret diffs to identify affected components, compatibility risks, and missing

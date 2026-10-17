@@ -20,7 +20,14 @@ public final class EmbeddingVector {
         for (float value : vector) bytes.putFloat(value == 0 ? 0 : value);
         return EmbeddingProfile.hash(bytes.array());
     }
-    static String sql(float[] vector) { return Arrays.toString(vector); }
+    public static String sql(float[] vector) { return Arrays.toString(vector); }
+    public static void verifyStored(String text, String checksum, int dimensions) {
+        try {
+            float[] vector = parse(text);
+            validate(vector, dimensions);
+            if (!hash(vector).equals(checksum)) fail();
+        } catch (EmbeddingException e) { throw new EmbeddingException(EmbeddingException.Code.INDEX_INTEGRITY_FAILURE); }
+    }
     static float[] parse(String text) {
         try {
             if (text == null || !text.startsWith("[") || !text.endsWith("]")) fail();

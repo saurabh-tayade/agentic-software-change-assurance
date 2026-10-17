@@ -11,7 +11,7 @@ M1.5 implements publication-scoped keyword retrieval and a measured controlled b
 M1.6 implements opt-in local grounded Q&A over keyword evidence, with citation
 identity validation and a versioned evaluation definition. M1.7a adds explicit
 [versioned embedding indexing](architecture/embedding-indexing.md) and pgvector
-persistence. Vector retrieval, a
+persistence. M1.7b adds [exact vector retrieval](architecture/vector-retrieval.md). A
 public Q&A API, change analysis, and agents are not implemented. Live-model quality
 and semantic support remain limited to the exploratory observations in the
 [M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md).
@@ -76,8 +76,9 @@ publication consistency checks and [versioned retrieval evaluation](../evaluatio
 M1.6 adds [grounded Q&A](architecture/grounded-question-answering.md) and a
 [Q&A evaluation definition](../evaluation/qa/README.md). M1.7 will compare vector
 and hybrid retrieval with the existing keyword baseline while preserving the answer
-and citation contracts. M1.7a indexing is implemented; M1.7b semantic retrieval and
-M1.7c hybrid/Q&A strategy integration remain planned.
+and citation contracts. M1.7a indexing and M1.7b semantic retrieval are implemented;
+M1.7c hybrid/Q&A strategy integration remains planned. Live vector-retrieval
+acceptance is pending; deterministic ranking verification is not a quality comparison.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

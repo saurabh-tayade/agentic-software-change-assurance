@@ -71,6 +71,29 @@ class OllamaEmbeddingGatewayTests {
                 assertThrows(EmbeddingException.class, () -> gateway(5).embed(p, p.document("x"))).code());
         assertNull(sent);
     }
+    @Test void queryInputIsSentUnchangedWithTheSameCompatibilityChecks() {
+        var gateway = gateway(5);
+        var p = gateway.resolveProfile();
+        var input = p.query(" Where is café 😀?\r\n");
+        assertEquals(768, gateway.embed(p, input).vector().length);
+        assertEquals(input.text(), sent.path("input").get(0).asString());
+        assertFalse(sent.path("truncate").asBoolean());
+        assertEquals(4, calls.get());
+        changeDigest = true;
+        assertEquals(EmbeddingException.Code.PROFILE_MISMATCH,
+                assertThrows(EmbeddingException.class, () -> gateway.embed(p, input)).code());
+    }
+    @Test void forgedQueryEnvelopeIsRejectedBeforeInference() {
+        var p = EmbeddingProfileTests.profile();
+        var input = p.query("question");
+        for (var forged : List.of(new EmbeddingProfile.Input(input.text(), "0".repeat(64), input.bytes()),
+                new EmbeddingProfile.Input(input.text(), input.hash(), input.bytes() + 1),
+                new EmbeddingProfile.Input("unsupported: question", input.hash(), input.bytes()))) {
+            assertEquals(EmbeddingException.Code.PROFILE_MISMATCH,
+                    assertThrows(EmbeddingException.class, () -> gateway(5).embed(p, forged)).code());
+        }
+        assertNull(sent);
+    }
     @Test void changedDigestDuringCallDiscardsOutput() {
         changeDigest = true; var p = EmbeddingProfileTests.profile();
         assertEquals(EmbeddingException.Code.PROFILE_MISMATCH,

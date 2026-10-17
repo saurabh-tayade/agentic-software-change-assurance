@@ -6,8 +6,9 @@ reingestion, parsing, filesystem access, or model calls. ADR-0001 through ADR-00
 remain applicable; this adds no endpoint, dependency, database extension, or service.
 This module performs no embedding generation or answer generation. See
 [grounded Q&A](grounded-question-answering.md) and [embedding indexing](embedding-indexing.md)
-for the separately implemented opt-in capabilities. Vector and hybrid retrieval
-remain planned.
+for the separately implemented opt-in capabilities. M1.7b adds separate
+[vector retrieval](vector-retrieval.md); keyword behavior is unchanged and hybrid
+retrieval remains planned.
 
 ## Service and outcomes
 

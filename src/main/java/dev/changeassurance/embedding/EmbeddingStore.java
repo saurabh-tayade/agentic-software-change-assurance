@@ -39,13 +39,31 @@ public final class EmbeddingStore {
                     ON CONFLICT (profile_id) DO NOTHING
                     """, profile.id(), profile.provider(), profile.model(), profile.modelDigest(), profile.dimensions(),
                     profile.documentRecipe(), profile.queryRecipe(), JSON.writeValueAsString(profile.options()), profile.distanceMetric());
-            var stored = jdbc.queryForObject("SELECT * FROM embedding_profile WHERE profile_id = ?", (r, n) ->
-                    new EmbeddingProfile(r.getString("provider"), r.getString("model"), r.getString("model_digest"),
-                            r.getInt("dimensions"), r.getString("document_recipe"), r.getString("query_recipe"),
-                            JSON.readValue(r.getString("options"), EmbeddingProfile.Options.class), r.getString("distance_metric")), profile.id());
+            var stored = readProfile(jdbc, profile.id()).orElseThrow();
             if (!profile.equals(stored)) throw new EmbeddingException(EmbeddingException.Code.PROFILE_MISMATCH);
             return null;
         }));
+    }
+    /** Read-only lookup for explicit CLI profile selection. Never registers or repairs a profile. */
+    public java.util.Optional<EmbeddingProfile> findProfile(String profileId) {
+        return database(() -> read.execute(status -> readProfile(jdbc, profileId)));
+    }
+    /** Caller supplies the transaction so retrieval verifies profile and candidates in one snapshot. */
+    public static java.util.Optional<EmbeddingProfile> readProfile(JdbcTemplate jdbc, String profileId) {
+        if (profileId == null || !profileId.matches("[0-9a-f]{64}"))
+            throw new IllegalArgumentException("Expected a full embedding profile SHA-256 identity");
+        try {
+            var profiles = jdbc.query("SELECT * FROM embedding_profile WHERE profile_id = ?", (r, n) ->
+                    new EmbeddingProfile(r.getString("provider"), r.getString("model"), r.getString("model_digest"),
+                            r.getInt("dimensions"), r.getString("document_recipe"), r.getString("query_recipe"),
+                            JSON.readValue(r.getString("options"), EmbeddingProfile.Options.class), r.getString("distance_metric")), profileId);
+            if (profiles.isEmpty()) return java.util.Optional.empty();
+            var profile = profiles.getFirst();
+            if (!profileId.equals(profile.id())) throw new EmbeddingException(EmbeddingException.Code.PROFILE_MISMATCH);
+            return java.util.Optional.of(profile);
+        } catch (IllegalArgumentException | tools.jackson.core.JacksonException e) {
+            throw new EmbeddingException(EmbeddingException.Code.PROFILE_MISMATCH);
+        }
     }
     /** Validate vectors while streaming; retain only chunk IDs and input hashes in memory. */
     public Map<String, String> existing(PersistedPublication publication, EmbeddingProfile profile) {
@@ -86,12 +104,9 @@ public final class EmbeddingStore {
         }));
     }
     private static void verifyVector(String text, String hash, EmbeddingProfile profile) {
-        try {
-            float[] vector = EmbeddingVector.parse(text);
-            EmbeddingVector.validate(vector, profile.dimensions());
-            if (!EmbeddingVector.hash(vector).equals(hash)) throw new EmbeddingException(EmbeddingException.Code.INVALID_VECTOR);
-        } catch (EmbeddingException e) { throw new EmbeddingException(EmbeddingException.Code.INDEX_INTEGRITY_FAILURE); }
+        EmbeddingVector.verifyStored(text, hash, profile.dimensions());
     }
+
     private static <T> T database(Supplier<T> operation) {
         try { return operation.get(); }
         catch (DataAccessException | TransactionException e) { throw new EmbeddingException(EmbeddingException.Code.PERSISTENCE_FAILURE); }

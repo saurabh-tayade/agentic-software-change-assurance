@@ -68,9 +68,14 @@ public final class OllamaEmbeddingGateway implements EmbeddingGateway {
     public Response embed(EmbeddingProfile expected, EmbeddingProfile.Input input) {
         if (!resolveProfile().equals(expected)) throw failure(EmbeddingException.Code.PROFILE_MISMATCH);
         // Recompute the input envelope; callers cannot bypass the byte bound/hash contract.
-        if (input == null || !input.text().startsWith("search_document: ")
-                || !expected.document(input.text().substring("search_document: ".length())).equals(input))
-            throw failure(EmbeddingException.Code.PROFILE_MISMATCH);
+        if (input == null || input.text() == null) throw failure(EmbeddingException.Code.PROFILE_MISMATCH);
+        EmbeddingProfile.Input verified;
+        if (input.text().startsWith("search_document: "))
+            verified = expected.document(input.text().substring("search_document: ".length()));
+        else if (input.text().startsWith("search_query: "))
+            verified = expected.query(input.text().substring("search_query: ".length()));
+        else throw failure(EmbeddingException.Code.PROFILE_MISMATCH);
+        if (!verified.equals(input)) throw failure(EmbeddingException.Code.PROFILE_MISMATCH);
         long start = System.nanoTime();
         try {
             var response = embedding.call(new EmbeddingRequest(List.of(input.text()), null));

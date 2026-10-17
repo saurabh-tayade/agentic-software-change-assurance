@@ -40,6 +40,18 @@ class EmbeddingProfileTests {
         assertThrows(IllegalArgumentException.class, () -> new EmbeddingProfile("ollama", "nomic-embed-text:v1.5", "a".repeat(64), 768,
                 "unknown", EmbeddingProfile.QUERY_RECIPE, EmbeddingProfile.Options.defaults(), "cosine"));
     }
+    @Test void queryRecipePreservesExactTextAndHashesItsOwnTaskPrefix() throws Exception {
+        String query = " Where is café 😀?\r\n";
+        var input = profile().query(query);
+        byte[] bytes = ("search_query: " + query).getBytes(StandardCharsets.UTF_8);
+        assertEquals("search_query: " + query, input.text());
+        assertEquals(bytes.length, input.bytes());
+        assertEquals(HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(bytes)), input.hash());
+        assertNotEquals(profile().document(query).hash(), input.hash());
+        assertThrows(IllegalArgumentException.class, () -> profile().query("\ud800"));
+        assertEquals(EmbeddingException.Code.OVERSIZED_INPUT,
+                assertThrows(EmbeddingException.class, () -> profile().query("x".repeat(8192))).code());
+    }
     @Test void inputLimitCountsUtf8BytesAndDoesNotTruncate() {
         assertEquals(8192, profile().document("a".repeat(8175)).bytes());
         assertEquals(EmbeddingException.Code.OVERSIZED_INPUT,

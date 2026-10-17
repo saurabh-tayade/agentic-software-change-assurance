@@ -42,6 +42,7 @@ public record EmbeddingProfile(String provider, String model, String modelDigest
         } catch (IOException impossible) { throw new IllegalStateException(impossible); }
     }
     public Input document(String source) { return input("search_document: ", source); }
+    public Input query(String query) { return input("search_query: ", query); }
     private Input input(String prefix, String source) {
         if (source == null || source.isEmpty() || source.indexOf('\0') >= 0
                 || !StandardCharsets.UTF_8.newEncoder().canEncode(source))
