@@ -32,17 +32,49 @@ quality, or semantic groundedness.
 
 ## M1.7c three-strategy acceptance
 
-| Strategy | Live execution during M1.7c | Ranked evidence / QuotePolicy position | Q&A status, citations, latency, usage |
-| --- | --- | --- | --- |
-| KEYWORD | Not executed | Pending | Pending |
-| VECTOR | Not executed | Pending; prior retrieval-only observation above | Pending |
-| HYBRID | Not executed | Pending | Pending |
+The maintainer subsequently executed the same question against the publication
+above using all three Q&A retrieval strategies and reported these live results.
+These observations were supplied by the maintainer; they were not independently
+reproduced during this documentation update.
 
-The task environment did not export `EVIDENCE_DB_URL`, `EVIDENCE_DB_USER`, or
-`EVIDENCE_DB_PASSWORD`. The existing local database was not modified and no live
-Ollama answer was generated. Deterministic tests separately verify RRF mechanics,
-real PostgreSQL composition, citation identity, failure propagation, and CLI wiring;
-their answer doubles do not establish model quality.
+| Strategy | QuotePolicy.priceCents() retrieval | Answer status | Maintainer-observed answer and citations | Total latency |
+| --- | --- | --- | --- | --- |
+| KEYWORD | Not retrieved | `INSUFFICIENT_EVIDENCE` | Insufficient evidence to answer | 7,337 ms |
+| VECTOR | Retrieved at rank 5 | `SUPPORTED` | Correct answer with relevant citations | 10,558 ms |
+| HYBRID | Retrieved at rank 5 | `SUPPORTED` | Correct answer with a relevant citation | 7,836 ms |
+
+The strategy versions and profile association follow the existing
+[keyword](../../docs/architecture/keyword-retrieval.md),
+[vector](../../docs/architecture/vector-retrieval.md), and
+[hybrid](../../docs/architecture/hybrid-retrieval.md) documentation:
+
+| Selection | Versioned strategy | Embedding profile |
+| --- | --- | --- |
+| KEYWORD | `postgres-keyword-v1` | Not applicable |
+| VECTOR | `postgres-vector-v1:profile=<profile-id>` | The profile in Inputs above |
+| HYBRID | `postgres-hybrid-rrf-v1:k=60:depth=<candidate-depth>:weights=1,1:profile=<profile-id>` | The same profile in Inputs above |
+
+The maintainer confirmed hybrid RRF `k=60` and equal weights. The documented
+three-strategy commands use topK=12, giving hybrid candidate depth 48 under
+`min(100, max(20, 4 * topK))`. This describes the reproduction configuration;
+raw run diagnostics were not supplied to independently confirm the effective
+topK/depth or full strategy strings. Exact answer text, citation identities/spans,
+complete rankings, token usage, and isolated model/retrieval timings were also not
+supplied. Correctness and citation relevance above are maintainer assessments,
+not a separately scored semantic-support review.
+
+Each latency is the reported total duration of one execution. These observations
+are not aggregate evaluation metrics, repeated latency measurements, or evidence
+that HYBRID outperforms VECTOR. Both retrieved the implementation at rank 5 and
+were reported to answer correctly. No Recall@K, MRR, NDCG, or general groundedness
+improvement is established by this single question.
+
+During the earlier M1.7c implementation task, database connection variables were
+unavailable and live execution remained pending. The maintainer's later runs above
+replace that pending status without changing the earlier standalone M1.7b record.
+Deterministic tests separately verify RRF mechanics, real PostgreSQL composition,
+citation identity, failure propagation, and CLI wiring; their answer doubles do
+not establish model quality. This documentation update ran no live model requests.
 
 For each future run, retain requested/effective strategy, profile/digest/options,
 publication, query/topK, branch candidate counts, complete ranked evidence and
