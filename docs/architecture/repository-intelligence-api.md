@@ -1,7 +1,8 @@
 # Repository Intelligence REST API
 
 M1.9a implements a local, read-only HTTP adapter over the existing publication,
-retrieval, and grounded Q&A services. M1.9b's React UI remains planned. This is a
+retrieval, and grounded Q&A services. M1.9b adds the
+[React workspace](repository-intelligence-workspace.md) over these unchanged routes. This is a
 trusted local demonstration, not an authenticated or publicly deployable API.
 
 ## Architecture and boundaries
@@ -300,7 +301,7 @@ a safe description. Malformed HTTP rejected by the servlet container before
 application filters (for example encoded slash traversal) may use the container's
 400 response instead of this JSON envelope; it never reaches evidence resolution.
 
-## Local security and the planned React UI
+## Local security and the React UI
 
 All publications in the configured local database are visible to the trusted
 operator. There is no authentication, RBAC, per-repository access policy, or public
@@ -320,14 +321,15 @@ application boundary is not a replacement for database grants. Privileged databa
 operators remain trusted, as in the existing persistence architecture.
 
 Treat all source, paths, Markdown, structural context, and model text as untrusted
-data. M1.9b should use escaped React text and `<pre>` excerpts, not executable HTML
+data. M1.9b uses escaped React text and `<pre>` excerpts, not executable HTML
 or unsanitized Markdown. Use relative `/api/v1` requests through a loopback Vite
 proxy and set the optional browser origin to that proxy's exact origin. Do not
 forget the proxy's `changeOrigin: true` setting: Host must identify the backend
 port, while Origin identifies the browser's frontend origin. Do not
 call models, rank retrieval, resolve paths, or reconstruct provenance in React.
 Discard stale responses when selection changes; avoid automatic answer retries.
-No frontend, persisted conversations, streaming, or full-file browser is included.
+The frontend is documented separately in the [workspace guide](repository-intelligence-workspace.md).
+Persisted conversations, streaming, and full-file browsing remain out of scope.
 
 ## Maintainer live smoke test
 

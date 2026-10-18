@@ -5,6 +5,10 @@
 *.ear
 target/
 out/
+node_modules/
+frontend/dist/
+frontend/coverage/
+*.tsbuildinfo
 hs_err_pid*
 replay_pid*
 .classpath
