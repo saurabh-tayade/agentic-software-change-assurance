@@ -17,9 +17,9 @@ The platform aims to help engineers and reviewers identify affected components,
 explain compatibility risks, and prioritize release verification. Its intended
 output is a structured report with cited evidence, uncertainty, and required
 checks. It supports human release decisions; it does not certify a change as safe.
-Repository Intelligence is the first independently usable capability planned for
-this vision: developers and non-technical stakeholders will ask natural-language
-questions about existing repositories and receive evidence-backed, cited answers.
+Repository Intelligence is the first independently usable capability in
+this vision: developers and non-technical stakeholders can ask natural-language
+questions about published repositories and inspect evidence-backed, cited answers.
 
 ## Current implementation status
 
@@ -60,9 +60,12 @@ reviews do not establish aggregate answer correctness. M1.9a adds a
 for publication selection, coverage, grounded answers, strategy selection, and
 verified evidence excerpts. Its explicit `intelligence-api` profile disables
 migrations and CLI commands and binds to loopback. Default startup still exposes
-only the framework `/actuator/health` endpoint.
+only the framework `/actuator/health` endpoint. M1.9b adds the
+[interactive React workspace](docs/architecture/repository-intelligence-workspace.md):
+explicit publication/scope selection, three retrieval strategies, grounded answers,
+uncertainty, interactive citations, and original source excerpts with provenance.
 
-The M1.9b React UI, public/authenticated API access, and change-impact analysis
+Public/authenticated API access and change-impact analysis
 remain unimplemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
@@ -119,6 +122,19 @@ For HTTP access to existing publications, use the
 [API startup and maintainer smoke-test procedure](docs/architecture/repository-intelligence-api.md).
 The API process never prepares the schema or indexes; keep using the existing
 CLI workflows for that explicit preparation.
+For the React workspace, use Node 24/npm 11 and follow the
+[frontend installation, proxy setup, and live demonstration](docs/architecture/repository-intelligence-workspace.md).
+Start the API with `INTELLIGENCE_API_BROWSER_ORIGIN=http://127.0.0.1:5173`, then:
+
+```sh
+npm ci --prefix frontend
+npm run dev --prefix frontend
+```
+
+Open `http://127.0.0.1:5173/`. Both processes remain loopback-only; no wildcard
+CORS or backend security changes are required. The UI uses the existing five API
+routes and adds no retrieval/model logic or browser persistence.
+
 Default startup and mandatory tests do not require Ollama. Spring AI 2.0.1 is
 managed through its BOM; the initial model is `qwen3:4b-instruct` with an 8,192-token
 context setting and bounded output. Citation validation verifies immutable source
@@ -129,14 +145,21 @@ review must be recorded separately from deterministic tests.
 
 The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `main`,
 pushes to `main`, and manual dispatch. One Ubuntu job uses Temurin Java 21,
-Maven caching, read-only repository permissions, and a 15-minute timeout.
+Maven/npm caching, Node pinned by `frontend/.nvmrc`, read-only repository permissions,
+and a 15-minute timeout. Frontend dependencies install with `npm ci`; type checking,
+deterministic component/API tests, and a production build run in the same job.
 It requires no repository secrets or cloud services. Testcontainers starts disposable
 PostgreSQL through the runner's Docker engine; missing Docker fails verification.
 
-Reproduce its checks from the repository root with Java 21, Git, and Python 3.9+:
+Reproduce its checks from the repository root with Java 21, Git, Python 3.9+,
+Node 24, and npm 11:
 
 ```sh
 python3 scripts/check_repository.py
+npm ci --prefix frontend
+npm run typecheck --prefix frontend
+npm test --prefix frontend
+npm run build --prefix frontend
 ./mvnw -B -ntp clean verify
 ```
 

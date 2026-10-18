@@ -92,7 +92,10 @@ unreviewed. M1.8c implements [offline evaluation reports](architecture/evaluatio
 with explicit input/review selection and reproducible JSON/Markdown output.
 M1.9a implements the [local Repository Intelligence REST API](architecture/repository-intelligence-api.md)
 for explicit publication selection, coverage, three-strategy grounded Q&A, and
-verified original excerpts. M1.9b's React UI remains planned. Live API acceptance
+verified original excerpts. M1.9b implements the
+[interactive React workspace](architecture/repository-intelligence-workspace.md)
+with explicit publication selection, grounded answers, uncertainty, citation-to-source
+navigation, and expandable diagnostics. Live UI/API acceptance
 is separate from deterministic tests; sparse reviews are not aggregate correctness evidence.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector

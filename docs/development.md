@@ -104,8 +104,26 @@ documents the separate `intelligence-api` HTTP profile and maintainer smoke test
 That profile excludes CLI runners, disables schema initialization, and uses
 loopback HTTP and read-only connections. Prepare publications/indexes separately.
 Keep HTTP DTOs explicit, preserve uncertainty/provenance, and resolve evidence only
-within its publication. The planned React UI must remain a presentation layer.
+within its publication. The React UI remains a presentation layer.
 API tests use deterministic gateways and disposable PostgreSQL, not live Ollama.
+
+## Local React workspace
+
+The [workspace guide](architecture/repository-intelligence-workspace.md) documents
+Node 24/npm 11, installation, loopback Vite proxy, exact API browser-origin setup,
+tests, and live acceptance. Keep the explicit TypeScript wire types aligned with
+the Java HTTP DTOs. Use native fetch, local state, and escaped text; do not add
+browser persistence, duplicate retrieval logic, or interpret source as markup.
+Abort requests on selection changes and guard against late responses. Model POSTs
+require deliberate submission, with no automatic retries. Tests use synthetic typed
+fixtures; keep live source/answers out of version control.
+
+Run `npm ci --prefix frontend`, `npm run typecheck --prefix frontend`,
+`npm test --prefix frontend`, and `npm run build --prefix frontend` in addition to
+the existing checks. Keep the lockfile, but ignore dependencies, build output, and
+coverage. Review narrow and desktop layouts and keyboard navigation separately
+from DOM tests. Change the exact API allowed origin when changing the Vite port;
+never strip browser Origin or weaken the backend's local access filter.
 
 ## Retrieval evaluation
 

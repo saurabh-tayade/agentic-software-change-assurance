@@ -75,7 +75,10 @@ over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrie
 [M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution for independent
 context/citation checks and offline human review. [M1.8c](evaluation-reporting.md)
 adds offline JSON/Markdown reports with explicit review selection and reproducibility
-manifests. M1.9a's local REST API is implemented; the M1.9b React UI remains planned.
+manifests. M1.9a's local REST API and the M1.9b
+[React workspace](repository-intelligence-workspace.md) are implemented. The UI
+delegates to the five existing routes through a loopback development proxy and
+adds no retrieval, prompting, or persistence behavior.
 
 ## Architectural principles
 
