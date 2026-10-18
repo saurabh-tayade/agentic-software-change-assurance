@@ -50,8 +50,12 @@ remain separate from aggregate evaluation. M1.8a adds
 for the existing 15 scenarios at K=5 and K=12. The maintainer reports 90 live
 retrieval executions without failures and reproduction of the historical keyword
 baseline. M1.8b adds [grounded-answer capture and offline grading](docs/architecture/grounded-answer-evaluation.md),
-with independent citation checks and explicit human semantic review. Live M1.8b
-answer quality remains unmeasured; comparative reporting remains M1.8c work.
+with independent citation checks and explicit human semantic review. The maintainer
+accepted six live Q&A executions with one attributed review demonstrating both an
+incorrect and a correct claim despite valid citation identities. M1.8c adds
+[offline JSON/Markdown reporting](docs/architecture/evaluation-reporting.md) with
+explicit review selection, denominators, and reproducibility manifests. These sparse
+reviews do not establish aggregate answer correctness; M1.9 UI work remains planned.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
 A public Q&A API, Repository

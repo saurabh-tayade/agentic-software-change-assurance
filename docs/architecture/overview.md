@@ -70,7 +70,9 @@ implemented, along with PostgreSQL persistence and keyword retrieval. Opt-in
 over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrieval.
 [M1.8a](retrieval-evaluation.md) captures retrieval comparisons;
 [M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution for independent
-context/citation checks and offline human review. Comparative reports remain M1.8c work.
+context/citation checks and offline human review. [M1.8c](evaluation-reporting.md)
+adds offline JSON/Markdown reports with explicit review selection and reproducibility
+manifests. M1.9 UI work remains planned.
 
 ## Architectural principles
 

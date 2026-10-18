@@ -281,7 +281,9 @@ maintainer reports, not scores in this dataset. This small visible development s
 is vulnerable to overfitting and does not establish general repository performance.
 Source overlap measures retrieval location/coverage, not semantic relevance, factual
 answer correctness, or feature absence. [M1.8b](grounded-answer-evaluation.md) adds
-independent answer capture, structural grading, and human semantic review; full comparative reports remain M1.8c work.
+independent answer capture, structural grading, and human semantic review.
+[M1.8c](evaluation-reporting.md) presents saved observations through offline
+JSON/Markdown reports with explicit review selection and separate denominators.
 The maintainer subsequently reported completion of all 90 live executions without
 failures and reproduction of the historical keyword baseline. That report does not
 establish answer correctness or imply a new checked-in retrieval baseline.

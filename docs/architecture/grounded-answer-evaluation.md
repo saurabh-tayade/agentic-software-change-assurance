@@ -5,7 +5,8 @@ It reuses [M1.8a retrieval evaluation](retrieval-evaluation.md), the existing
 `GroundedQuestionAnsweringService`, and the [human rubric](../../evaluation/qa/README.md).
 It does not change retrieval, context selection, prompts, answer validation, or model
 settings. Citation identity validity never implies semantic support or factual truth.
-Full comparative reporting remains M1.8c work.
+[M1.8c reporting](evaluation-reporting.md) now presents these saved observations
+with explicit review selection and independent denominators.
 
 ## Versioned comparison
 
@@ -239,7 +240,8 @@ do not alter captured claims or execution hashes. Validate and attach the review
 The resulting new grades document embeds the validated review. The CLI accepts one
 review per invocation; the Java grader accepts multiple distinct execution reviews.
 Earlier review observations are preserved, not implicitly merged or overwritten.
-Reconciliation and comparative reporting are M1.8c concerns.
+The [M1.8c reporter](evaluation-reporting.md) selects explicit observations and
+rejects duplicate/conflicting reviews rather than choosing a newest record.
 
 ## Verification and limitations
 
@@ -267,3 +269,10 @@ from a mutable tag or even fixed settings; hardware, model digest, and load matt
 Offline grades replay recorded evidence, not future model behavior. Semantic and
 numerical failures remain possible. No LLM judge, statistical latency report, UI,
 new schema/migration, or automatic quality claim is introduced.
+
+After M1.8b implementation, the maintainer accepted six live Q&A executions with
+zero recorded execution failures and five applicable citation identities, all valid.
+One attributed review recorded one INCORRECT and one CORRECT claim; five executions
+remained semantically unreviewed. These sparse observations do not establish general
+answer accuracy. The [M1.8c reporter](evaluation-reporting.md) preserves the distinction
+between execution success, citation identity, and explicitly selected human judgments.

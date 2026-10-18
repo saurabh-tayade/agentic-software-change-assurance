@@ -38,6 +38,10 @@ public final class RetrievalEvaluationCliRunner implements ApplicationRunner {
         try {
             for (String command : List.of("qa.command", "vector.command", "embeddings.command"))
                 if (env.containsProperty(command)) throw new IllegalArgumentException("Use one developer command per invocation");
+            if ("report".equals(required("evaluation.command"))) {
+                EvaluationReportCommand.run(env);
+                return;
+            }
             if (required("evaluation.command").startsWith("qa-")) {
                 QaEvaluationCommands.run(env, publications, keyword, vector, dataSource, application);
                 return;

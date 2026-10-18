@@ -14,8 +14,9 @@ identity validation and a versioned evaluation definition. M1.7a adds explicit
 persistence. M1.7b adds [exact vector retrieval](architecture/vector-retrieval.md).
 M1.7c adds [RRF fusion and Q&A strategy selection](architecture/hybrid-retrieval.md). A
 public Q&A API, change analysis, and agents are not implemented. Live-model quality
-and semantic support remain limited to the exploratory observations in the
-[M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md).
+and semantic support remain limited to exploratory observations, including the
+[M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md) and sparse
+maintainer-reviewed M1.8b outputs.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -85,8 +86,11 @@ using the existing ground truth, separate K=5/K=12 executions, and offline gradi
 The maintainer reports 90 live M1.8a executions without failures and reproduction
 of the historical keyword baseline. M1.8b implements [grounded-answer evaluation](architecture/grounded-answer-evaluation.md):
 same-execution capture, independent deterministic checks, and attributed offline
-human review. Live M1.8b semantic quality remains unmeasured. Comparative reporting
-remains M1.8c work.
+human review. The maintainer accepted six live Q&A executions and one attributed
+review containing an incorrect and a correct claim; five executions remain semantically
+unreviewed. M1.8c implements [offline evaluation reports](architecture/evaluation-reporting.md)
+with explicit input/review selection and reproducible JSON/Markdown output. M1.9 UI
+features remain planned; sparse reviews are not aggregate correctness evidence.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

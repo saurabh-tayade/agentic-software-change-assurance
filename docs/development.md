@@ -115,6 +115,13 @@ leave raw response capture disabled routinely, and retain NOT_REVIEWED for any
 human dimension not inspected. Do not edit historical definitions or observations
 to improve results.
 
+## Offline evaluation reports
+
+Use the [M1.8c reporting guide](architecture/evaluation-reporting.md) to combine
+explicit saved captures and selected grading observations without database or model
+profiles. Preserve artifacts before `mvnw clean`. Never choose the newest review
+automatically or pool unmatched populations. Keep private reviews/reports out of Git.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,
