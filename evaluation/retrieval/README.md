@@ -113,3 +113,12 @@ and graded relevance, configuration comparisons, cold/warm workload distribution
 larger publication sizes, and independently assessed answer/citation support.
 It should retain original expectations and record corpus, strategy, implementation,
 and grading versions when comparing results.
+
+## Multi-strategy comparison
+
+M1.8a reuses this grader and imports these same 15 scenarios through
+[retrieval-comparison-v1.json](retrieval-comparison-v1.json). See the
+[execution and offline grading guide](../../docs/architecture/retrieval-evaluation.md)
+for separate KEYWORD/VECTOR/HYBRID runs at K=5 and K=12, explicit publication
+variants, failure denominators, and local artifacts. This historical baseline and
+its ground truth remain unchanged; new captures are written only under `target`.

@@ -14,8 +14,9 @@ identity validation and a versioned evaluation definition. M1.7a adds explicit
 persistence. M1.7b adds [exact vector retrieval](architecture/vector-retrieval.md).
 M1.7c adds [RRF fusion and Q&A strategy selection](architecture/hybrid-retrieval.md). A
 public Q&A API, change analysis, and agents are not implemented. Live-model quality
-and semantic support remain limited to the exploratory observations in the
-[M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md).
+and semantic support remain limited to exploratory observations, including the
+[M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md) and sparse
+maintainer-reviewed M1.8b outputs.
 See the [project charter](../README.md) for the product principles and data strategy.
 
 Milestones build on one another. Completion requires reproducible evidence, not
@@ -75,13 +76,21 @@ M1.4 implements [Evidence Persistence](architecture/evidence-persistence.md).
 M1.5 implements [Keyword Retrieval](architecture/keyword-retrieval.md), including
 publication consistency checks and [versioned retrieval evaluation](../evaluation/retrieval/README.md).
 M1.6 adds [grounded Q&A](architecture/grounded-question-answering.md) and a
-[Q&A evaluation definition](../evaluation/qa/README.md). M1.7 will compare vector
-and hybrid retrieval with the existing keyword baseline while preserving the answer
+[Q&A evaluation definition](../evaluation/qa/README.md). M1.7 adds vector
+and hybrid retrieval alongside the existing keyword baseline while preserving the answer
 and citation contracts. M1.7a indexing and M1.7b semantic retrieval are implemented;
-M1.7c hybrid/Q&A strategy integration is implemented. Three-strategy live Q&A
-acceptance remains pending. [Initial observations](../evaluation/retrieval/m1-7-observations.md)
-preserve the maintainer-reported M1.7b vector run separately; deterministic ranking
-verification is not a quality comparison.
+M1.7c hybrid/Q&A strategy integration is implemented. [Initial observations](../evaluation/retrieval/m1-7-observations.md)
+preserve the maintainer-reported standalone and three-strategy live runs; they are
+not aggregate benchmark evidence. M1.8a adds [reproducible retrieval evaluation](architecture/retrieval-evaluation.md)
+using the existing ground truth, separate K=5/K=12 executions, and offline grading.
+The maintainer reports 90 live M1.8a executions without failures and reproduction
+of the historical keyword baseline. M1.8b implements [grounded-answer evaluation](architecture/grounded-answer-evaluation.md):
+same-execution capture, independent deterministic checks, and attributed offline
+human review. The maintainer accepted six live Q&A executions and one attributed
+review containing an incorrect and a correct claim; five executions remain semantically
+unreviewed. M1.8c implements [offline evaluation reports](architecture/evaluation-reporting.md)
+with explicit input/review selection and reproducible JSON/Markdown output. M1.9 UI
+features remain planned; sparse reviews are not aggregate correctness evidence.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

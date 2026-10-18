@@ -97,6 +97,31 @@ Keyword remains the default. Opting into VECTOR/HYBRID requires the embeddings
 profile and an explicit compatible stored profile ID; do not index automatically
 or substitute keyword retrieval after a failure.
 
+## Retrieval evaluation
+
+Follow the [M1.8a guide](architecture/retrieval-evaluation.md) to execute the pinned
+15-case suite against existing publications and regrade saved artifacts offline.
+Keep TEST_DOUBLE verification separate from LIVE model observations. Retain needed
+local artifacts before `mvnw clean`; full comparison needs explicit full, scoped,
+and chunk-limited publication IDs. No publication or indexing is automatic.
+
+## Grounded-answer evaluation
+
+Follow the [M1.8b guide](architecture/grounded-answer-evaluation.md) for same-execution
+Q&A captures, independent context/citation checks, and offline human reviews. Use
+`evaluation.command=qa-run` explicitly; normal tests use model doubles. Citation-valid
+answers receive no automatic semantic credit. Preserve raw captures privately,
+leave raw response capture disabled routinely, and retain NOT_REVIEWED for any
+human dimension not inspected. Do not edit historical definitions or observations
+to improve results.
+
+## Offline evaluation reports
+
+Use the [M1.8c reporting guide](architecture/evaluation-reporting.md) to combine
+explicit saved captures and selected grading observations without database or model
+profiles. Preserve artifacts before `mvnw clean`. Never choose the newest review
+automatically or pool unmatched populations. Keep private reviews/reports out of Git.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,

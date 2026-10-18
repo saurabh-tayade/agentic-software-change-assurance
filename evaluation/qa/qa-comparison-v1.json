@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "version": "qa-comparison-v1",
+  "qa_definition": "evaluation/qa/qa-v2.json",
+  "retrieval_definition": "evaluation/retrieval/retrieval-comparison-v1.json",
+  "original_scenarios": "evaluation/scenarios/parcel-quotes-v1.json",
+  "rubric": "evaluation/qa/README.md",
+  "sha256": {
+    "evaluation/qa/qa-v2.json": "0da211e2bd73eef87e53bdc903f09705071a6f89f1d033ef0f7a0efd76a58c44",
+    "evaluation/retrieval/retrieval-comparison-v1.json": "11233d170e4f6b2ddf54e718e0583ea209cd812b8aea5b2d39db16af129965a5",
+    "evaluation/scenarios/parcel-quotes-v1.json": "5192b48a8e68a8f0ef110ce41e7705faba527c6e9d8ab126aaae64d211fcbd3e",
+    "evaluation/qa/README.md": "04296830585288a06daeb1b1015f7db8c498040e5ed633dfe87d9f36db9499f9"
+  },
+  "strategies": [
+    "KEYWORD",
+    "VECTOR",
+    "HYBRID"
+  ],
+  "scenario_count": 11,
+  "regressions": [
+    {
+      "id": "QA-REG-SHIPPING",
+      "classification": "DEVELOPMENT_REGRESSION",
+      "question": "Where is the shipping cost calculated?",
+      "evidence_from": "RI-002",
+      "expected_answerability": "answerable",
+      "expected_findings": [
+        "Identify QuotePolicy.priceCents() as the parcel pricing implementation, citing the relevant source."
+      ],
+      "historical_observation": "KEYWORD missed the implementation; VECTOR and HYBRID returned it at rank 5. This is not an expected ranking requirement."
+    },
+    {
+      "id": "QA-REG-UNITS",
+      "classification": "DEVELOPMENT_REGRESSION",
+      "question": "Does QuotePolicy always charge a $10 surcharge for remote destinations?",
+      "evidence_from": "RI-002",
+      "expected_answerability": "answerable",
+      "expected_findings": [
+        "Correct the $10 premise: the method returns cents and adds 300 cents ($3.00) for remote destinations.",
+        "Preserve units in claims and uncertainties; 800 cents is $8.00, not $800."
+      ],
+      "historical_observation": "Qwen3 reported a $300 surcharge with valid source citations under prompt v1 and v2; v2 also described 800 cents as $800."
+    }
+  ],
+  "keyword_only_expectations": {
+    "KW-006": {
+      "expected_matches": 0,
+      "expected_model_invoked": false
+    }
+  },
+  "notes": "No nearest-neighbor zero-match expectation for VECTOR or HYBRID. Expected answerability requires semantic review in light of selected evidence. All cases are development data."
+}
