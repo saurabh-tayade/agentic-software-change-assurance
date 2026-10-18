@@ -47,8 +47,11 @@ M1.7c adds [RRF hybrid retrieval and explicit Q&A strategy selection](docs/archi
 keeping keyword retrieval as the default. [Maintainer-reported live observations](evaluation/retrieval/m1-7-observations.md)
 remain separate from aggregate evaluation. M1.8a adds
 [reproducible retrieval comparison and offline grading](docs/architecture/retrieval-evaluation.md)
-for the existing 15 scenarios at K=5 and K=12. Live M1.8a retrieval quality is
-unmeasured; answer evaluation and comparative reporting remain planned.
+for the existing 15 scenarios at K=5 and K=12. The maintainer reports 90 live
+retrieval executions without failures and reproduction of the historical keyword
+baseline. M1.8b adds [grounded-answer capture and offline grading](docs/architecture/grounded-answer-evaluation.md),
+with independent citation checks and explicit human semantic review. Live M1.8b
+answer quality remains unmeasured; comparative reporting remains M1.8c work.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
 A public Q&A API, Repository

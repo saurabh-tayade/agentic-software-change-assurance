@@ -68,7 +68,9 @@ Selected-commit ingestion, parsing, and provenance-preserving chunking are
 implemented, along with PostgreSQL persistence and keyword retrieval. Opt-in
 [grounded Q&A](grounded-question-answering.md) now validates citation identities
 over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrieval.
-Broader retrieval and answer-quality evaluation remain M1.8 work.
+[M1.8a](retrieval-evaluation.md) captures retrieval comparisons;
+[M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution for independent
+context/citation checks and offline human review. Comparative reports remain M1.8c work.
 
 ## Architectural principles
 
@@ -121,9 +123,10 @@ selection, chunking, and verification. M1.4
 [persists those contracts](evidence-persistence.md) atomically.
 M1.5 [keyword retrieval](keyword-retrieval.md) now supplies ranked evidence and a
 controlled baseline. M1.6 [grounds structured answers](grounded-question-answering.md)
-in bounded keyword evidence with deterministic citation identity checks. M1.7 will
-compare vector/hybrid retrieval against the keyword baseline; M1.8 will expand
-answer quality evaluation and human-reviewed semantic support.
+in bounded evidence with deterministic citation identity checks. M1.7 supplies
+keyword/vector/hybrid strategy selection. M1.8a/b now provide reproducible retrieval
+capture and independent answer evaluation with human-reviewed semantic support;
+no automatic semantic correctness follows from a valid citation.
 Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
 metadata including source revisions, tool/model configuration, latency, and token
 usage. Further ranking improvements and model-quality claims remain open;

@@ -71,3 +71,12 @@ M1.5 adds a [versioned PostgreSQL retrieval baseline](retrieval/README.md). It c
 the seven scenarios above unchanged, adds eight lexical/coverage cases, and measures
 source-reference Recall@5, MRR, and latency. This is separate from answer-quality
 evaluation; lexical overlap does not establish semantic support.
+
+## Retrieval and answer comparisons
+
+[M1.8a retrieval evaluation](../docs/architecture/retrieval-evaluation.md) reuses the
+historical grading for three-strategy comparisons. [M1.8b grounded-answer evaluation](../docs/architecture/grounded-answer-evaluation.md)
+imports existing Q&A cases and explicit development regressions, captures actual
+Q&A executions, and separates context coverage, citation identity, answer structure,
+and attributed human semantic judgments. Generated captures and offline review
+observations remain local; historical baselines are not replaced.

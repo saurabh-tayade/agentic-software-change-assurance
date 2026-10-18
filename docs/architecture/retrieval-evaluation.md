@@ -280,5 +280,8 @@ publication, indexing, or comparison was executed for that extension. The earlie
 maintainer reports, not scores in this dataset. This small visible development suite
 is vulnerable to overfitting and does not establish general repository performance.
 Source overlap measures retrieval location/coverage, not semantic relevance, factual
-answer correctness, or feature absence. Answerability, numerical correctness, human
-semantic review, and full comparative reports remain M1.8b/M1.8c work.
+answer correctness, or feature absence. [M1.8b](grounded-answer-evaluation.md) adds
+independent answer capture, structural grading, and human semantic review; full comparative reports remain M1.8c work.
+The maintainer subsequently reported completion of all 90 live executions without
+failures and reproduction of the historical keyword baseline. That report does not
+establish answer correctness or imply a new checked-in retrieval baseline.

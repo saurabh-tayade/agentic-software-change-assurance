@@ -105,6 +105,16 @@ Keep TEST_DOUBLE verification separate from LIVE model observations. Retain need
 local artifacts before `mvnw clean`; full comparison needs explicit full, scoped,
 and chunk-limited publication IDs. No publication or indexing is automatic.
 
+## Grounded-answer evaluation
+
+Follow the [M1.8b guide](architecture/grounded-answer-evaluation.md) for same-execution
+Q&A captures, independent context/citation checks, and offline human reviews. Use
+`evaluation.command=qa-run` explicitly; normal tests use model doubles. Citation-valid
+answers receive no automatic semantic credit. Preserve raw captures privately,
+leave raw response capture disabled routinely, and retain NOT_REVIEWED for any
+human dimension not inspected. Do not edit historical definitions or observations
+to improve results.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,

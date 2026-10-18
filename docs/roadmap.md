@@ -82,8 +82,11 @@ M1.7c hybrid/Q&A strategy integration is implemented. [Initial observations](../
 preserve the maintainer-reported standalone and three-strategy live runs; they are
 not aggregate benchmark evidence. M1.8a adds [reproducible retrieval evaluation](architecture/retrieval-evaluation.md)
 using the existing ground truth, separate K=5/K=12 executions, and offline grading.
-Live M1.8a comparison is pending. Grounded-answer grading and comparative reporting
-remain M1.8b/M1.8c work.
+The maintainer reports 90 live M1.8a executions without failures and reproduction
+of the historical keyword baseline. M1.8b implements [grounded-answer evaluation](architecture/grounded-answer-evaluation.md):
+same-execution capture, independent deterministic checks, and attributed offline
+human review. Live M1.8b semantic quality remains unmeasured. Comparative reporting
+remains M1.8c work.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.
