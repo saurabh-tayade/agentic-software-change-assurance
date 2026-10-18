@@ -64,6 +64,9 @@ only the framework `/actuator/health` endpoint. M1.9b adds the
 [interactive React workspace](docs/architecture/repository-intelligence-workspace.md):
 explicit publication/scope selection, three retrieval strategies, grounded answers,
 uncertainty, interactive citations, and original source excerpts with provenance.
+M1.9c.2 refines contrast, mobile status layout, publication context, limitations
+disclosure, and selection reliability, with a five-minute demo and proxy preflight
+in the workspace guide.
 
 Public/authenticated API access and change-impact analysis
 remain unimplemented. Tests cover

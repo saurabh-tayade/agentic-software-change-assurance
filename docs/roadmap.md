@@ -95,8 +95,11 @@ for explicit publication selection, coverage, three-strategy grounded Q&A, and
 verified original excerpts. M1.9b implements the
 [interactive React workspace](architecture/repository-intelligence-workspace.md)
 with explicit publication selection, grounded answers, uncertainty, citation-to-source
-navigation, and expandable diagnostics. Live UI/API acceptance
-is separate from deterministic tests; sparse reviews are not aggregate correctness evidence.
+navigation, and expandable diagnostics. M1.9c.2 adds focused accessibility and
+mobile polish, clearer publication/uncertainty presentation, selection reliability,
+and a documented demo preflight without changing retrieval or backend APIs.
+Live UI/API acceptance is separate from deterministic tests; sparse reviews are
+not aggregate correctness evidence.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

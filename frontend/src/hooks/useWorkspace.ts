@@ -17,6 +17,8 @@ export function useWorkspace() {
     const evidenceRequest = useRef<AbortController | null>(null);
 
     const selectPublication = useCallback(async (publication: PublicationReference) => {
+        // Failed detail loads have no data, so selecting them again still retries.
+        if (selectedId.current === publication.publicationId && detail.data?.publication.publicationId === publication.publicationId) return;
         detailRequest.current?.abort();
         answerRequest.current?.abort(); answerPending.current = false;
         setAnswer(emptyState());
@@ -33,7 +35,7 @@ export function useWorkspace() {
         } catch (error) {
             if (!controller.signal.aborted && !isCancellation(error)) setDetail({ data: null, loading: false, error: asApiError(error) });
         }
-    }, []);
+    }, [detail.data]);
 
     const submit = useCallback(async (strategy: Strategy, limit: number) => {
         const publicationId = selectedId.current;

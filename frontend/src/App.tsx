@@ -24,7 +24,7 @@ export function App() {
                 <p className="sr-only" role="status">{workspace.answer.data ? `Answer ready: ${workspace.answer.data.status.replaceAll('_', ' ').toLowerCase()}. Review claims and uncertainty below.` : ''}</p>
                 {capabilities.loading && <p role="status">Loading retrieval capabilities…</p>}
                 {capabilities.error && <ErrorNotice error={capabilities.error} action={<button className="text-button" onClick={() => void loadCapabilities()}>Retry capabilities</button>} />}
-                <QuestionForm capabilities={capabilities.data} publication={workspace.selected} ready={!!workspace.detail.data}
+                <QuestionForm capabilities={capabilities.data} capabilitiesLoading={capabilities.loading} publication={workspace.selected} ready={!!workspace.detail.data}
                     question={workspace.question} onQuestion={workspace.setQuestion} pending={workspace.answer.loading}
                     onSubmit={(strategy, limit) => void workspace.submit(strategy, limit)} />
                 {workspace.answer.loading && <div className="panel processing" role="status"><span className="processing-mark" aria-hidden="true">◌</span><div>

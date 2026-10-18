@@ -34,7 +34,9 @@ state library, component framework, Markdown interpreter, or syntax executor is 
 
 There is no browser storage or conversation persistence. Changing publications
 clears the answer and source, cancels pending work, and retains the editable question.
-Starting another question clears the previous answer/source. Evidence failures
+Re-selecting a publication whose details loaded successfully preserves its answer
+and excerpt without another request; a failed detail load still has an explicit
+retry. Starting another question clears the previous answer/source. Evidence failures
 leave the answer intact and offer a GET retry. Submission failures preserve the
 question and require an explicit new submission. Cancellation is not an error.
 
@@ -70,13 +72,19 @@ PARTIAL is saved coverage information, not an HTTP execution failure.
 KEYWORD is the default advertised by the API; VECTOR and HYBRID are enabled only
 when configured. A configured strategy can still fail due to an incomplete index
 or unavailable model. There is no silent fallback. Questions must be nonblank,
-within the server's UTF-16 length limit, valid Unicode, and NUL-free. The server
-remains authoritative for validation. Ctrl/Cmd+Enter and the submit button share
+within the server's UTF-16 length limit, valid Unicode, and NUL-free. The composer
+repeats publication ID, scope, and chunk limits alongside repository
+and revision so publications sharing a commit remain distinct. Loading or failed
+capabilities are labelled unknown/unavailable; only a successful capabilities
+response can label a strategy unconfigured. The server remains authoritative for
+validation. Ctrl/Cmd+Enter and the submit button share
 the same pending/validation guard.
 
 SUPPORTED, PARTIALLY_SUPPORTED, and INSUFFICIENT_EVIDENCE are application answer
-results, never independent truth judgments. Uncertainty, publication limitations,
-and context omissions remain visible. Technical details show requested/effective
+results, never independent truth judgments. All returned uncertainties remain
+visible, with a concise processing-coverage and context-omission summary. General
+ingestion/processing policies remain available in a counted native disclosure.
+No returned uncertainty is filtered or rewritten. Technical details show requested/effective
 strategy, ranked references and scores, context selection/omission reasons,
 model/prompt metadata, invocation timing/tokens, and the exact statement:
 
@@ -86,7 +94,9 @@ CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED
 
 Ranking scores are not confidence percentages. Every returned citation is a button,
 including citations not attached to a claim. Ranked evidence is also navigable.
-Opening a citation focuses the evidence heading for keyboard/mobile navigation.
+Zero-citation answers say "No citations returned." The exact backend validation
+statement remains in diagnostics for every answer. Opening a citation focuses the
+evidence heading for keyboard/mobile navigation.
 The explorer shows original inclusive source coordinates, line-numbered escaped
 Java/Markdown, repository/revision, format, citation key, and expandable hashes,
 Git blob, parser, chunking, and structural context. It is not a full-file browser.
@@ -191,13 +201,150 @@ that build locally, stop Vite dev and run `npm run preview --prefix frontend`;
 preview uses the same loopback port and proxy. This is a local preview procedure,
 not a public deployment configuration. Stop owned foreground processes with Ctrl+C.
 
+## Demo startup and preflight
+
+Use the existing installation steps and Node version above. Start services only
+when they are not already running. Coordinate any restart with the owner; do not
+stop unrelated listeners. For a demo on **http://127.0.0.1:5174**, use the following
+commands from the repository root in the indicated terminals.
+
+In the credentials/API terminal (existing credentials, no new database or index):
+
+```sh
+: "${EVIDENCE_DB_USER:?Export your existing local database user}"
+: "${EVIDENCE_DB_PASSWORD:?Export your existing local database password}"
+export EVIDENCE_DB_URL="${EVIDENCE_DB_URL:-jdbc:postgresql://localhost:5432/evidence}"
+docker compose up -d postgres
+docker compose ps postgres
+docker compose exec -T postgres sh -c 'pg_isready -U "$POSTGRES_USER" -d evidence'
+export INTELLIGENCE_API_BROWSER_ORIGIN=http://127.0.0.1:5174
+export INTELLIGENCE_API_EMBEDDING_PROFILE_ID=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b
+./mvnw spring-boot:run \
+  -Dspring-boot.run.profiles=intelligence-api,embeddings
+```
+
+The profile ID is an example for the prepared Parcel Quotes index. Substitute the
+compatible profile already stored in your database; it is not a hardcoded default.
+Use your actual configured database port in `EVIDENCE_DB_URL` if different.
+
+If Ollama is not already running, start it in a separate terminal:
+
+```sh
+ollama serve
+```
+
+In the frontend terminal, after installing dependencies with `npm ci --prefix frontend`:
+
+```sh
+npm run dev --prefix frontend -- --host 127.0.0.1 --port 5174
+```
+
+In a preflight terminal, verify the **same origin the browser will open**:
+
+```sh
+export WORKSPACE_ORIGIN=http://127.0.0.1:5174
+export DEMO_PUBLICATION=40b677d1bb8efeb02506e0de2ef624acb046a26cc2b57a65a8d7d9ab906c702c
+export DEMO_PROFILE=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b
+export DEMO_CHECK_DIR="$(mktemp -d /tmp/repository-demo-preflight.XXXXXX)"
+ollama list
+curl --fail-with-body http://127.0.0.1:11434/api/tags
+curl --fail-with-body http://127.0.0.1:8080/api/v1/capabilities
+curl --fail-with-body "$WORKSPACE_ORIGIN/" -o /dev/null
+curl --fail-with-body -H "Origin: $WORKSPACE_ORIGIN" \
+  "$WORKSPACE_ORIGIN/api/v1/capabilities" -o "$DEMO_CHECK_DIR/capabilities.json"
+curl --fail-with-body -H "Origin: $WORKSPACE_ORIGIN" \
+  "$WORKSPACE_ORIGIN/api/v1/publications?limit=20" -o "$DEMO_CHECK_DIR/publications.json"
+curl --fail-with-body -H "Origin: $WORKSPACE_ORIGIN" \
+  "$WORKSPACE_ORIGIN/api/v1/publications/$DEMO_PUBLICATION" -o "$DEMO_CHECK_DIR/publication.json"
+python3 - <<'CHECK'
+import json, os
+from pathlib import Path
+root = Path(os.environ['DEMO_CHECK_DIR'])
+caps = json.loads((root / 'capabilities.json').read_text())
+page = json.loads((root / 'publications.json').read_text())
+detail = json.loads((root / 'publication.json').read_text())
+assert caps['apiVersion'] == 'repository-intelligence-v1'
+assert {'KEYWORD', 'VECTOR'} <= set(caps['configuredRetrievalStrategies'])
+assert caps['embeddingProfileId'] == os.environ['DEMO_PROFILE']
+assert detail['publication']['publicationId'] == os.environ['DEMO_PUBLICATION']
+print('Configured chat model:', caps['generationSettings']['model'])
+print('Configured embedding profile:', caps['embeddingProfileId'])
+print('Catalog page:', len(page['items']), 'publications; next cursor:', page['nextAfter'])
+print('Selected publication:', detail['publication'])
+print('Coverage:', detail['coverage'])
+CHECK
+```
+
+Confirm the advertised chat model is installed in `ollama list`. Also confirm the
+embedding model configured in the API startup shell (`EMBEDDINGS_MODEL`, normally
+`nomic-embed-text:v1.5`) is installed and matches the existing profile described in
+the [embedding guide](embedding-indexing.md). The API does not expose a profile
+management endpoint. If the intended publication is beyond the first catalog page,
+use **Load more publications** in the UI; ordering does not indicate recency.
+
+These checks establish reachability, readable metadata, and configured strategies.
+They do not prove a complete embedding index or successful inference. One real
+VECTOR question tests that selected publication's current retrieval/model path;
+inspect any safe operational error rather than silently switching publications,
+creating an index, or assuming readiness. The API process performs no migration
+or ingestion as part of this procedure.
+
+### Diagnosing a frontend-only startup
+
+A page loading does not prove the API proxy is active. If direct API capabilities
+return 200 but the same route through Vite returns 404, check the Vite terminal,
+working directory, and whether `frontend/vite.config.ts` was loaded. During the
+M1.9c audit the existing Vite process predated creation of that config file and
+listened on `[::1]:5174`; `localhost` served the UI, while `127.0.0.1` refused the
+connection. Starting a fresh process with the checked-in configuration restored
+IPv4 loopback access and both proxy routes without backend changes.
+
+Restart only your own stale Vite process after coordinating with its owner, using
+the frontend command above. Use the URL printed by that fresh process. The exact
+scheme, host, and port must match `INTELLIGENCE_API_BROWSER_ORIGIN` in the running
+API process; exporting a new value elsewhere does not reconfigure it. A 403 origin
+rejection is distinct from a missing proxy. Never strip Origin, relax Host checks,
+or add wildcard CORS. Do not substitute `localhost` for `127.0.0.1`.
+
+## Five-minute engineering demonstration
+
+Complete preflight before sharing the screen. Keep technical disclosures closed
+initially; the main workflow should explain itself in roughly 30 seconds.
+
+| Time | Action and explanation |
+| --- | --- |
+| 0:00–0:45 | Explicitly select the full Parcel Quotes publication by ID, all-path scope, and 10,000-chunk limit. Show its immutable Git revision and coverage. Explain that scope/configuration also define publication identity and PARTIAL is saved coverage, not an HTTP failure. |
+| 0:45–1:30 | Ask **Where is shipping cost calculated?** with **Vector**. Describe semantic retrieval while the local model runs. Do not resubmit while pending. |
+| 1:30–2:30 | Read the actual status, answer, and claim. Open the returned citation for the pricing implementation; inspect `QuotePolicy.priceCents()` if it is cited. E5 and lines 4–7 are historical examples, not guaranteed outputs. |
+| 2:30–3:15 | Show original line numbers, escaped source, revision, and source provenance. Read answer uncertainty and the visible coverage/omission summary. Expand general policies only when relevant. Explain that identity checks do not independently verify semantic support or factual correctness. |
+| 3:15–4:15 | Select **Keyword** and explicitly ask again. Explain the observed result, whether supported or insufficient. Insufficiency is not proof that functionality is absent; operational failure is a separate state. |
+| 4:15–5:00 | Expand retrieval/execution details. Compare ranking, selected evidence, omissions, and model timing. Scores are not confidence. Connect this observation to the existing M1.8 evaluations below. |
+
+The maintainer-reported M1.8a acceptance recorded **90 retrieval executions without
+failures** and reproduction of the historical keyword baseline. M1.8b acceptance
+recorded **six Q&A executions**, with one attributed review containing both an
+incorrect and a correct claim despite valid citation identities; five executions
+remained semantically unreviewed. M1.8c provides reproducible offline reports with
+explicit input/review selection and denominators. These are historical acceptance
+observations, not a fresh benchmark, proof of aggregate correctness, or evidence
+that one retrieval strategy is generally superior. See the
+[retrieval evaluation guide](retrieval-evaluation.md),
+[Q&A evaluation guide](grounded-answer-evaluation.md), and
+[reporting guide](evaluation-reporting.md).
+
+Do not promise identical wording, status, citation keys, or timings. If a response
+has no citations, discuss its uncertainty instead of presenting an unrelated
+excerpt as support. If inference fails, show the safe error and preserved draft;
+resolve the local service issue before retrying. No live results should be fabricated.
+
 ## Maintainer live acceptance
 
 This procedure uses existing data and does not guarantee any particular model output.
 The known full Parcel Quotes publication is an example, not hardcoded in the UI:
 
 ```sh
-API=http://127.0.0.1:5173/api/v1
+WORKSPACE_ORIGIN=${WORKSPACE_ORIGIN:-http://127.0.0.1:5173}
+API="$WORKSPACE_ORIGIN/api/v1"
 PUBLICATION=40b677d1bb8efeb02506e0de2ef624acb046a26cc2b57a65a8d7d9ab906c702c
 curl --fail-with-body "$API/capabilities" | python3 -m json.tool
 curl --fail-with-body "$API/publications?limit=20" | python3 -m json.tool
@@ -233,16 +380,16 @@ Check safe malformed-input handling through the same proxy:
 
 ```sh
 curl -i -H 'Content-Type: application/json' \
-  -H 'Origin: http://127.0.0.1:5173' \
+  -H "Origin: $WORKSPACE_ORIGIN" \
   --data '{"question":" ","retrievalStrategy":"VECTOR"}' \
   "$API/publications/$PUBLICATION/answers"
 curl -i "$API/publications/not-a-publication"
 ```
 
 Expect 400 with a fixed problem code/description, no SQL/provider details. To
-exercise an operational error in the UI without altering stored data, stop the
-API process you own and submit a question; the UI must preserve the question and
-show a safe service/proxy failure. Restart the API afterwards. An allowed-origin
+review operational-error behavior, use a naturally occurring safe failure or the
+deterministic frontend tests; do not interrupt a healthy demo service just to
+produce an error. Submission failures preserve the draft question. An allowed-origin
 misconfiguration also produces a safe ORIGIN_NOT_ALLOWED notice; fix startup
 configuration instead of weakening the proxy. Never stop somebody else's process.
 
@@ -250,7 +397,7 @@ For a direct same-proxy inference/evidence check:
 
 ```sh
 curl --fail-with-body -H 'Content-Type: application/json' \
-  -H 'Origin: http://127.0.0.1:5173' \
+  -H "Origin: $WORKSPACE_ORIGIN" \
   --data '{"question":"Where is shipping cost calculated?","retrievalStrategy":"VECTOR"}' \
   "$API/publications/$PUBLICATION/answers" > /tmp/repository-workspace-answer.json
 python3 -m json.tool /tmp/repository-workspace-answer.json

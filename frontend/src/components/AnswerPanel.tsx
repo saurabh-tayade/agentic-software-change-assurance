@@ -11,6 +11,11 @@ const meanings = {
 
 export function AnswerPanel({ answer, onEvidence }: Props) {
     const publication = answer.publication.publication;
+    const policies = [...answer.publication.ingestionLimitations, ...answer.publication.processingLimitations];
+    const coverage = [
+        ...(publication.processingStatus !== 'COMPLETE' ? [`${publication.processingStatus} processing; evidence coverage is incomplete.`] : []),
+        ...(answer.contextSelection.omissions.length ? [`${answer.contextSelection.omissions.length} retrieved excerpt(s) omitted from the model context.`] : []),
+    ];
     return <article className="panel answer-panel" aria-labelledby="answer-title">
         <div className="panel-heading"><div><span className="eyebrow">Grounded response</span><h2 id="answer-title">Answer & supporting evidence</h2></div>
             <StatusBadge status={answer.status} /></div>
@@ -35,11 +40,13 @@ export function AnswerPanel({ answer, onEvidence }: Props) {
         <section className="uncertainty-section" aria-label="Uncertainty and limitations"><h3>What remains uncertain</h3>
             {answer.uncertainties.length ? <ul className="plain-list">{answer.uncertainties.map((text, i) => <li key={i}>{text}</li>)}</ul>
                 : <p className="small">No additional uncertainties were reported. This is not a guarantee of correctness.</p>}
-            {publication.processingStatus !== 'COMPLETE' && <p className="small">Publication processing is {publication.processingStatus.toLowerCase()}; evidence coverage is incomplete.</p>}
-            {answer.contextSelection.omissions.length > 0 && <p className="small">{answer.contextSelection.omissions.length} retrieved excerpt(s) were omitted from the model context.</p>}
-            <ul className="plain-list">{[...answer.publication.ingestionLimitations, ...answer.publication.processingLimitations].map((text, i) => <li key={i}>{text}</li>)}</ul>
+            {coverage.length > 0 && <p className="small"><strong>Evidence coverage: </strong>{coverage.join(' ')}</p>}
+            {policies.length > 0 && <details className="general-limitations"><summary>General ingestion & processing limitations ({policies.length})</summary>
+                <ul className="plain-list">{policies.map((text, i) => <li key={i}>{text}</li>)}</ul>
+            </details>}
         </section>
-        <div className="identity-note"><span aria-hidden="true">◈</span><p><strong>Citation identities validated</strong><br />Source identity checked; semantic support not independently verified.</p></div>
+        <div className="identity-note"><span aria-hidden="true">◈</span><p><strong>{answer.citations.length ? 'Citation identities validated' : 'No citations returned.'}</strong><br />
+            {answer.citations.length ? 'Source identity checked; semantic support not independently verified.' : 'Factual correctness has not been independently verified.'}</p></div>
         <Diagnostics answer={answer} {...(onEvidence ? { onEvidence } : {})} />
     </article>;
 }

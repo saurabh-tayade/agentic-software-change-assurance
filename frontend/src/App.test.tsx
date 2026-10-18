@@ -155,6 +155,54 @@ it('clears the answer and source when switching publications, while preserving t
     expect(screen.getByLabelText('Repository question')).toHaveValue(answer.question);
 });
 
+it('preserves the loaded answer and evidence when re-selecting the active publication', async () => {
+    const user = await prepareAnswer();
+    await user.click(screen.getByRole('button', { name: /Open citation E5/ }));
+    const source = await screen.findByRole('region', { name: /Original source/ });
+    const response = screen.getByRole('article');
+    const requests = fetchMock.mock.calls.length;
+    await user.click(screen.getByRole('button', { name: /aaaaaaaaaa/ }));
+    expect(screen.getByRole('article')).toBe(response);
+    expect(screen.getByRole('region', { name: /Original source/ })).toBe(source);
+    expect(fetchMock).toHaveBeenCalledTimes(requests);
+});
+
+it.each([full, scoped, limited])('identifies publication $publicationId in the question composer', async publication => {
+    const user = userEvent.setup(); render(<App />);
+    await user.click(await screen.findByRole('button', { name: new RegExp(publication.publicationId.slice(0, 10)) }));
+    const context = screen.getByRole('group', { name: 'Question publication' });
+    expect(context).toHaveTextContent(publication.repositoryId);
+    expect(context).toHaveTextContent(`revision ${publication.commitSha.slice(0, 10)}`);
+    expect(context).toHaveTextContent(`publication ${publication.publicationId.slice(0, 10)}`);
+    expect(context).toHaveTextContent(publication.scope.includes.join(', ') || 'All paths');
+    expect(context).toHaveTextContent(`${publication.processingConfiguration.maxChunks.toLocaleString()} chunk limit`);
+});
+
+it('distinguishes loading and failed capabilities from strategies reported as unconfigured', async () => {
+    const original = fetchMock.getMockImplementation()!;
+    let resolve!: (value: Response) => void;
+    let attempts = 0;
+    fetchMock.mockImplementation((input, init) => String(input).endsWith('/capabilities')
+        ? attempts++ === 0 ? new Promise<Response>(done => { resolve = done; })
+            : Promise.resolve(jsonResponse({ ...capabilities, configuredRetrievalStrategies: ['KEYWORD'] }))
+        : original(input, init));
+    const user = userEvent.setup(); render(<App />);
+    expect(screen.getByText('Loading retrieval strategies…')).toBeVisible();
+    expect(screen.getAllByRole('radio', { name: /configuration unknown/ })).toHaveLength(3);
+    expect(screen.queryByRole('radio', { name: /not configured/ })).not.toBeInTheDocument();
+    await act(async () => resolve(jsonResponse({ code: 'RETRIEVAL_FAILURE' }, 503)));
+    expect(screen.getByText('Retrieval strategies are unavailable. Retry capabilities above.')).toBeVisible();
+    expect(screen.getAllByRole('radio', { name: /configuration unknown/ })).toHaveLength(3);
+    expect(screen.queryByRole('radio', { name: /not configured/ })).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('Repository evidence could not be read');
+    await user.click(screen.getByRole('button', { name: 'Retry capabilities' }));
+    expect(await screen.findByRole('radio', { name: 'Keyword' })).toBeEnabled();
+    expect(screen.getByRole('radio', { name: 'Keyword' })).toBeChecked();
+    expect(screen.getByRole('radio', { name: /Vector\s*\(not configured\)/ })).toBeDisabled();
+    expect(screen.getByRole('radio', { name: /Hybrid\s*\(not configured\)/ })).toBeDisabled();
+    expect(screen.queryByRole('radio', { name: /configuration unknown/ })).not.toBeInTheDocument();
+});
+
 it.each(['answer', 'evidence', 'detail'])('ignores a stale %s response even if transport does not honor cancellation', async operation => {
     const original = fetchMock.getMockImplementation()!;
     let resolve!: (value: Response) => void;
