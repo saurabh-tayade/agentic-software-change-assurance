@@ -4,9 +4,9 @@ import java.util.HashSet;
 import java.util.List;
 
 /** Source-reference metrics only; deliberately independent of lexical similarity and answer support. */
-final class RetrievalGrading {
-    record Reference(String path, int start, int end) {
-        Reference {
+public final class RetrievalGrading {
+    public record Reference(String path, int start, int end) {
+        public Reference {
             if (path == null || path.isBlank() || start < 1 || end < start || end - start > 1_000_000)
                 throw new IllegalArgumentException("Invalid evaluation reference");
         }
@@ -14,9 +14,9 @@ final class RetrievalGrading {
             return path.equals(other.path) && start <= other.end && end >= other.start;
         }
     }
-    record Grade(Double recall, Double reciprocalRank, int coveredReferences, int expectedReferences) { }
+    public record Grade(Double recall, Double reciprocalRank, int coveredReferences, int expectedReferences) { }
 
-    static Grade grade(List<Reference> expected, List<Reference> ranked) {
+    public static Grade grade(List<Reference> expected, List<Reference> ranked) {
         if (expected.isEmpty()) return new Grade(null, null, 0, 0);
         int covered = 0;
         for (var ref : expected) {

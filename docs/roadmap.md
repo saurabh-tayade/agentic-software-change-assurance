@@ -75,13 +75,15 @@ M1.4 implements [Evidence Persistence](architecture/evidence-persistence.md).
 M1.5 implements [Keyword Retrieval](architecture/keyword-retrieval.md), including
 publication consistency checks and [versioned retrieval evaluation](../evaluation/retrieval/README.md).
 M1.6 adds [grounded Q&A](architecture/grounded-question-answering.md) and a
-[Q&A evaluation definition](../evaluation/qa/README.md). M1.7 will compare vector
-and hybrid retrieval with the existing keyword baseline while preserving the answer
+[Q&A evaluation definition](../evaluation/qa/README.md). M1.7 adds vector
+and hybrid retrieval alongside the existing keyword baseline while preserving the answer
 and citation contracts. M1.7a indexing and M1.7b semantic retrieval are implemented;
-M1.7c hybrid/Q&A strategy integration is implemented. Three-strategy live Q&A
-acceptance remains pending. [Initial observations](../evaluation/retrieval/m1-7-observations.md)
-preserve the maintainer-reported M1.7b vector run separately; deterministic ranking
-verification is not a quality comparison.
+M1.7c hybrid/Q&A strategy integration is implemented. [Initial observations](../evaluation/retrieval/m1-7-observations.md)
+preserve the maintainer-reported standalone and three-strategy live runs; they are
+not aggregate benchmark evidence. M1.8a adds [reproducible retrieval evaluation](architecture/retrieval-evaluation.md)
+using the existing ground truth, separate K=5/K=12 executions, and offline grading.
+Live M1.8a comparison is pending. Grounded-answer grading and comparative reporting
+remain M1.8b/M1.8c work.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

@@ -44,7 +44,11 @@ M1.7a adds [versioned embedding generation and persistence](docs/architecture/em
 for existing publications through an opt-in CLI. M1.7b adds
 [exact vector retrieval](docs/architecture/vector-retrieval.md) with explicit publication/profile selection.
 M1.7c adds [RRF hybrid retrieval and explicit Q&A strategy selection](docs/architecture/hybrid-retrieval.md),
-keeping keyword retrieval as the default. Live three-strategy Q&A acceptance is pending.
+keeping keyword retrieval as the default. [Maintainer-reported live observations](evaluation/retrieval/m1-7-observations.md)
+remain separate from aggregate evaluation. M1.8a adds
+[reproducible retrieval comparison and offline grading](docs/architecture/retrieval-evaluation.md)
+for the existing 15 scenarios at K=5 and K=12. Live M1.8a retrieval quality is
+unmeasured; answer evaluation and comparative reporting remain planned.
 The HTTP application still exposes only the framework `/actuator/health` endpoint.
 
 A public Q&A API, Repository

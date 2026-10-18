@@ -121,7 +121,7 @@ class KeywordEvaluationIT {
                         "service", sha(Path.of("src/main/java/dev/changeassurance/retrieval/KeywordRetrievalService.java")),
                         "integrity", sha(Path.of("src/main/java/dev/changeassurance/persistence/PublicationIntegrity.java")),
                         "migration", sha(Path.of("src/main/resources/db/migration/V2__keyword_retrieval.sql")),
-                        "grader", sha(Path.of("src/test/java/dev/changeassurance/evaluation/RetrievalGrading.java"))));
+                        "grader", sha(Path.of("src/main/java/dev/changeassurance/evaluation/RetrievalGrading.java"))));
                 report.put("commit", ingestion.snapshot().commitSha()); report.put("top_k", topK);
                 report.put("query_count", rows.size()); report.put("queries_with_expected_evidence", graded.size());
                 report.put("macro_recall_at_k", graded.stream().mapToDouble(Grade::recall).average().orElseThrow());

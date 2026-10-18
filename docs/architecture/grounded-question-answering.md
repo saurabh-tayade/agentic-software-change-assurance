@@ -112,7 +112,30 @@ disposable corpus commit is local and does not change this project's Git history
   -Dspring-boot.run.arguments='--qa.command=publish --qa.publish-repository=/absolute/path/to/repository --qa.repository-id=parcel-quotes-v1 --qa.revision=ACTUAL_COMMIT_SHA --qa.chunk-max-lines=4'
 ```
 
-The CLI prints a `publicationId`. Use that exact ID in a separate run:
+Publication options are backward compatible:
+
+| Property | Default | Meaning |
+| --- | --- | --- |
+| `qa.scope-includes` | Omitted: unrestricted scope | Comma-separated literal repository-relative path prefixes, e.g. `src` or `src,tests` |
+| `qa.chunk-max-lines` | `80` | Existing per-chunk line limit, 1–10,000 |
+| `qa.chunk-max-chunks` | `10000` | Publication processing chunk limit, 1–100,000 |
+
+Include prefixes use `RepositorySelection.Scope` semantics: a prefix includes that
+path and its descendants. Surrounding spaces are stripped; duplicates are removed
+and prefixes sorted by the existing domain contract. This property is a scalar
+comma-separated value, not a JSON array or glob expression. Commas and surrounding
+spaces in literal path names cannot be represented by this CLI syntax. Exclusions
+remain empty. Omit the property to retain unrestricted scope; an explicitly empty
+value, empty list entry, unsafe path, control character, or invalid chunk limit fails
+with `INVALID_REQUEST` before ingestion. Existing ingestion policies still apply.
+
+The JSON output includes `publicationId`, effective `snapshot.scope`,
+`snapshot.commitSha`, `configuration.maxLines`, `configuration.maxChunks`, and
+`processingStatus`. Defaults retain the same publication identity for identical
+inputs. The [evaluation guide](retrieval-evaluation.md#preparing-kw-007-and-kw-008)
+provides exact restricted-scope and one-chunk publication/indexing commands.
+
+Use the printed `publicationId` in a separate answer run:
 
 ```sh
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=persistence,qa \

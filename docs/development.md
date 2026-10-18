@@ -97,6 +97,14 @@ Keyword remains the default. Opting into VECTOR/HYBRID requires the embeddings
 profile and an explicit compatible stored profile ID; do not index automatically
 or substitute keyword retrieval after a failure.
 
+## Retrieval evaluation
+
+Follow the [M1.8a guide](architecture/retrieval-evaluation.md) to execute the pinned
+15-case suite against existing publications and regrade saved artifacts offline.
+Keep TEST_DOUBLE verification separate from LIVE model observations. Retain needed
+local artifacts before `mvnw clean`; full comparison needs explicit full, scoped,
+and chunk-limited publication IDs. No publication or indexing is automatic.
+
 ## Documentation and decisions
 
 Update implementation status with relevant changes. Distinguish implemented,

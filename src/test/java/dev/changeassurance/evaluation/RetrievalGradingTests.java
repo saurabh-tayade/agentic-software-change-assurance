@@ -6,6 +6,20 @@ import static dev.changeassurance.evaluation.RetrievalGrading.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RetrievalGradingTests {
+    @Test void reproducesEveryHistoricalPerCaseGradeWithoutDatabaseOrModel() throws Exception {
+        var definition = EvaluationFixtures.definition();
+        var baseline = RetrievalComparison.JSON.readTree(java.nio.file.Files.readString(java.nio.file.Path.of("evaluation/retrieval/baseline-v1.json")));
+        int compared = 0;
+        for (var row : baseline.path("scenarios")) {
+            var scenario = definition.scenarios().stream().filter(s -> s.id().equals(row.path("id").asString())).findFirst().orElseThrow();
+            var ranked = new java.util.ArrayList<Reference>();
+            for (var match : row.path("matches")) ranked.add(new Reference(match.path("path").asString(),
+                    match.path("start_line").asInt(), match.path("end_line").asInt()));
+            assertEquals(RetrievalComparison.JSON.treeToValue(row.path("grade"), Grade.class), grade(scenario.expected(), ranked));
+            compared++;
+        }
+        assertEquals(15, compared);
+    }
     @Test void requiresCompleteUnionCoverageAndDoesNotDoubleCountOverlap() {
         var expected = List.of(new Reference("A", 3, 7), new Reference("B", 1, 2));
         var grade = grade(expected, List.of(new Reference("irrelevant", 1, 20), new Reference("A", 3, 5),
