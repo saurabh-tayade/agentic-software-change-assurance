@@ -22,8 +22,10 @@ health. Model integrations run through opt-in local profiles and CLI commands.
 Default startup needs no
 external services; the explicit `persistence` profile enables PostgreSQL and Flyway.
 
-The current request flow is HTTP client -> embedded server -> Actuator health
-handling -> JSON health response. It performs no source ingestion or analysis.
+Default HTTP startup serves health. M1.9a's explicit `intelligence-api` profile
+adds the [Repository Intelligence API](repository-intelligence-api.md): HTTP
+controller -> existing publication/retrieval/Q&A services -> explicit JSON DTOs.
+It is local and read-only, with migrations disabled and CLI execution rejected.
 
 The Maven Wrapper builds an executable JAR. Automated tests verify context startup
 and HTTP health on a random port. GitHub Actions runs the build and offline
@@ -43,7 +45,8 @@ M1.6 adds [grounded Q&A](grounded-question-answering.md). M1.7a adds
 [versioned embedding indexing](embedding-indexing.md) with derived pgvector storage.
 M1.7b adds [exact vector retrieval](vector-retrieval.md) scoped to a publication and profile.
 M1.7c adds [RRF hybrid retrieval](hybrid-retrieval.md) and explicit Q&A strategy selection.
-These components add no HTTP route or automatic repository scan.
+M1.9a exposes these services through five opt-in HTTP routes without automatic
+repository scans, indexing, or a second Q&A pipeline.
 
 ## Planned responsibilities and evidence flow
 
@@ -72,7 +75,7 @@ over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrie
 [M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution for independent
 context/citation checks and offline human review. [M1.8c](evaluation-reporting.md)
 adds offline JSON/Markdown reports with explicit review selection and reproducibility
-manifests. M1.9 UI work remains planned.
+manifests. M1.9a's local REST API is implemented; the M1.9b React UI remains planned.
 
 ## Architectural principles
 

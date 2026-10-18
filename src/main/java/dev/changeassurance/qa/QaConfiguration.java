@@ -34,6 +34,7 @@ public class QaConfiguration {
     }
 
     @Bean
+    @Profile("!intelligence-api")
     GroundedQuestionAnsweringService groundedQuestionAnsweringService(ModelGateway gateway,
                                                                       ObjectProvider<KeywordRetrievalService> retrieval,
                                                                       ObjectProvider<VectorRetrievalService> vector,

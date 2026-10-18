@@ -18,4 +18,9 @@ class HealthEndpointTests {
                 .expectStatus().isOk()
                 .expectBody().jsonPath("$.status").isEqualTo("UP");
     }
+
+    @Test
+    void defaultStartupDoesNotExposeRepositoryIntelligence(@Autowired RestTestClient client) {
+        client.get().uri("/api/v1/capabilities").exchange().expectStatus().isNotFound();
+    }
 }

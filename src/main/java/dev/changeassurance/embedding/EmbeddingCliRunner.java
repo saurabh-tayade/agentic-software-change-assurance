@@ -15,7 +15,7 @@ import java.util.Map;
 
 /** Explicit developer CLI; a partial result is printed but produces a nonzero process exit. */
 @Component
-@Profile("embeddings")
+@Profile("embeddings & !intelligence-api")
 @ConditionalOnProperty(name = "embeddings.command")
 public final class EmbeddingCliRunner implements ApplicationRunner {
     private final Environment environment;

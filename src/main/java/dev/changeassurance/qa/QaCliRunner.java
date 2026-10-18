@@ -22,7 +22,7 @@ import java.util.Map;
 
 /** Explicit developer command; ingestion/publication stays outside the answering service. */
 @Component
-@Profile("qa")
+@Profile("qa & !intelligence-api")
 @ConditionalOnProperty(name = "qa.command")
 public final class QaCliRunner implements ApplicationRunner {
     private final Environment environment;

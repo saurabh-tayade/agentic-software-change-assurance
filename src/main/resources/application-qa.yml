@@ -1,7 +1,4 @@
 # Explicit opt-in: activate persistence,qa together. No model is downloaded or called at startup.
-spring:
-  main:
-    web-application-type: none
 qa:
   retrieval-strategy: ${QA_RETRIEVAL_STRATEGY:KEYWORD}
   embedding-profile-id: ${QA_EMBEDDING_PROFILE_ID:}
@@ -13,3 +10,10 @@ qa:
   max-output-tokens: ${QA_MAX_OUTPUT_TOKENS:768}
   connect-timeout-seconds: ${QA_CONNECT_TIMEOUT_SECONDS:5}
   timeout-seconds: ${QA_TIMEOUT_SECONDS:120}
+---
+spring:
+  config:
+    activate:
+      on-profile: '!intelligence-api'
+  main:
+    web-application-type: none

@@ -1,0 +1,19 @@
+# Existing CLI workflows prepare the schema/publications/indexes before this process starts.
+spring:
+  main:
+    web-application-type: servlet
+  flyway:
+    enabled: false
+  sql:
+    init:
+      mode: never
+  datasource:
+    hikari:
+      read-only: true
+server:
+  address: 127.0.0.1
+  forward-headers-strategy: none
+intelligence:
+  api:
+    embedding-profile-id: ${INTELLIGENCE_API_EMBEDDING_PROFILE_ID:}
+    browser-origin: ${INTELLIGENCE_API_BROWSER_ORIGIN:}
