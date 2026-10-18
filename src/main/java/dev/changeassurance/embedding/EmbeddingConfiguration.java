@@ -21,6 +21,7 @@ public class EmbeddingConfiguration {
                 environment.getProperty("embeddings.timeout-seconds", Integer.class, 60));
     }
     @Bean
+    @Profile("!intelligence-api")
     EmbeddingIndexingService embeddingIndexingService(EvidencePersistenceService publications,
                                                      javax.sql.DataSource dataSource, EmbeddingGateway gateway) {
         return new EmbeddingIndexingService(publications, new EmbeddingStore(dataSource), gateway);

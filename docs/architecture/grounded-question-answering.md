@@ -8,6 +8,11 @@ and validates references before returning an answer. The [M1.4 publication](evid
 retains snapshot identity and processing coverage. The Q&A service does not ingest,
 parse, persist, or choose a latest publication.
 
+M1.9a's [local REST API](repository-intelligence-api.md) reuses this service and
+same-invocation retrieval trace through a separate `intelligence-api` profile.
+The CLI commands below retain their existing behavior; the API rejects CLI command
+properties and performs no schema migration, publication, or indexing.
+
 ## Boundaries and contract
 
 `GroundedQuestionAnsweringService.answer(publicationId, question, configuration)`

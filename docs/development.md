@@ -97,6 +97,16 @@ Keyword remains the default. Opting into VECTOR/HYBRID requires the embeddings
 profile and an explicit compatible stored profile ID; do not index automatically
 or substitute keyword retrieval after a failure.
 
+## Local Repository Intelligence API
+
+The [Repository Intelligence API guide](architecture/repository-intelligence-api.md)
+documents the separate `intelligence-api` HTTP profile and maintainer smoke tests.
+That profile excludes CLI runners, disables schema initialization, and uses
+loopback HTTP and read-only connections. Prepare publications/indexes separately.
+Keep HTTP DTOs explicit, preserve uncertainty/provenance, and resolve evidence only
+within its publication. The planned React UI must remain a presentation layer.
+API tests use deterministic gateways and disposable PostgreSQL, not live Ollama.
+
 ## Retrieval evaluation
 
 Follow the [M1.8a guide](architecture/retrieval-evaluation.md) to execute the pinned

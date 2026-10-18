@@ -89,8 +89,11 @@ same-execution capture, independent deterministic checks, and attributed offline
 human review. The maintainer accepted six live Q&A executions and one attributed
 review containing an incorrect and a correct claim; five executions remain semantically
 unreviewed. M1.8c implements [offline evaluation reports](architecture/evaluation-reporting.md)
-with explicit input/review selection and reproducible JSON/Markdown output. M1.9 UI
-features remain planned; sparse reviews are not aggregate correctness evidence.
+with explicit input/review selection and reproducible JSON/Markdown output.
+M1.9a implements the [local Repository Intelligence REST API](architecture/repository-intelligence-api.md)
+for explicit publication selection, coverage, three-strategy grounded Q&A, and
+verified original excerpts. M1.9b's React UI remains planned. Live API acceptance
+is separate from deterministic tests; sparse reviews are not aggregate correctness evidence.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

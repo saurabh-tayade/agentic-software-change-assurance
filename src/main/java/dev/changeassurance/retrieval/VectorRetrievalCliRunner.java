@@ -18,7 +18,7 @@ import java.util.Map;
 
 /** Opt-in developer retrieval; no chat invocation, indexing, or public endpoint. */
 @Component
-@Profile("embeddings")
+@Profile("embeddings & !intelligence-api")
 @ConditionalOnProperty(name = "vector.command")
 public final class VectorRetrievalCliRunner implements ApplicationRunner {
     private final Environment environment;

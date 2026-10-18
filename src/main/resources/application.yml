@@ -1,6 +1,9 @@
 spring:
   application:
     name: agentic-software-change-assurance
+  profiles:
+    group:
+      intelligence-api: persistence,qa
 ---
 spring:
   config:

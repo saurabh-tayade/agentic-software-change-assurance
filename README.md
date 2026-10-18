@@ -55,11 +55,15 @@ accepted six live Q&A executions with one attributed review demonstrating both a
 incorrect and a correct claim despite valid citation identities. M1.8c adds
 [offline JSON/Markdown reporting](docs/architecture/evaluation-reporting.md) with
 explicit review selection, denominators, and reproducibility manifests. These sparse
-reviews do not establish aggregate answer correctness; M1.9 UI work remains planned.
-The HTTP application still exposes only the framework `/actuator/health` endpoint.
+reviews do not establish aggregate answer correctness. M1.9a adds a
+[local read-only Repository Intelligence REST API](docs/architecture/repository-intelligence-api.md)
+for publication selection, coverage, grounded answers, strategy selection, and
+verified evidence excerpts. Its explicit `intelligence-api` profile disables
+migrations and CLI commands and binds to loopback. Default startup still exposes
+only the framework `/actuator/health` endpoint.
 
-A public Q&A API, Repository
-Intelligence UI, and change-impact analysis are not implemented. Tests cover
+The M1.9b React UI, public/authenticated API access, and change-impact analysis
+remain unimplemented. Tests cover
 ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
 deterministic chunks, original source mappings, application startup/HTTP health,
 PostgreSQL persistence/rollback/retrieval, and evaluation-fixture consistency. The
@@ -111,6 +115,10 @@ Run tests, including the health test against an embedded server on a random port
 ```
 
 For opt-in Q&A, use the [local Ollama and CLI guide](docs/architecture/grounded-question-answering.md).
+For HTTP access to existing publications, use the
+[API startup and maintainer smoke-test procedure](docs/architecture/repository-intelligence-api.md).
+The API process never prepares the schema or indexes; keep using the existing
+CLI workflows for that explicit preparation.
 Default startup and mandatory tests do not require Ollama. Spring AI 2.0.1 is
 managed through its BOM; the initial model is `qwen3:4b-instruct` with an 8,192-token
 context setting and bounded output. Citation validation verifies immutable source

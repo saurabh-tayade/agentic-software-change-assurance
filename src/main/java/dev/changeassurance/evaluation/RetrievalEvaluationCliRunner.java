@@ -9,6 +9,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 /** Explicit local execution/offline grading. Prints paths and counts, never evidence or credentials. */
 @Component
+@Profile("!intelligence-api")
 @ConditionalOnProperty(name = "evaluation.command")
 public final class RetrievalEvaluationCliRunner implements ApplicationRunner {
     private final Environment env;
