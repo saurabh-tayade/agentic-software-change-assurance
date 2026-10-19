@@ -5,7 +5,8 @@ Ollama, an LLM judge, or new storage. [M1.8a](retrieval-evaluation.md) captures 
 retrieval; [M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution and
 supports attributed human review; M1.8c validates and presents these observations.
 Retrieval, prompts, models, answer generation, and historical ground truth are unchanged.
-M1.9 UI work remains planned.
+M1.9 now exposes Repository Intelligence through a [local API/UI](repository-intelligence-workspace.md);
+evaluation dashboards remain planned.
 
 ## Inputs and validation
 

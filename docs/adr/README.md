@@ -1,8 +1,10 @@
 # Architecture decision records
 
 ADRs record decisions and their rationale, not a claim that every affected
-capability has been implemented. Accepted decisions below establish M0 direction;
-their application to future features is incremental.
+capability has been implemented. The individual Status and Context sections preserve what existed when each decision
+was written (M0 through M1.7a). They are historical records, not the current capability
+inventory. The [architecture overview](../architecture/overview.md) describes the
+implemented M1 system and subsequent application of these decisions.
 
 | ADR | Decision | Status |
 | --- | --- | --- |

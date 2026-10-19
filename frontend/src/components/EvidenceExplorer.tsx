@@ -6,10 +6,10 @@ import { EmptyState, ErrorNotice, shortId } from './Common';
 interface Props {
     state: LoadState<EvidenceResponse>;
     citation: { reference: EvidenceReference; key: string | undefined } | null;
-    onRetry: () => void;
+    onRetry: () => void; inSheet?: boolean;
 }
 
-export function EvidenceExplorer({ state, citation, onRetry }: Props) {
+export function EvidenceExplorer({ state, citation, onRetry, inSheet = false }: Props) {
     const heading = useRef<HTMLHeadingElement>(null);
     useEffect(() => {
         // Move keyboard users to the requested excerpt, including on a stacked mobile layout.
@@ -22,8 +22,8 @@ export function EvidenceExplorer({ state, citation, onRetry }: Props) {
     const lines = data?.content.match(/[^\r\n]*(?:\r\n|\n|\r|$)/g) ?? [];
     if (lines.at(-1) === '') lines.pop();
     return <aside className="panel evidence-panel" aria-labelledby="evidence-title">
-        <div className="panel-heading"><div><span className="eyebrow">03 / Source evidence</span>
-            <h2 id="evidence-title" tabIndex={-1} ref={heading}>Evidence explorer</h2></div><span className="file-symbol" aria-hidden="true">⌗</span></div>
+        <div className="panel-heading"><div><span className="eyebrow">Original repository excerpts</span>
+            <h2 id="evidence-title" tabIndex={-1} ref={heading}>{inSheet ? 'Original source excerpt' : 'Supporting Sources'}</h2></div><span className="file-symbol" aria-hidden="true">⌗</span></div>
         {!citation && <EmptyState eyebrow="Follow the source" title="Evidence lives here"><p>Open a citation from an answer to inspect its original source excerpt and provenance.</p></EmptyState>}
         <p className="sr-only" role="status">{reference ? `Source excerpt ready: ${reference.path}, lines ${reference.startLine} to ${reference.endLine}.` : ''}</p>
         {state.loading && <p className="evidence-loading" role="status">Resolving the persisted excerpt and checking its identity…</p>}
@@ -41,7 +41,7 @@ export function EvidenceExplorer({ state, citation, onRetry }: Props) {
                 <p>Revision <code>{shortId(reference.commitSha)}</code></p>
                 <p className="small muted">Persisted evidence chunk, not a full-file view. Content is displayed as plain text.</p></div>
             <div className="identity-note"><span aria-hidden="true">◈</span><p><strong>Source identity checked by the API</strong><br />This does not verify the answer’s interpretation.</p></div>
-            <details className="source-provenance"><summary>Source provenance</summary><dl className="metadata">
+            <details className="source-provenance"><summary>Source Details</summary><dl className="metadata">
                 <dt>Publication</dt><dd className="mono">{reference.publicationId}</dd>
                 <dt>Snapshot</dt><dd className="mono">{reference.snapshotId}</dd>
                 <dt>Chunk</dt><dd className="mono">{reference.chunkId}</dd>

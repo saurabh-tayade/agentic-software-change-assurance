@@ -65,7 +65,8 @@ These nested diagnostics have no current independent query lifecycle, so JSONB a
 extra tables. Source/chunk content remains relational TEXT, separate from context.
 Primary keys, foreign keys, unique ordinal/derivation constraints, required columns,
 digest shapes, source-size limits, and valid line bounds provide database checks.
-Only primary/unique indexes are added; M1.5 search indexes are not implemented.
+M1.4 added primary/unique indexes. Subsequent [M1.5 keyword retrieval](keyword-retrieval.md)
+adds its search index; [M1.7 embedding indexing](embedding-indexing.md) adds derived vectors.
 
 ## Snapshot, derivation, and publication identities
 

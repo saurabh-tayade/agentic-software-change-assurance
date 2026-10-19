@@ -220,5 +220,7 @@ Publication membership has its own association because chunk identity is indepen
 of scope. The persistence guide documents schema, transactions, immutable identities,
 and readback. M1.5 adds [keyword search indexing and retrieval](keyword-retrieval.md);
 retention remains future work.
-Vector search, embeddings, grounded Q&A, Repository
-Intelligence UI, and change-impact analysis remain **not implemented**.
+Subsequent milestones implement [embedding indexing](embedding-indexing.md),
+[vector retrieval](vector-retrieval.md), [grounded Q&A](grounded-question-answering.md),
+and the [Repository Intelligence UI](repository-intelligence-workspace.md).
+Change-impact analysis remains planned.

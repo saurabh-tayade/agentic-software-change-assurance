@@ -1,142 +1,129 @@
 # Architecture overview
 
-## Purpose and scope
+## Implemented M1 scope
 
-The platform aims to help engineers assess what a software change could break,
-which evidence supports that assessment, and what must be verified before release.
-It supports human decisions; it does not certify a change as safe. The
-[project charter](../../README.md) defines the product scope.
+**Upcoming v0.1.0 — Repository Intelligence Foundation** is a Java modular monolith
+with a separate React presentation layer. It reads committed local Git evidence,
+publishes immutable snapshots, retrieves relevant chunks, and produces cited answers
+with explicit uncertainty. Contract reasoning, diff-driven change assessment, agents,
+and deployment decisions remain planned. See the [product overview](../product-overview.md).
 
-M0 establishes an executable foundation and development conventions. Change-impact
-analysis and agent execution are not implemented. M1.2 adds ingestion, M1.3
-parsing/chunking, M1.4 persistence, M1.5 keyword retrieval, M1.6 local grounded Q&A,
-M1.7a embedding indexing, M1.7b vector retrieval, and M1.7c hybrid/Q&A selection; the remaining logical
-responsibilities guide future work, not separate services or deployment boundaries.
+## Evidence and request flow
 
-## Implemented foundation
+```mermaid
+flowchart TD
+    subgraph Preparation[Explicit operator CLI — database writes]
+        Git[Local Git repository + pinned revision + scope] --> Snapshot[Immutable Git snapshot]
+        Snapshot --> Parse[Java / Markdown parsing]
+        Parse --> Chunks[Chunking + original provenance + coverage]
+        Chunks --> Publish[Atomic evidence publication]
+        Publish --> DB[(PostgreSQL evidence)]
+        DB --> Index[Explicit embedding indexer]
+        Nomic[Ollama Nomic + versioned profile] --> Index
+        Index --> Vectors[(pgvector derived embeddings)]
+    end
+    subgraph Intelligence[Local read-only API process]
+        UI[React Repository Intelligence UI] --> API[Versioned REST API]
+        API --> Retrieval[Keyword / Vector / Hybrid retrieval]
+        DB --> Retrieval
+        Vectors --> Retrieval
+        Nomic --> QueryVector[Query embedding for Vector / Hybrid]
+        QueryVector --> Retrieval
+        Retrieval --> Context[Bounded complete-chunk context]
+        Context --> Model[Ollama grounded answer generation]
+        Model --> Validate[Structured answer and citation identity validation]
+        Validate --> API
+        API --> UI
+        API --> Resolve[Publication-scoped evidence integrity checks]
+        DB --> Resolve
+        Resolve --> API
+    end
+```
 
-One Spring Boot application starts from `ChangeAssuranceApplication` in
-`dev.changeassurance`. Spring MVC runs with the embedded servlet container;
-Actuator supplies `GET /actuator/health`. Default HTTP exposure is limited to
-health. Model integrations run through opt-in local profiles and CLI commands.
-Default startup needs no
-external services; the explicit `persistence` profile enables PostgreSQL and Flyway.
+Query embedding and answer inference happen on demand; the API does not persist
+new embeddings, publications, or conversations. Its controller delegates to existing
+application services, capturing retrieval and diagnostics from the same answer run.
+There is no second frontend RAG pipeline or automatic strategy fallback.
 
-Default HTTP startup serves health. M1.9a's explicit `intelligence-api` profile
-adds the [Repository Intelligence API](repository-intelligence-api.md): HTTP
-controller -> existing publication/retrieval/Q&A services -> explicit JSON DTOs.
-It is local and read-only, with migrations disabled and CLI execution rejected.
+## Distinct contracts
 
-The Maven Wrapper builds an executable JAR. Automated tests verify context startup
-and HTTP health on a random port. GitHub Actions runs the build and offline
-repository/documentation checks. These checks verify the foundation, not future
-analysis quality. M0 is complete; M1 is active. M1.1 adds conceptual contracts
-and controlled evaluation validation. M1.2 adds
-[read-only Git snapshot ingestion](git-snapshot-ingestion.md) in
-`dev.changeassurance.ingestion`, independently executable through integration tests.
-It preserves committed Java/Markdown content and provenance with explicit coverage
-limitations. M1.3 adds [artifact processing](artifact-processing.md) in
-`dev.changeassurance.processing`, with Java/Markdown parsing, deterministic chunks,
-and original line provenance. M1.4 adds [PostgreSQL persistence](evidence-persistence.md)
-in `dev.changeassurance.persistence`, with atomic publication and identity readback.
-M1.5 adds [keyword retrieval](keyword-retrieval.md) in `dev.changeassurance.retrieval`,
-with explicit publication isolation, ranked evidence, and coverage.
-M1.6 adds [grounded Q&A](grounded-question-answering.md). M1.7a adds
-[versioned embedding indexing](embedding-indexing.md) with derived pgvector storage.
-M1.7b adds [exact vector retrieval](vector-retrieval.md) scoped to a publication and profile.
-M1.7c adds [RRF hybrid retrieval](hybrid-retrieval.md) and explicit Q&A strategy selection.
-M1.9a exposes these services through five opt-in HTTP routes without automatic
-repository scans, indexing, or a second Q&A pipeline.
-
-## Planned responsibilities and evidence flow
-
-| Responsibility | Intended role | Earliest roadmap scope |
+| Concept | Meaning | What it does not establish |
 | --- | --- | --- |
-| Source ingestion | Read an explicitly selected local Git repository revision | M1 |
-| Parsing and provenance | Extract Java/Markdown content and preserve source identity, revision, and locations through chunking | M1 |
-| Retrieval | Find relevant evidence using keyword and vector search | M1 |
-| Evaluation | Compare retrieval and answers against versioned scenarios and supporting evidence | M1 onward |
-| Contract and dependency analysis | Establish supported relationships and compatibility facts | M2 |
-| Change-impact analysis | Relate a diff to affected components and verification needs | M3 |
-| Evidence-backed reporting | Produce cited answers in M1; change-risk reports later | M1, then M3 |
-| Controlled agent execution | Investigate through bounded, least-privileged tools with approval boundaries | M4 |
+| Snapshot | Repository ID, resolved Git commit, scope, and ingestion policy | Current HEAD or uncommitted worktree content |
+| Publication | Immutable snapshot plus processing configuration/derivation, artifacts, ordered chunks, and coverage | Complete repository understanding |
+| Processing coverage | Discovered, ingested, excluded, unsupported, parsed, and failed outcomes; COMPLETE/PARTIAL/FAILED | Success of an embedding job or factual correctness |
+| Embedding index | Derived vectors keyed by snapshot/chunk/profile, with completion checked against publication membership | Coverage of unsupported or omitted files |
+| Retrieval | Ranked evidence from one explicit publication using Keyword, Vector, or Hybrid | Calibrated answer confidence or semantic correctness |
+| Answer generation | Structured model response over bounded selected chunks, with claims and uncertainty | An independently verified conclusion |
+| Citation validation | Returned citation matches an allowed evidence identity; evidence resolution also checks persisted integrity | Semantic entailment of a claim or proof of complete behavior |
 
-The planned M1 flow is a selected repository commit -> Java/Markdown artifacts ->
-parsed content and chunks with provenance -> keyword/vector retrieval -> structured
-answers with citations and explicit uncertainty. Versioned evaluation scenarios
-exercise retrieval and answer generation and retain results for comparison.
-Later work adds deterministic contract/dependency findings and diff analysis to
-support risk reports; controlled agents may gather evidence within defined limits.
-Selected-commit ingestion, parsing, and provenance-preserving chunking are
-implemented, along with PostgreSQL persistence and keyword retrieval. Opt-in
-[grounded Q&A](grounded-question-answering.md) now validates citation identities
-over selected evidence from explicit KEYWORD (default), VECTOR, or HYBRID retrieval.
-[M1.8a](retrieval-evaluation.md) captures retrieval comparisons;
-[M1.8b](grounded-answer-evaluation.md) captures the same Q&A execution for independent
-context/citation checks and offline human review. [M1.8c](evaluation-reporting.md)
-adds offline JSON/Markdown reports with explicit review selection and reproducibility
-manifests. M1.9a's local REST API and the M1.9b
-[React workspace](repository-intelligence-workspace.md) are implemented. The UI
-delegates to the five existing routes through a loopback development proxy and
-adds no retrieval, prompting, or persistence behavior.
+Source coordinates refer to the original committed excerpt. Source/content hashes,
+Git blob identity, parser metadata, and chunking configuration remain available.
+A publication can remain PARTIAL while its emitted chunks are completely indexed.
 
-## Architectural principles
+## Packages and reusable boundaries
 
-- Establish deterministic facts before AI interpretation when reliable parsers or
-  algorithms exist. State the tool's supported scope and limitations.
-- Back conclusions with evidence. Distinguish observed facts, interpretations,
-  unknowns, and verification still required; a citation alone does not prove a claim.
-- Preserve source identity, revision, and location so evidence can be revisited
-  after a repository changes.
-- Make evaluation reproducible through versioned inputs, expected findings,
-  expected evidence, configuration, and recorded results.
-- Use least-privileged execution. Treat retrieved content as data, not instructions;
-  introduce tool permissions and approval boundaries only with the relevant feature.
-- Express uncertainty and missing evidence instead of inferring safety from silence.
-- Evolve incrementally inside one deployable application. Add boundaries and
-  dependencies when implemented capabilities justify them.
-
-The rationale is recorded in the [architecture decisions](../adr/README.md).
-
-## Technology decisions and preferences
-
-| Area | Implemented now | Future direction, not installed or finalized |
+| Boundary | Responsibility | Detail |
 | --- | --- | --- |
-| Application | Java 21, Spring Boot 4.1.1, Spring MVC, `dev.changeassurance` | Domain packages as capabilities emerge |
-| Build and tests | Maven 3.9.16 via Wrapper, Boot-managed testing and JUnit | Additional test fixtures when needed |
-| Operations | Actuator health and baseline Micrometer support | OpenTelemetry and broader observability |
-| Quality | GitHub Actions, offline repository/documentation checks | Evaluation of retrieval and answer quality |
-| Parsing | JavaParser core 3.27.1 and CommonMark core 0.24.0 | Additional source formats when needed |
-| AI | Spring AI 2.0.1 and opt-in Ollama chat adapter for grounded Q&A | Model quality and further providers are not established |
-| Storage and retrieval | PostgreSQL evidence persistence, keyword/exact vector/RRF hybrid retrieval, and derived pgvector embeddings via JDBC/Flyway | Measured retrieval improvements in M1.8 |
-| Environment | Local JVM; optional PostgreSQL profile and database-only Compose | Limited AWS validation later |
+| `ingestion` | Read committed Git objects, apply scope/resource policy, retain provenance and exclusions | [Ingestion](git-snapshot-ingestion.md) |
+| `processing` | JavaParser/CommonMark parsing and deterministic chunking | [Processing](artifact-processing.md) |
+| `persistence` | Atomic immutable publication, JDBC reads, integrity verification | [Persistence](evidence-persistence.md) |
+| `embedding` | Nomic profile/digest validation and explicit derived indexing | [Indexing](embedding-indexing.md) |
+| `retrieval` | Publication-scoped keyword, exact vector, and reciprocal-rank fusion | [Keyword](keyword-retrieval.md), [Vector](vector-retrieval.md), [Hybrid](hybrid-retrieval.md) |
+| `qa` | Context selection, model gateway, structured answer/citation validation | [Grounded Q&A](grounded-question-answering.md) |
+| `evaluation` | Same-execution capture, deterministic grading, offline human reviews and reporting | [Retrieval](retrieval-evaluation.md), [answers](grounded-answer-evaluation.md), [reports](evaluation-reporting.md) |
+| HTTP adapter | Five explicit versioned DTO endpoints; safe errors and local access restrictions | [API](repository-intelligence-api.md) |
+| `frontend` | Catalog, explicit selection, questions, answer/source dialogs, Help, and planned previews | [Workspace](repository-intelligence-workspace.md) |
 
-## M1 readiness
+## Write-enabled preparation versus read-only use
 
-The foundation provides a runnable application, repeatable build, tests, and CI.
-M1.1 establishes [Repository Intelligence contracts](repository-intelligence.md)
-and a [controlled evaluation foundation](../../evaluation/README.md). Repository
-Intelligence is the first independently usable capability planned for developers
-and non-technical stakeholders, supporting the long-term Change Assurance vision.
-The ADRs remain the governing decisions; these contracts refine their M1 direction.
+Default Spring Boot startup exposes health and requires no database or model.
+The `persistence` profile enables PostgreSQL and Flyway. Explicit CLI commands under
+`persistence,qa` publish evidence; `persistence,embeddings` indexes a selected publication.
+These are deliberate operator actions, not browser features.
 
-M1.2 now resolves selected local Git revisions, reads committed source objects, and
-reports deterministic inventories with provenance and coverage. The
-[ingestion guide](git-snapshot-ingestion.md) documents scope, dirty-worktree policy,
-links/submodules, encodings, limits, and verification.
+The `intelligence-api` profile groups the existing persistence and Q&A configuration
+but disables Flyway and SQL initialization, rejects CLI execution, binds to loopback,
+and configures read-only database connections. Adding `embeddings` enables the existing
+model integration for configured Vector/Hybrid requests. Model calls do not hold a
+transaction over the entire answer operation.
 
-M1.3 consumes unchanged source content and preserves original source locations and
-ingestion limitations; see the [processing guide](artifact-processing.md) for parser
-selection, chunking, and verification. M1.4
-[persists those contracts](evidence-persistence.md) atomically.
-M1.5 [keyword retrieval](keyword-retrieval.md) now supplies ranked evidence and a
-controlled baseline. M1.6 [grounds structured answers](grounded-question-answering.md)
-in bounded evidence with deterministic citation identity checks. M1.7 supplies
-keyword/vector/hybrid strategy selection. M1.8a/b now provide reproducible retrieval
-capture and independent answer evaluation with human-reviewed semantic support;
-no automatic semantic correctness follows from a valid citation.
-Before quality claims, define metrics, acceptance thresholds, held-out cases, and run
-metadata including source revisions, tool/model configuration, latency, and token
-usage. Further ranking improvements and model-quality claims remain open;
-the conceptual contracts do not prescribe those implementations. See the
-[roadmap](../roadmap.md) for milestone acceptance criteria.
+This is a trusted local boundary: configured database publications are visible to the
+operator; no authentication or RBAC is implemented. Read-only application behavior
+is not protection against a privileged database administrator. Evidence is immutable
+by application contract, not tamper-proof against arbitrary privileged SQL.
+
+The Vite development proxy preserves browser Origin; backend Host/Origin checks stay
+active. Source content, Markdown, and model output are escaped text. Citations resolve
+by publication/chunk identities, never browser-supplied paths or line coordinates.
+No repository scripts, tests, or HTML execute through source inspection.
+
+## Design decisions and tradeoffs
+
+- [ADR-0001](../adr/0001-modular-monolith.md): one deployable backend; domain packages
+  provide cohesive boundaries without speculative microservices.
+- [ADR-0002](../adr/0002-deterministic-analysis-before-ai-interpretation.md): deterministic
+  facts and identity checks precede model interpretation; neither is an assurance guarantee.
+- [ADR-0003](../adr/0003-evidence-provenance-and-reproducible-evaluation.md): provenance
+  and versioned evaluation are first-class. Human semantic review remains separate.
+- [ADR-0004](../adr/0004-atomic-evidence-publications.md): atomic immutable publications
+  preserve coverage and reject identity conflicts; scope-specific storage duplicates some evidence.
+- [ADR-0005](../adr/0005-versioned-derived-embedding-indexes.md): embeddings are replaceable
+  derived indexes; per-chunk progress enables explicit recovery without rewriting source evidence.
+
+Exact vector search and bounded full-publication reads favor inspectability at current
+local scale. They are not evidence of large-scale performance. The current 768-dimension
+schema, Java/Markdown support, local models, and fixed resource budgets are deliberate
+limits, not a generic ingestion or multi-tenant production platform.
+
+## Evaluation and release state
+
+M1.8 captures requested/effective configuration, immutable identities, rankings,
+context omissions, model/prompt metadata, and available timing/token counts. Offline
+reports retain explicit review selection and denominators. No review means
+NOT_REVIEWED, not correct. The [release results](../releases/v0.1.0-results.md) separate
+controlled retrieval benchmarks from sparse real-repository experiments.
+
+M1 functionality and the frozen UI are implemented; v0.1.0 is upcoming until the
+maintainer tags/publishes it. The [roadmap](../roadmap.md) preserves the longer-term
+contract, change-impact, controlled-agent, and production-engineering direction.

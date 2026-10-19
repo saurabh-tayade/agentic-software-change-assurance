@@ -1,0 +1,1279 @@
+{
+  "format": "v0.1.0-release-evidence-summary-v1",
+  "reviewedOn": "2026-10-19",
+  "scope": "Selected fields from three prior local experiments and one fresh UI capture; not an aggregate benchmark or human semantic grade. Raw reports remain maintainer-local.",
+  "runs": [
+    {
+      "sourceReportDirectoryName": "ai-data-explorer-publication.9Sv4g4",
+      "sourceReportSha256": {
+        "detail.json": "469757d7cf0c92bd143cecfcc86168e50471ce0f559058f381a38e70ee0fe88c",
+        "index.json": "0c5c4d39e1737e7222d4984aa563b59835d1862a11bf3380159e06ce245a02ef",
+        "index-timing.json": "6702beb6fd850018e215d56a31e53fe6d4c08adb1a1fdf2687b1bbb1b35854c0",
+        "answer.json": "41f5216ec8dd02723de78a2753a2f9411b2dffad35393be5a8e9be869b02bc1b",
+        "citation-review.json": "51ea92cd78db92d6f94e8b816a6d6f484170d2aea749dfff8f8cb0fbb1be7a8c",
+        "preservation-after-publication.json": "76ef8849fa5e3f3addfe8d5f080e79196513b49e60b4e5b361e1deddfabec9e2",
+        "preservation-after-indexing.json": "76ef8849fa5e3f3addfe8d5f080e79196513b49e60b4e5b361e1deddfabec9e2"
+      },
+      "publication": {
+        "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+        "snapshotId": "b6025b9254e29f898a85859856a55ef94c4cf4f14b32017eb4183f598c24d669",
+        "derivationId": "b9594bb2c731b5a576a7894c9aee0a93961a1ee1a959770114038e27d746eaf6",
+        "repositoryId": "ai-data-explorer",
+        "commitSha": "5106f3e61365991d9b4fd5c2bc15023105612165",
+        "scope": {
+          "includes": [],
+          "excludes": []
+        },
+        "policyVersion": "git-snapshot-v1",
+        "processingConfiguration": {
+          "identity": "source-lines-v1:lines=20:chunks=10000",
+          "maxLines": 20,
+          "maxChunks": 10000
+        },
+        "processingStatus": "PARTIAL"
+      },
+      "coverage": {
+        "discovered": 117,
+        "ingested": 66,
+        "excluded": 0,
+        "unsupported": 51,
+        "failed": 0,
+        "artifacts": 66,
+        "parsed": 66,
+        "completeArtifacts": 47,
+        "partialArtifacts": 19,
+        "failedArtifacts": 0,
+        "chunks": 1112
+      },
+      "artifactLimitationCounts": {
+        "SPLIT_ELEMENT": 61
+      },
+      "ingestionLimitations": [
+        "Committed objects only; staged, unstaged, and untracked changes are ignored.",
+        "Java/Markdown discovery only; test classification is a path heuristic, not syntax analysis.",
+        "Coverage counts tree leaves, including gitlinks; submodule contents are not inspected.",
+        "Policy git-snapshot-v1: strict UTF-8; binary control characters unsupported; fixed resource limits."
+      ],
+      "processingLimitations": [
+        "Java 21 syntax only; no compilation, symbol resolution, or test execution. Unicode escape candidates rejected.",
+        "CommonMark core only; extension syntax has core semantics. Only document-level headings define sections.",
+        "Line-based chunks may contain a long line up to the ingestion file-byte limit; no token-size guarantee.",
+        "Declaration, heading, and parser diagnostics are untrusted metadata, not quoted source or instructions."
+      ],
+      "index": {
+        "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+        "profileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "profile": {
+          "provider": "ollama",
+          "model": "nomic-embed-text:v1.5",
+          "modelDigest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "dimensions": 768,
+          "documentRecipe": "nomic-document-v1",
+          "queryRecipe": "nomic-query-v1",
+          "options": {
+            "contextTokens": 2048,
+            "maxInputBytes": 8192,
+            "truncate": false,
+            "keepAlive": "0s"
+          },
+          "distanceMetric": "cosine"
+        },
+        "processingStatus": "PARTIAL",
+        "status": "COMPLETE",
+        "totalChunks": 1112,
+        "indexedChunks": 1112,
+        "missingChunks": 0,
+        "reusedChunks": 0,
+        "insertedChunks": 1112,
+        "issueCount": 0,
+        "issues": [],
+        "modelDurationMillis": 320141
+      },
+      "indexTiming": {
+        "wallSeconds": 331,
+        "exitCode": 0
+      },
+      "preservationAfterPublication": {
+        "baselinePublications": 3,
+        "currentPublications": 4,
+        "preserved": true,
+        "allowedPublicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56"
+      },
+      "preservationAfterIndexing": {
+        "baselinePublications": 3,
+        "currentPublications": 4,
+        "preserved": true,
+        "allowedPublicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56"
+      },
+      "answer": {
+        "question": "What approval and SQL checks are required before a query executes?",
+        "answer": "User approval is required before a query executes. A generated plan or SQL preview is not sufficient on its own; execution is only enabled when the backend marks the SQL preview executable and normal execution prerequisites are satisfied.\nExecution requires user approval, and the 'Approve & Run Query' button is enabled only when: a generated plan exists, a SQL preview exists, the preview is executable, and existing execution prerequisites are satisfied.\nAI-generated SQL may be marked as `REVIEW_REQUIRED`, indicating the user should review it carefully. `REVIEW_REQUIRED` is not an automatic block; a safe read-only `SELECT` can still be executable if it passes backend guardrail validation and the user approves it.\nThe deterministic query flow includes confirming that the generated SQL is a safe `SELECT` and that the Safety Review allows execution before the user clicks 'Approve & Run Query'.",
+        "status": "PARTIALLY_SUPPORTED",
+        "claims": [
+          {
+            "text": "User approval is required before a query executes. A generated plan or SQL preview is not sufficient on its own; execution is only enabled when the backend marks the SQL preview executable and normal execution prerequisites are satisfied.",
+            "evidenceKeys": [
+              "E1"
+            ]
+          },
+          {
+            "text": "Execution requires user approval, and the 'Approve & Run Query' button is enabled only when: a generated plan exists, a SQL preview exists, the preview is executable, and existing execution prerequisites are satisfied.",
+            "evidenceKeys": [
+              "E2"
+            ]
+          },
+          {
+            "text": "AI-generated SQL may be marked as `REVIEW_REQUIRED`, indicating the user should review it carefully. `REVIEW_REQUIRED` is not an automatic block; a safe read-only `SELECT` can still be executable if it passes backend guardrail validation and the user approves it.",
+            "evidenceKeys": [
+              "E4"
+            ]
+          },
+          {
+            "text": "The deterministic query flow includes confirming that the generated SQL is a safe `SELECT` and that the Safety Review allows execution before the user clicks 'Approve & Run Query'.",
+            "evidenceKeys": [
+              "E6"
+            ]
+          }
+        ],
+        "uncertainties": [
+          "The evidence does not specify any explicit SQL validation checks beyond backend guardrail validation and the `REVIEW_REQUIRED` state, which is a review requirement rather than a direct SQL check.",
+          "There is no explicit mention of any SQL syntax, schema, or data integrity checks performed on the SQL query before execution in the provided documentation.",
+          "While the backend validation and execution prerequisites are referenced, the specific technical nature or implementation of these checks is not detailed in the selected evidence.",
+          "Publication processing is PARTIAL; repository evidence is incomplete.",
+          "Some retrieved evidence was omitted from the model context; inspect contextSelection."
+        ],
+        "citations": [
+          {
+            "key": "E1",
+            "evidence": {
+              "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+              "snapshotId": "b6025b9254e29f898a85859856a55ef94c4cf4f14b32017eb4183f598c24d669",
+              "chunkId": "4eb4a349e5754c7776f6f6da6dafaa9702d55d8f7c8b7b99bfa7bd81986302a5",
+              "repositoryId": "ai-data-explorer",
+              "commitSha": "5106f3e61365991d9b4fd5c2bc15023105612165",
+              "path": "docs/SAFETY_GUARDRAILS.md",
+              "startLine": 58,
+              "endLine": 63,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "4558328e26fde8d7df00b9f91092b5e475022e67",
+              "sourceHash": "02472baa857452888966008b641391782f6f56ea6e83dce03b73887eb9f4e21e",
+              "contentHash": "e1633505162b0b386049b1bb8c0edc017976da77861cb268fd74be83561a746a",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          },
+          {
+            "key": "E2",
+            "evidence": {
+              "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+              "snapshotId": "b6025b9254e29f898a85859856a55ef94c4cf4f14b32017eb4183f598c24d669",
+              "chunkId": "a9a19c17561725b40b9d668806dba6e367c19038d839181b598b957620545557",
+              "repositoryId": "ai-data-explorer",
+              "commitSha": "5106f3e61365991d9b4fd5c2bc15023105612165",
+              "path": "docs/FEATURE_REPORT.md",
+              "startLine": 178,
+              "endLine": 194,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "b42d0a8a7061db03e8376074cb68d1a9b01a55fe",
+              "sourceHash": "dc6caa01117e3bcc803f3ed19dd2ed6ebe298d2f11fb650b4e2414992c5ebae0",
+              "contentHash": "a7ace850457097b040a03481ef2c025a6e8ca1d96b9b37b93ae93591d47e595e",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          },
+          {
+            "key": "E4",
+            "evidence": {
+              "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+              "snapshotId": "b6025b9254e29f898a85859856a55ef94c4cf4f14b32017eb4183f598c24d669",
+              "chunkId": "1fb3263cece18ccd1f58c44e43702f49aa542bd2f36aae61fe364bed9a13fc38",
+              "repositoryId": "ai-data-explorer",
+              "commitSha": "5106f3e61365991d9b4fd5c2bc15023105612165",
+              "path": "docs/SAFETY_GUARDRAILS.md",
+              "startLine": 140,
+              "endLine": 145,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "4558328e26fde8d7df00b9f91092b5e475022e67",
+              "sourceHash": "02472baa857452888966008b641391782f6f56ea6e83dce03b73887eb9f4e21e",
+              "contentHash": "cd7759e807fb1d862cff5573f55c8ab006cdcfe8fd834e9eab5d344c75f80b8b",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          },
+          {
+            "key": "E6",
+            "evidence": {
+              "publicationId": "c4eef97c42b8980aa540fa8d2098c8bd1e689134dd9f0abfb819c9a834772c56",
+              "snapshotId": "b6025b9254e29f898a85859856a55ef94c4cf4f14b32017eb4183f598c24d669",
+              "chunkId": "2d038336a9a133839e4713a27c1bddac0220417c991c563e6442b27b686d3a5f",
+              "repositoryId": "ai-data-explorer",
+              "commitSha": "5106f3e61365991d9b4fd5c2bc15023105612165",
+              "path": "docs/SMOKE_TEST_PLAN.md",
+              "startLine": 20,
+              "endLine": 31,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "8542ada25c0834ec07f323d6d26d6b75779ecdc3",
+              "sourceHash": "03d48c569de09f5a8bd7cb50c7e5562f46a37f60b7e38cc239c8f978c4b8ae02",
+              "contentHash": "6e379b65a2efc9c0a128b48a5a90134f1b4a283c6f4f897fd7f2d2502724c05b",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          }
+        ],
+        "requestedRetrievalStrategy": "VECTOR",
+        "retrievalStrategy": "postgres-vector-v1:profile=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "embeddingProfileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "contextSelection": {
+          "policy": "complete-ranked-chunks-v1",
+          "selected": [
+            {
+              "key": "E1",
+              "rank": 1,
+              "chunkId": "4eb4a349e5754c7776f6f6da6dafaa9702d55d8f7c8b7b99bfa7bd81986302a5"
+            },
+            {
+              "key": "E2",
+              "rank": 2,
+              "chunkId": "a9a19c17561725b40b9d668806dba6e367c19038d839181b598b957620545557"
+            },
+            {
+              "key": "E3",
+              "rank": 3,
+              "chunkId": "45ce214c4560002059c604a67bb668c5f532cd4842a5c78e9d7de04b344236c1"
+            },
+            {
+              "key": "E4",
+              "rank": 4,
+              "chunkId": "1fb3263cece18ccd1f58c44e43702f49aa542bd2f36aae61fe364bed9a13fc38"
+            },
+            {
+              "key": "E5",
+              "rank": 5,
+              "chunkId": "31d60924bb4b976cbc71dbb33c814556a51ebe2377c08eeb655d0c37aaf1fcc1"
+            },
+            {
+              "key": "E6",
+              "rank": 6,
+              "chunkId": "2d038336a9a133839e4713a27c1bddac0220417c991c563e6442b27b686d3a5f"
+            }
+          ],
+          "omissions": [
+            {
+              "rank": 7,
+              "chunkId": "e67fa9e6ad80ea9252744a65af330ec02e696e37734502367936ef254feff4e8",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            },
+            {
+              "rank": 8,
+              "chunkId": "b8e4bea261f015502d568135cd3e5ca8cf29a51aa74305b07de22347a7ba4e61",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            },
+            {
+              "rank": 9,
+              "chunkId": "e4bb9cfe223f959ab2f44e95ee2932da1686c0b8c561fd51878cb2c849b2101a",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            },
+            {
+              "rank": 10,
+              "chunkId": "c4cb636542794f26d8e389bf110f23a868f43d63162fa2144fd0534a621f95e2",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            },
+            {
+              "rank": 11,
+              "chunkId": "bf4efb88f8304270db97a8f0880be7ff61b0611a5c61b9c0af6efcf2b23bbec0",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            },
+            {
+              "rank": 12,
+              "chunkId": "eb01af7516efd147392c7131f43c3825a730854285c4396bf80bcc938b89de1f",
+              "reason": "EVIDENCE_COUNT_LIMIT"
+            }
+          ],
+          "contextBytes": 5444,
+          "limitations": [
+            "Only complete selected chunks were shown; omitted chunks cannot be cited.",
+            "UTF-8 byte limits are conservative input bounds, not exact model token counts.",
+            "Coverage in model context is summarized; the answer retains complete publication coverage."
+          ]
+        },
+        "configuration": {
+          "topK": 12,
+          "maxEvidence": 6,
+          "maxContextBytes": 6000,
+          "maxEvidenceBytes": 3000
+        },
+        "promptVersion": "repository-qa-v2",
+        "promptHash": "a6d4f211036172e307fdf8a74bc1b96f6f68ee31e33b52c30965e6cd61481b8f",
+        "schemaHash": "9d03a212a30d74a2b537c61ab61273e7fe73037e9bbb4d8459cd2fed2dabb7c4",
+        "generationSettings": {
+          "model": "qwen3:4b-instruct",
+          "temperature": 0.0,
+          "contextTokens": 8192,
+          "maxOutputTokens": 768,
+          "timeoutSeconds": 120
+        },
+        "invocation": {
+          "provider": "ollama",
+          "model": "qwen3:4b-instruct",
+          "durationMillis": 14139,
+          "inputTokens": 2547,
+          "outputTokens": 395,
+          "finishReason": "stop",
+          "returnedModel": "qwen3:4b-instruct",
+          "connectTimeoutSeconds": 5,
+          "thinkingEnabled": false,
+          "keepAlive": "0s"
+        },
+        "validation": "CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED",
+        "durationMillis": 14851
+      },
+      "retrievedPaths": [
+        "docs/SAFETY_GUARDRAILS.md",
+        "docs/FEATURE_REPORT.md",
+        "docs/SAMPLE_WORKFLOWS.md",
+        "docs/SAFETY_GUARDRAILS.md",
+        "docs/FEATURE_REPORT.md",
+        "docs/SMOKE_TEST_PLAN.md",
+        "docs/SMOKE_TEST_PLAN.md",
+        "backend/src/main/java/com/aidataexplorer/backend/queryexecution/QueryExecutionService.java",
+        "docs/SMOKE_TEST_PLAN.md",
+        "docs/ARCHITECTURE.md",
+        "docs/SAFETY_GUARDRAILS.md",
+        "docs/SAMPLE_WORKFLOWS.md"
+      ],
+      "citationReview": {
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          {
+            "key": "E1",
+            "path": "docs/SAFETY_GUARDRAILS.md",
+            "startLine": 58,
+            "endLine": 63,
+            "sourceIdentityAndExcerptMatch": true
+          },
+          {
+            "key": "E2",
+            "path": "docs/FEATURE_REPORT.md",
+            "startLine": 178,
+            "endLine": 194,
+            "sourceIdentityAndExcerptMatch": true
+          },
+          {
+            "key": "E4",
+            "path": "docs/SAFETY_GUARDRAILS.md",
+            "startLine": 140,
+            "endLine": 145,
+            "sourceIdentityAndExcerptMatch": true
+          },
+          {
+            "key": "E6",
+            "path": "docs/SMOKE_TEST_PLAN.md",
+            "startLine": 20,
+            "endLine": 31,
+            "sourceIdentityAndExcerptMatch": true
+          }
+        ],
+        "semanticCorrectness": "REQUIRES_MANUAL_REVIEW",
+        "note": "Inspect excerpts against associated claims; identity does not prove factual correctness."
+      }
+    },
+    {
+      "sourceReportDirectoryName": "ai-incident-triage-assistant-publication.Gv1wOp",
+      "sourceReportSha256": {
+        "detail.json": "99183ba466aa59e32af1275a1cd916890fe275cdfad0761aaa4d679264fb5eb6",
+        "index.json": "1a2f53701f32d7d1d43c1b85ebc11999e33543b3cc740d5e5e737c1e537e8b1b",
+        "index-timing.json": "cebabc0e794c320c6f381d17ca6f7d84c1994966467f2b3736b93b3b142452e7",
+        "answer.json": "660c6b0a21581ad5ba92986d7bdae4aae95174f1a8e5e6e1d4f63d5eab5745e3",
+        "citation-review.json": "c49e3ec9664f0921ea67a8de816511a0c87fd86e5fbff059095ace604d0b9a9f",
+        "preservation-after-publication.json": "db508fbd6b0c8c9fb289e3121599c4c8aa978adc15005575982986612289774c",
+        "preservation-after-indexing.json": "db508fbd6b0c8c9fb289e3121599c4c8aa978adc15005575982986612289774c"
+      },
+      "publication": {
+        "publicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46",
+        "snapshotId": "1af4f0c1d049d0ea5e6edfb9a07f765c460d96a11a6c128ddd9b1c5d96dd77db",
+        "derivationId": "b9594bb2c731b5a576a7894c9aee0a93961a1ee1a959770114038e27d746eaf6",
+        "repositoryId": "ai-incident-triage-assistant",
+        "commitSha": "9844570d18a41e846dc1e8e50dea6dec55f8c63d",
+        "scope": {
+          "includes": [],
+          "excludes": []
+        },
+        "policyVersion": "git-snapshot-v1",
+        "processingConfiguration": {
+          "identity": "source-lines-v1:lines=20:chunks=10000",
+          "maxLines": 20,
+          "maxChunks": 10000
+        },
+        "processingStatus": "PARTIAL"
+      },
+      "coverage": {
+        "discovered": 109,
+        "ingested": 66,
+        "excluded": 0,
+        "unsupported": 43,
+        "failed": 0,
+        "artifacts": 66,
+        "parsed": 66,
+        "completeArtifacts": 49,
+        "partialArtifacts": 17,
+        "failedArtifacts": 0,
+        "chunks": 1649
+      },
+      "artifactLimitationCounts": {
+        "SPLIT_ELEMENT": 77
+      },
+      "ingestionLimitations": [
+        "Committed objects only; staged, unstaged, and untracked changes are ignored.",
+        "Java/Markdown discovery only; test classification is a path heuristic, not syntax analysis.",
+        "Coverage counts tree leaves, including gitlinks; submodule contents are not inspected.",
+        "Policy git-snapshot-v1: strict UTF-8; binary control characters unsupported; fixed resource limits."
+      ],
+      "processingLimitations": [
+        "Java 21 syntax only; no compilation, symbol resolution, or test execution. Unicode escape candidates rejected.",
+        "CommonMark core only; extension syntax has core semantics. Only document-level headings define sections.",
+        "Line-based chunks may contain a long line up to the ingestion file-byte limit; no token-size guarantee.",
+        "Declaration, heading, and parser diagnostics are untrusted metadata, not quoted source or instructions."
+      ],
+      "index": {
+        "publicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46",
+        "profileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "profile": {
+          "provider": "ollama",
+          "model": "nomic-embed-text:v1.5",
+          "modelDigest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "dimensions": 768,
+          "documentRecipe": "nomic-document-v1",
+          "queryRecipe": "nomic-query-v1",
+          "options": {
+            "contextTokens": 2048,
+            "maxInputBytes": 8192,
+            "truncate": false,
+            "keepAlive": "0s"
+          },
+          "distanceMetric": "cosine"
+        },
+        "processingStatus": "PARTIAL",
+        "status": "COMPLETE",
+        "totalChunks": 1649,
+        "indexedChunks": 1649,
+        "missingChunks": 0,
+        "reusedChunks": 0,
+        "insertedChunks": 1649,
+        "issueCount": 0,
+        "issues": [],
+        "modelDurationMillis": 473135
+      },
+      "indexTiming": {
+        "wallSeconds": 489,
+        "exitCode": 0
+      },
+      "preservationAfterPublication": {
+        "baselinePublications": 4,
+        "currentPublications": 5,
+        "preserved": true,
+        "allowedPublicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46"
+      },
+      "preservationAfterIndexing": {
+        "baselinePublications": 4,
+        "currentPublications": 5,
+        "preserved": true,
+        "allowedPublicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46"
+      },
+      "answer": {
+        "question": "How are logs and runbooks bounded in the AI triage prompt?",
+        "answer": "Runbooks are used by the AI triage prompt as supporting context and are also visible to the user.\nThe AI result includes supporting evidence such as logs, metrics, deployments, alerts, and runbooks, allowing users to connect the AI summary back to raw operational data.",
+        "status": "PARTIALLY_SUPPORTED",
+        "claims": [
+          {
+            "text": "Runbooks are used by the AI triage prompt as supporting context and are also visible to the user.",
+            "evidenceKeys": [
+              "E1"
+            ]
+          },
+          {
+            "text": "The AI result includes supporting evidence such as logs, metrics, deployments, alerts, and runbooks, allowing users to connect the AI summary back to raw operational data.",
+            "evidenceKeys": [
+              "E4"
+            ]
+          }
+        ],
+        "uncertainties": [
+          "The evidence does not specify how logs and runbooks are bounded in terms of selection criteria, retrieval scope, or filtering logic within the AI triage prompt.",
+          "There is no explicit mention of boundaries or limits on the number of logs or runbooks included in the AI triage prompt or how they are prioritized or filtered during evidence selection.",
+          "Publication processing is PARTIAL; repository evidence is incomplete.",
+          "Some retrieved evidence was omitted from the model context; inspect contextSelection."
+        ],
+        "citations": [
+          {
+            "key": "E1",
+            "evidence": {
+              "publicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46",
+              "snapshotId": "1af4f0c1d049d0ea5e6edfb9a07f765c460d96a11a6c128ddd9b1c5d96dd77db",
+              "chunkId": "f49f783b655d336badd792638464329203770a361bb691efa9077f7940cb15bc",
+              "repositoryId": "ai-incident-triage-assistant",
+              "commitSha": "9844570d18a41e846dc1e8e50dea6dec55f8c63d",
+              "path": "docs/synthetic-data.md",
+              "startLine": 354,
+              "endLine": 372,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "6088aad4ba9609353aab2fa784758e1c4798dfbc",
+              "sourceHash": "c802037b2e077e94d2d323ddf5c5e8b30a0b47ab6b14c8e956b5a782883be4f5",
+              "contentHash": "302e0e092f964219153c5e32709e7b5d15a38a48f759d6c96d2ad06a702ae529",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          },
+          {
+            "key": "E4",
+            "evidence": {
+              "publicationId": "a637b8384504d52712fa4947fd51a9198391015cfa10cbae800d9cb36537ab46",
+              "snapshotId": "1af4f0c1d049d0ea5e6edfb9a07f765c460d96a11a6c128ddd9b1c5d96dd77db",
+              "chunkId": "c9b55ccc58378ad0e717437ee6eb1a0500f739747ee611e5593a4de6cadc8c17",
+              "repositoryId": "ai-incident-triage-assistant",
+              "commitSha": "9844570d18a41e846dc1e8e50dea6dec55f8c63d",
+              "path": "docs/demo-guide.md",
+              "startLine": 328,
+              "endLine": 347,
+              "artifactType": "DOCUMENTATION",
+              "sourceFormat": "MARKDOWN",
+              "gitBlobId": "70c1cb1e2454362b7d8dd38e54793c19d593afcd",
+              "sourceHash": "bb96ae22e62e9615ce5c87025d2c9dc05af46c13a2a1d976e280627787be3d3a",
+              "contentHash": "31250f532c8ba7671fdeef016bef959fec0364e32cac244aeb269cd1372f83ed",
+              "parser": "commonmark-0.24.0-core",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          }
+        ],
+        "requestedRetrievalStrategy": "VECTOR",
+        "retrievalStrategy": "postgres-vector-v1:profile=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "embeddingProfileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "contextSelection": {
+          "policy": "complete-ranked-chunks-v1",
+          "selected": [
+            {
+              "key": "E1",
+              "rank": 1,
+              "chunkId": "f49f783b655d336badd792638464329203770a361bb691efa9077f7940cb15bc"
+            },
+            {
+              "key": "E2",
+              "rank": 2,
+              "chunkId": "5c927aefd9a111beaeafc669f428615816a92612404117c6629dcb639a638f1f"
+            },
+            {
+              "key": "E3",
+              "rank": 3,
+              "chunkId": "21d553dfa989f92e6469d415ba1888554e1996d5c21d35dc2618fa5cdb9969ee"
+            },
+            {
+              "key": "E4",
+              "rank": 4,
+              "chunkId": "c9b55ccc58378ad0e717437ee6eb1a0500f739747ee611e5593a4de6cadc8c17"
+            },
+            {
+              "key": "E5",
+              "rank": 5,
+              "chunkId": "b6966e9ec417df406ec835fd335ef88e951b985dab3f32062a85f1c764e679a2"
+            }
+          ],
+          "omissions": [
+            {
+              "rank": 6,
+              "chunkId": "bf9c24b286fe7a7e9b7d68989b93ac87819ba52b7e0680988c9be08d5180c285",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 7,
+              "chunkId": "b5e10477de135301faa672537eac6586d07c448e14d5ea04343a7c7915fd9d61",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 8,
+              "chunkId": "8159bbd430d63683595c22ca8a7774388f44dd088f24b65ffe683fb1cd42956b",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 9,
+              "chunkId": "bdbc0b307cf252809caf8af282c5e332c27a26a1e3939b1a7e3eaefee7f2699a",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 10,
+              "chunkId": "d52000d1da1dd3077802440ba2a8acf87731fd5db90cc92b04ee700f00183a62",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 11,
+              "chunkId": "936532b928a64afbc258574a6445883e35f7823eadde0c4207e89d429251e0ee",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 12,
+              "chunkId": "7eeed1c8a415705cfc8e1843e646602e559b6a2a1b66703f60f52a0b0ad770da",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            }
+          ],
+          "contextBytes": 5777,
+          "limitations": [
+            "Only complete selected chunks were shown; omitted chunks cannot be cited.",
+            "UTF-8 byte limits are conservative input bounds, not exact model token counts.",
+            "Coverage in model context is summarized; the answer retains complete publication coverage."
+          ]
+        },
+        "configuration": {
+          "topK": 12,
+          "maxEvidence": 6,
+          "maxContextBytes": 6000,
+          "maxEvidenceBytes": 3000
+        },
+        "promptVersion": "repository-qa-v2",
+        "promptHash": "a6d4f211036172e307fdf8a74bc1b96f6f68ee31e33b52c30965e6cd61481b8f",
+        "schemaHash": "9d03a212a30d74a2b537c61ab61273e7fe73037e9bbb4d8459cd2fed2dabb7c4",
+        "generationSettings": {
+          "model": "qwen3:4b-instruct",
+          "temperature": 0.0,
+          "contextTokens": 8192,
+          "maxOutputTokens": 768,
+          "timeoutSeconds": 120
+        },
+        "invocation": {
+          "provider": "ollama",
+          "model": "qwen3:4b-instruct",
+          "durationMillis": 8950,
+          "inputTokens": 2496,
+          "outputTokens": 202,
+          "finishReason": "stop",
+          "returnedModel": "qwen3:4b-instruct",
+          "connectTimeoutSeconds": 5,
+          "thinkingEnabled": false,
+          "keepAlive": "0s"
+        },
+        "validation": "CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED",
+        "durationMillis": 9614
+      },
+      "retrievedPaths": [
+        "docs/synthetic-data.md",
+        "README.md",
+        "README.md",
+        "docs/demo-guide.md",
+        "docs/synthetic-data.md",
+        "docs/project-plan.md",
+        "docs/ai-workflow.md",
+        "docs/ai-workflow.md",
+        "docs/architecture.md",
+        "docs/ai-workflow.md",
+        "README.md",
+        "docs/demo-guide.md"
+      ],
+      "citationReview": {
+        "retrievedPaths": [
+          "docs/synthetic-data.md",
+          "README.md",
+          "README.md",
+          "docs/demo-guide.md",
+          "docs/synthetic-data.md",
+          "docs/project-plan.md",
+          "docs/ai-workflow.md",
+          "docs/ai-workflow.md",
+          "docs/architecture.md",
+          "docs/ai-workflow.md",
+          "README.md",
+          "docs/demo-guide.md"
+        ],
+        "javaImplementationRetrieved": false,
+        "candidatePromptBuilderRetrieved": false,
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          {
+            "key": "E1",
+            "path": "docs/synthetic-data.md",
+            "startLine": 354,
+            "endLine": 372,
+            "sourceIdentityAndExcerptMatch": true
+          },
+          {
+            "key": "E4",
+            "path": "docs/demo-guide.md",
+            "startLine": 328,
+            "endLine": 347,
+            "sourceIdentityAndExcerptMatch": true
+          }
+        ],
+        "semanticCorrectness": "REQUIRES_MANUAL_REVIEW",
+        "note": "Inspect excerpts against associated claims; identity does not prove factual correctness."
+      }
+    },
+    {
+      "sourceReportDirectoryName": "ddip-publication.39JfiS",
+      "sourceReportSha256": {
+        "detail.json": "bf4a08f657fe90526bbda55acd23bc7a3995987a128af775d2a7928815750461",
+        "index.json": "4ccb0312265728f7aed221e45f8650e680ab7c59858c99c793465f810ed639f9",
+        "index-timing.json": "b1084c2fa3a8d8db95839c48312c7ec7c9074e31eeb6ac2908564324f3d67292",
+        "answer.json": "7e8734e8958621fd918b3474886191c0bf47a4c7f750856175aeb2e33692a7f1",
+        "citation-review.json": "b3963dba935889033bd0bacd6278781b2d8730791f07a34e8076ef83792c9a0e",
+        "preservation-after-publication.json": "da39fcf9475abc373d18f5447ba00f573f15ffa6833c5167fec2bfff273a4a5a",
+        "preservation-after-indexing.json": "da39fcf9475abc373d18f5447ba00f573f15ffa6833c5167fec2bfff273a4a5a"
+      },
+      "publication": {
+        "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+        "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+        "derivationId": "b9594bb2c731b5a576a7894c9aee0a93961a1ee1a959770114038e27d746eaf6",
+        "repositoryId": "distributed-data-intelligence-platform",
+        "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+        "scope": {
+          "includes": [
+            "README.md",
+            "docs",
+            "ingestion/src/main/java",
+            "services/content-api"
+          ],
+          "excludes": []
+        },
+        "policyVersion": "git-snapshot-v1",
+        "processingConfiguration": {
+          "identity": "source-lines-v1:lines=20:chunks=10000",
+          "maxLines": 20,
+          "maxChunks": 10000
+        },
+        "processingStatus": "PARTIAL"
+      },
+      "coverage": {
+        "discovered": 174,
+        "ingested": 69,
+        "excluded": 101,
+        "unsupported": 4,
+        "failed": 0,
+        "artifacts": 69,
+        "parsed": 69,
+        "completeArtifacts": 40,
+        "partialArtifacts": 29,
+        "failedArtifacts": 0,
+        "chunks": 1155
+      },
+      "artifactLimitationCounts": {
+        "SPLIT_ELEMENT": 52
+      },
+      "ingestionLimitations": [
+        "Committed objects only; staged, unstaged, and untracked changes are ignored.",
+        "Java/Markdown discovery only; test classification is a path heuristic, not syntax analysis.",
+        "Coverage counts tree leaves, including gitlinks; submodule contents are not inspected.",
+        "Policy git-snapshot-v1: strict UTF-8; binary control characters unsupported; fixed resource limits."
+      ],
+      "processingLimitations": [
+        "Java 21 syntax only; no compilation, symbol resolution, or test execution. Unicode escape candidates rejected.",
+        "CommonMark core only; extension syntax has core semantics. Only document-level headings define sections.",
+        "Line-based chunks may contain a long line up to the ingestion file-byte limit; no token-size guarantee.",
+        "Declaration, heading, and parser diagnostics are untrusted metadata, not quoted source or instructions."
+      ],
+      "index": {
+        "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+        "profileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "profile": {
+          "provider": "ollama",
+          "model": "nomic-embed-text:v1.5",
+          "modelDigest": "0a109f422b47e3a30ba2b10eca18548e944e8a23073ee3f3e947efcf3c45e59f",
+          "dimensions": 768,
+          "documentRecipe": "nomic-document-v1",
+          "queryRecipe": "nomic-query-v1",
+          "options": {
+            "contextTokens": 2048,
+            "maxInputBytes": 8192,
+            "truncate": false,
+            "keepAlive": "0s"
+          },
+          "distanceMetric": "cosine"
+        },
+        "processingStatus": "PARTIAL",
+        "status": "COMPLETE",
+        "totalChunks": 1155,
+        "indexedChunks": 1155,
+        "missingChunks": 0,
+        "reusedChunks": 0,
+        "insertedChunks": 1155,
+        "issueCount": 0,
+        "issues": [],
+        "modelDurationMillis": 334820
+      },
+      "indexTiming": {
+        "wallSeconds": 347,
+        "exitCode": 0
+      },
+      "preservationAfterPublication": {
+        "baselinePublications": 5,
+        "currentPublications": 6,
+        "preserved": true,
+        "allowedPublicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049"
+      },
+      "preservationAfterIndexing": {
+        "baselinePublications": 5,
+        "currentPublications": 6,
+        "preserved": true,
+        "allowedPublicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049"
+      },
+      "answer": {
+        "question": "How does BoundedProcessRunner limit analytics subprocess concurrency and execution time?",
+        "answer": "BoundedProcessRunner limits analytics subprocess concurrency using a Semaphore initialized with the maximum number of processes defined in AnalyticsProperties via the method maxProcesses().\nBoundedProcessRunner limits execution time by configuring a timeout duration in the AnalyticsProperties, as demonstrated in the test case where a 10-second timeout is applied to the runner's run method.",
+        "status": "PARTIALLY_SUPPORTED",
+        "claims": [
+          {
+            "text": "BoundedProcessRunner limits analytics subprocess concurrency using a Semaphore initialized with the maximum number of processes defined in AnalyticsProperties via the method maxProcesses().",
+            "evidenceKeys": [
+              "E1"
+            ]
+          },
+          {
+            "text": "BoundedProcessRunner limits execution time by configuring a timeout duration in the AnalyticsProperties, as demonstrated in the test case where a 10-second timeout is applied to the runner's run method.",
+            "evidenceKeys": [
+              "E5"
+            ]
+          }
+        ],
+        "uncertainties": [
+          "The evidence does not explicitly state how the execution time is enforced at runtime beyond the test case, which only verifies a timeout duration in a test environment.",
+          "The documentation (E4) confirms the architectural decision to use a bounded adapter with a fixed Python executable and validation boundary, but does not specify implementation details of concurrency or execution time limits beyond the architectural intent.",
+          "No evidence directly describes how the subprocess execution time is measured or enforced during actual runtime execution, only that a timeout is configured in test parameters.",
+          "Publication processing is PARTIAL; repository evidence is incomplete.",
+          "Some retrieved evidence was omitted from the model context; inspect contextSelection."
+        ],
+        "citations": [
+          {
+            "key": "E1",
+            "evidence": {
+              "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+              "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+              "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067",
+              "repositoryId": "distributed-data-intelligence-platform",
+              "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+              "path": "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+              "startLine": 23,
+              "endLine": 26,
+              "artifactType": "SOURCE",
+              "sourceFormat": "JAVA",
+              "gitBlobId": "ccf1b75cabc22819a50dd819d9eeadd9b4443d52",
+              "sourceHash": "71b43a74c8e44b55cfd7226c75685f40a6c1bce12b58322599c020b52a060dbf",
+              "contentHash": "f3d05275415ac8e6c4fdef4fc1d2091620ad08d76fef32b08fe3c1ab90c21561",
+              "parser": "javaparser-core-3.27.1-java21",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          },
+          {
+            "key": "E5",
+            "evidence": {
+              "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+              "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+              "chunkId": "b7eeb2546439468539a63c9e6e08cf1cfb55e8e0d508ffd161354aa001856452",
+              "repositoryId": "distributed-data-intelligence-platform",
+              "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+              "path": "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+              "startLine": 30,
+              "endLine": 34,
+              "artifactType": "TEST",
+              "sourceFormat": "JAVA",
+              "gitBlobId": "658f4d381e44b771b4662adf1949c88eb5d52b2b",
+              "sourceHash": "15d387d1feee44a7b426b4b7c00edb8e371162df95e34ad94c4255965dc941b8",
+              "contentHash": "a0555a91ab6d1389310d58d497da67b1260289f03a965cbe0a2f9348bf49bb75",
+              "parser": "javaparser-core-3.27.1-java21",
+              "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+            }
+          }
+        ],
+        "requestedRetrievalStrategy": "VECTOR",
+        "retrievalStrategy": "postgres-vector-v1:profile=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "embeddingProfileId": "6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+        "contextSelection": {
+          "policy": "complete-ranked-chunks-v1",
+          "selected": [
+            {
+              "key": "E1",
+              "rank": 1,
+              "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067"
+            },
+            {
+              "key": "E2",
+              "rank": 2,
+              "chunkId": "aa094e94ae801ce712762a77274898b1c0ed7ec1ea6b501bd251fa9ad82dbb62"
+            },
+            {
+              "key": "E3",
+              "rank": 3,
+              "chunkId": "ad4cef3b8ccf7824ebd0a0705249a16a50f5ae2714b768062de5c53b56db8395"
+            },
+            {
+              "key": "E4",
+              "rank": 4,
+              "chunkId": "231d5121878fc224900ae53e9864e675459964e3d789200d9e7326c512aa1bbe"
+            },
+            {
+              "key": "E5",
+              "rank": 5,
+              "chunkId": "b7eeb2546439468539a63c9e6e08cf1cfb55e8e0d508ffd161354aa001856452"
+            }
+          ],
+          "omissions": [
+            {
+              "rank": 6,
+              "chunkId": "18eb3d172f27b43a14785c4e22fc5e3bcb48b526f1a55f9d91aee5051bc129fd",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 7,
+              "chunkId": "a76f938f7f15b4d9b496505000e84f2f711f14e7538b4b97718f308b629c8282",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 8,
+              "chunkId": "30fe8ccfb79d38515ac54d6d5498ac948bd14e6699610e047808053602a806a3",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 9,
+              "chunkId": "e68a291e1c78eac612d791104f170b3dbbebcf55d48466cda0b5ddefa818ba1c",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 10,
+              "chunkId": "95af9fc1470d78a44472025d91e2ba64226110992b1b79f79c7e607c1d6ea2d3",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 11,
+              "chunkId": "fafe363e4cf26c9f24506cf94c7246c5e4794672d9f7d6adfc0a0cd30f8fd389",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            },
+            {
+              "rank": 12,
+              "chunkId": "f0185138389521e15936cc4d784662cf8bb30fa8a12d6154a8c9bd05a8c3c873",
+              "reason": "CONTEXT_BYTE_LIMIT"
+            }
+          ],
+          "contextBytes": 5926,
+          "limitations": [
+            "Only complete selected chunks were shown; omitted chunks cannot be cited.",
+            "UTF-8 byte limits are conservative input bounds, not exact model token counts.",
+            "Coverage in model context is summarized; the answer retains complete publication coverage."
+          ]
+        },
+        "configuration": {
+          "topK": 12,
+          "maxEvidence": 6,
+          "maxContextBytes": 6000,
+          "maxEvidenceBytes": 3000
+        },
+        "promptVersion": "repository-qa-v2",
+        "promptHash": "a6d4f211036172e307fdf8a74bc1b96f6f68ee31e33b52c30965e6cd61481b8f",
+        "schemaHash": "9d03a212a30d74a2b537c61ab61273e7fe73037e9bbb4d8459cd2fed2dabb7c4",
+        "generationSettings": {
+          "model": "qwen3:4b-instruct",
+          "temperature": 0.0,
+          "contextTokens": 8192,
+          "maxOutputTokens": 768,
+          "timeoutSeconds": 120
+        },
+        "invocation": {
+          "provider": "ollama",
+          "model": "qwen3:4b-instruct",
+          "durationMillis": 10506,
+          "inputTokens": 2440,
+          "outputTokens": 250,
+          "finishReason": "stop",
+          "returnedModel": "qwen3:4b-instruct",
+          "connectTimeoutSeconds": 5,
+          "thinkingEnabled": false,
+          "keepAlive": "0s"
+        },
+        "validation": "CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED",
+        "durationMillis": 11101
+      },
+      "retrievedPaths": [
+        "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+        "services/content-api/src/main/java/platform/contentapi/GoldAnalyticsAdapter.java",
+        "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+        "docs/adr/0005-gold-consumer-integration.md",
+        "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+        "docs/adr/0001-rss-raw-ingestion-contract.md",
+        "services/content-api/src/main/java/platform/contentapi/GoldAnalyticsAdapter.java",
+        "services/content-api/src/test/java/platform/contentapi/TestSupport.java",
+        "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+        "docs/architecture/analytics-api-contracts.md",
+        "docs/adr/0005-gold-consumer-integration.md",
+        "services/content-api/src/test/java/platform/contentapi/AnalyticsWebTest.java"
+      ],
+      "citationReview": {
+        "retrievedPaths": [
+          "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+          "services/content-api/src/main/java/platform/contentapi/GoldAnalyticsAdapter.java",
+          "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+          "docs/adr/0005-gold-consumer-integration.md",
+          "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+          "docs/adr/0001-rss-raw-ingestion-contract.md",
+          "services/content-api/src/main/java/platform/contentapi/GoldAnalyticsAdapter.java",
+          "services/content-api/src/test/java/platform/contentapi/TestSupport.java",
+          "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+          "docs/architecture/analytics-api-contracts.md",
+          "docs/adr/0005-gold-consumer-integration.md",
+          "services/content-api/src/test/java/platform/contentapi/AnalyticsWebTest.java"
+        ],
+        "javaImplementationRetrieved": true,
+        "candidateBoundedProcessRunnerRetrieved": true,
+        "relatedAnalyticsPropertiesRetrieved": false,
+        "status": "PARTIALLY_SUPPORTED",
+        "citations": [
+          {
+            "key": "E1",
+            "path": "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+            "startLine": 23,
+            "endLine": 26,
+            "sourceIdentityAndExcerptMatch": true
+          },
+          {
+            "key": "E5",
+            "path": "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+            "startLine": 30,
+            "endLine": 34,
+            "sourceIdentityAndExcerptMatch": true
+          }
+        ],
+        "semanticCorrectness": "REQUIRES_MANUAL_REVIEW",
+        "note": "Inspect excerpts against associated claims; identity does not prove factual correctness."
+      }
+    }
+  ],
+  "releaseScreenshotRun": {
+    "capture": {
+      "capturedAt": "2026-10-19T05:35:10.985Z",
+      "browser": "155.0.8059.85",
+      "viewport": [
+        1440,
+        900
+      ],
+      "errors": [],
+      "answerPosts": 1,
+      "screenshots": [
+        "overview.png",
+        "repositories.png",
+        "repository-intelligence-answer.png",
+        "full-answer.png",
+        "answer-uncertainty.png",
+        "supporting-java-source.png",
+        "help-center.png"
+      ],
+      "repositories": [
+        "Repository distributed-data-intelligence-platform",
+        "Repository parcel-quotes-v1",
+        "Repository ai-incident-triage-assistant",
+        "Repository ai-data-explorer"
+      ],
+      "status": "PARTIALLY_SUPPORTED",
+      "durationMillis": 12991,
+      "citation": {
+        "key": "E1",
+        "evidence": {
+          "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+          "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+          "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067",
+          "repositoryId": "distributed-data-intelligence-platform",
+          "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+          "path": "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+          "startLine": 23,
+          "endLine": 26,
+          "artifactType": "SOURCE",
+          "sourceFormat": "JAVA",
+          "gitBlobId": "ccf1b75cabc22819a50dd819d9eeadd9b4443d52",
+          "sourceHash": "71b43a74c8e44b55cfd7226c75685f40a6c1bce12b58322599c020b52a060dbf",
+          "contentHash": "f3d05275415ac8e6c4fdef4fc1d2091620ad08d76fef32b08fe3c1ab90c21561",
+          "parser": "javaparser-core-3.27.1-java21",
+          "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+        }
+      },
+      "passed": true
+    },
+    "answer": {
+      "question": "How does BoundedProcessRunner limit analytics subprocess concurrency and execution time?",
+      "answer": "BoundedProcessRunner limits analytics subprocess concurrency using a Semaphore initialized with the maximum number of processes defined in AnalyticsProperties via the method maxProcesses().\nBoundedProcessRunner limits execution time by configuring a timeout duration in the AnalyticsProperties, as demonstrated in the test case where a 10-second timeout is applied to the runner's run method.",
+      "status": "PARTIALLY_SUPPORTED",
+      "claims": [
+        {
+          "text": "BoundedProcessRunner limits analytics subprocess concurrency using a Semaphore initialized with the maximum number of processes defined in AnalyticsProperties via the method maxProcesses().",
+          "evidenceKeys": [
+            "E1"
+          ]
+        },
+        {
+          "text": "BoundedProcessRunner limits execution time by configuring a timeout duration in the AnalyticsProperties, as demonstrated in the test case where a 10-second timeout is applied to the runner's run method.",
+          "evidenceKeys": [
+            "E5"
+          ]
+        }
+      ],
+      "uncertainties": [
+        "The evidence does not explicitly state how the execution time is enforced at runtime beyond the test case, which only verifies a timeout duration in a test environment.",
+        "The documentation (E4) confirms the architectural decision to use a bounded adapter with a fixed Python executable and validation boundary, but does not specify implementation details of concurrency or execution time limits beyond the architectural intent.",
+        "No evidence directly describes how the subprocess execution time is measured or enforced during actual runtime execution, only that a timeout is configured in test parameters.",
+        "Publication processing is PARTIAL; repository evidence is incomplete.",
+        "Some retrieved evidence was omitted from the model context; inspect contextSelection."
+      ],
+      "citations": [
+        {
+          "key": "E1",
+          "evidence": {
+            "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+            "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+            "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067",
+            "repositoryId": "distributed-data-intelligence-platform",
+            "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+            "path": "services/content-api/src/main/java/platform/contentapi/BoundedProcessRunner.java",
+            "startLine": 23,
+            "endLine": 26,
+            "artifactType": "SOURCE",
+            "sourceFormat": "JAVA",
+            "gitBlobId": "ccf1b75cabc22819a50dd819d9eeadd9b4443d52",
+            "sourceHash": "71b43a74c8e44b55cfd7226c75685f40a6c1bce12b58322599c020b52a060dbf",
+            "contentHash": "f3d05275415ac8e6c4fdef4fc1d2091620ad08d76fef32b08fe3c1ab90c21561",
+            "parser": "javaparser-core-3.27.1-java21",
+            "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+          }
+        },
+        {
+          "key": "E5",
+          "evidence": {
+            "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+            "snapshotId": "23fe02b38a69f41d4781a80c31992711600c6d75c4839e145a9bcdb9e72503ca",
+            "chunkId": "b7eeb2546439468539a63c9e6e08cf1cfb55e8e0d508ffd161354aa001856452",
+            "repositoryId": "distributed-data-intelligence-platform",
+            "commitSha": "34819a23ac1cd0b83f2921d14665f330144dc215",
+            "path": "services/content-api/src/test/java/platform/contentapi/BoundedProcessRunnerTest.java",
+            "startLine": 30,
+            "endLine": 34,
+            "artifactType": "TEST",
+            "sourceFormat": "JAVA",
+            "gitBlobId": "658f4d381e44b771b4662adf1949c88eb5d52b2b",
+            "sourceHash": "15d387d1feee44a7b426b4b7c00edb8e371162df95e34ad94c4255965dc941b8",
+            "contentHash": "a0555a91ab6d1389310d58d497da67b1260289f03a965cbe0a2f9348bf49bb75",
+            "parser": "javaparser-core-3.27.1-java21",
+            "chunkingConfiguration": "source-lines-v1:lines=20:chunks=10000"
+          }
+        }
+      ],
+      "requestedRetrievalStrategy": "VECTOR",
+      "retrievalStrategy": "postgres-vector-v1:profile=6360aef03c6233a05a91583849c68ae0d6a97a66b1ef985de22e92876aa2aa0b",
+      "contextSelection": {
+        "policy": "complete-ranked-chunks-v1",
+        "selected": [
+          {
+            "key": "E1",
+            "rank": 1,
+            "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067"
+          },
+          {
+            "key": "E2",
+            "rank": 2,
+            "chunkId": "aa094e94ae801ce712762a77274898b1c0ed7ec1ea6b501bd251fa9ad82dbb62"
+          },
+          {
+            "key": "E3",
+            "rank": 3,
+            "chunkId": "ad4cef3b8ccf7824ebd0a0705249a16a50f5ae2714b768062de5c53b56db8395"
+          },
+          {
+            "key": "E4",
+            "rank": 4,
+            "chunkId": "231d5121878fc224900ae53e9864e675459964e3d789200d9e7326c512aa1bbe"
+          },
+          {
+            "key": "E5",
+            "rank": 5,
+            "chunkId": "b7eeb2546439468539a63c9e6e08cf1cfb55e8e0d508ffd161354aa001856452"
+          }
+        ],
+        "omissions": [
+          {
+            "rank": 6,
+            "chunkId": "18eb3d172f27b43a14785c4e22fc5e3bcb48b526f1a55f9d91aee5051bc129fd",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 7,
+            "chunkId": "a76f938f7f15b4d9b496505000e84f2f711f14e7538b4b97718f308b629c8282",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 8,
+            "chunkId": "30fe8ccfb79d38515ac54d6d5498ac948bd14e6699610e047808053602a806a3",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 9,
+            "chunkId": "e68a291e1c78eac612d791104f170b3dbbebcf55d48466cda0b5ddefa818ba1c",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 10,
+            "chunkId": "95af9fc1470d78a44472025d91e2ba64226110992b1b79f79c7e607c1d6ea2d3",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 11,
+            "chunkId": "fafe363e4cf26c9f24506cf94c7246c5e4794672d9f7d6adfc0a0cd30f8fd389",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          },
+          {
+            "rank": 12,
+            "chunkId": "f0185138389521e15936cc4d784662cf8bb30fa8a12d6154a8c9bd05a8c3c873",
+            "reason": "CONTEXT_BYTE_LIMIT"
+          }
+        ],
+        "contextBytes": 5926,
+        "limitations": [
+          "Only complete selected chunks were shown; omitted chunks cannot be cited.",
+          "UTF-8 byte limits are conservative input bounds, not exact model token counts.",
+          "Coverage in model context is summarized; the answer retains complete publication coverage."
+        ]
+      },
+      "configuration": {
+        "topK": 12,
+        "maxEvidence": 6,
+        "maxContextBytes": 6000,
+        "maxEvidenceBytes": 3000
+      },
+      "promptVersion": "repository-qa-v2",
+      "promptHash": "a6d4f211036172e307fdf8a74bc1b96f6f68ee31e33b52c30965e6cd61481b8f",
+      "schemaHash": "9d03a212a30d74a2b537c61ab61273e7fe73037e9bbb4d8459cd2fed2dabb7c4",
+      "generationSettings": {
+        "model": "qwen3:4b-instruct",
+        "temperature": 0,
+        "contextTokens": 8192,
+        "maxOutputTokens": 768,
+        "timeoutSeconds": 120
+      },
+      "invocation": {
+        "provider": "ollama",
+        "model": "qwen3:4b-instruct",
+        "durationMillis": 12091,
+        "inputTokens": 2440,
+        "outputTokens": 250,
+        "finishReason": "stop",
+        "returnedModel": "qwen3:4b-instruct",
+        "connectTimeoutSeconds": 5,
+        "thinkingEnabled": false,
+        "keepAlive": "0s"
+      },
+      "validation": "CITATION_IDENTITIES_VALIDATED_SEMANTIC_SUPPORT_NOT_VERIFIED",
+      "durationMillis": 12991
+    },
+    "sourceVerification": {
+      "publicationId": "03f03df316563a7c1b91030179962c8d60fc3da86b6868da7b699bdceac7d049",
+      "chunkId": "840ecc1cc2439e93840af7b69e7ca3d7f57c5c16e4545928e04f95e02e32f067",
+      "sourceIdentityAndExcerptMatch": true,
+      "lineEndingPolicy": "Original inclusive lines, retaining line terminators",
+      "sourceHashMatch": true,
+      "contentHashMatch": true,
+      "gitBlobIdMatch": true
+    },
+    "rawAnswerSha256": "d418ae62ba68a02c8c899e08344f98d5f8782faa785ee88587c817c3636f28e7"
+  }
+}

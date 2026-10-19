@@ -1,158 +1,225 @@
 # Agentic Software Change Assurance Platform
 
-An applied AI engineering and backend/platform project to produce evidence-backed
-change-risk reports from software changes and their surrounding system context.
+**Understand a repository. Inspect the evidence. Make better-informed engineering decisions.**
 
-> Is this software change safe, what could it break, how do we know, and what must
-> be verified before release?
+Change Assurance turns questions about committed Java code and Markdown documentation
+into answers with inspectable source excerpts, immutable Git provenance, and explicit
+uncertainty. Repository Intelligence is the first implemented capability in a larger
+vision for evidence-backed software change assessment.
 
-## Problem and value
+**Upcoming release: v0.1.0 — Repository Intelligence Foundation.** The M1 implementation
+and UI are complete; release publication remains a maintainer action. This repository
+does not yet analyze pull requests, approve changes, or decide whether software is safe
+to deploy.
 
-Change review requires connecting evidence scattered across code, tests, API
-contracts, database migrations, event schemas, architecture decisions, incidents,
-and service dependencies. A passing test suite alone does not establish which
-consumers or operational assumptions a change might affect.
+[Product overview](docs/product-overview.md) · [Get started](docs/getting-started.md) ·
+[90-second demo](docs/demo.md) · [Measured results](docs/releases/v0.1.0-results.md)
 
-The platform aims to help engineers and reviewers identify affected components,
-explain compatibility risks, and prioritize release verification. Its intended
-output is a structured report with cited evidence, uncertainty, and required
-checks. It supports human release decisions; it does not certify a change as safe.
-Repository Intelligence is the first independently usable capability in
-this vision: developers and non-technical stakeholders can ask natural-language
-questions about published repositories and inspect evidence-backed, cited answers.
+## The engineering problem
 
-## Current implementation status
+Understanding an unfamiliar codebase means connecting implementation, tests, and
+architecture notes—often across several repositories. Keyword search finds names,
+but not every question uses the vocabulary of the code. A fluent model answer is
+also insufficient: reviewers need to know which revision it describes, where its
+claims came from, and what evidence is missing.
 
-**M0 — Project Foundation: Complete. M1 — Repository Intelligence MVP: Active.**
-M1.1 established [conceptual contracts](docs/architecture/repository-intelligence.md)
-and a [controlled evaluation foundation](evaluation/README.md). M1.2 implements
-[read-only Git snapshot ingestion](docs/architecture/git-snapshot-ingestion.md):
-explicit local repositories/revisions, Java/Markdown artifact discovery, source
-provenance and integrity, and coverage diagnostics through a reusable Java component.
-M1.3 adds [Java/Markdown parsing and deterministic evidence chunking](docs/architecture/artifact-processing.md),
-preserving original source lines, hashes, context, and ingestion coverage.
-M1.4 adds [PostgreSQL evidence persistence](docs/architecture/evidence-persistence.md),
-with atomic publications, preserved processing coverage, and exact-identity readback.
-M1.5 adds [publication-scoped PostgreSQL keyword retrieval](docs/architecture/keyword-retrieval.md),
-deterministic ranking, read-path integrity checks, and a [measured retrieval baseline](evaluation/retrieval/README.md).
-M1.6 adds [evidence-grounded Q&A](docs/architecture/grounded-question-answering.md)
-through an opt-in local Ollama CLI, bounded keyword evidence, structured output,
-and deterministic citation validation. The [Q&A evaluation definition](evaluation/qa/README.md)
-is versioned; a separate local acceptance record distinguishes reported live
-observations from deterministic tests and pending scenarios.
-M1.7a adds [versioned embedding generation and persistence](docs/architecture/embedding-indexing.md)
-for existing publications through an opt-in CLI. M1.7b adds
-[exact vector retrieval](docs/architecture/vector-retrieval.md) with explicit publication/profile selection.
-M1.7c adds [RRF hybrid retrieval and explicit Q&A strategy selection](docs/architecture/hybrid-retrieval.md),
-keeping keyword retrieval as the default. [Maintainer-reported live observations](evaluation/retrieval/m1-7-observations.md)
-remain separate from aggregate evaluation. M1.8a adds
-[reproducible retrieval comparison and offline grading](docs/architecture/retrieval-evaluation.md)
-for the existing 15 scenarios at K=5 and K=12. The maintainer reports 90 live
-retrieval executions without failures and reproduction of the historical keyword
-baseline. M1.8b adds [grounded-answer capture and offline grading](docs/architecture/grounded-answer-evaluation.md),
-with independent citation checks and explicit human semantic review. The maintainer
-accepted six live Q&A executions with one attributed review demonstrating both an
-incorrect and a correct claim despite valid citation identities. M1.8c adds
-[offline JSON/Markdown reporting](docs/architecture/evaluation-reporting.md) with
-explicit review selection, denominators, and reproducibility manifests. These sparse
-reviews do not establish aggregate answer correctness. M1.9a adds a
-[local read-only Repository Intelligence REST API](docs/architecture/repository-intelligence-api.md)
-for publication selection, coverage, grounded answers, strategy selection, and
-verified evidence excerpts. Its explicit `intelligence-api` profile disables
-migrations and CLI commands and binds to loopback. Default startup still exposes
-only the framework `/actuator/health` endpoint. M1.9b adds the
-[interactive React workspace](docs/architecture/repository-intelligence-workspace.md):
-explicit publication/scope selection, three retrieval strategies, grounded answers,
-uncertainty, interactive citations, and original source excerpts with provenance.
+The long-term goal is to connect that evidence to proposed changes, affected
+interfaces, and verification needs. The current release addresses the prerequisite:
+reliable repository selection, retrieval, and source inspection.
 
-Public/authenticated API access and change-impact analysis
-remain unimplemented. Tests cover
-ingestion and processing with temporary repositories, Java 21 and Markdown syntax,
-deterministic chunks, original source mappings, application startup/HTTP health,
-PostgreSQL persistence/rollback/retrieval, and evaluation-fixture consistency. The
-controlled retrieval baseline measures lexical evidence coverage, not answer quality
-or production availability. Hosted CI must be checked
-for the revision under review; local verification does not establish it.
+## What you can do today
 
-See the [architecture overview](docs/architecture/overview.md),
-[development conventions](docs/development.md), and [ADR directory](docs/adr/).
+- Browse prepared repositories and explicitly select an immutable publication.
+  Versions retain their commit, scope, processing configuration, and coverage.
+- Ask natural-language questions with **Keyword**, **Vector**, or **Hybrid** search.
+- Read structured answers with claims, citations, and `SUPPORTED`,
+  `PARTIALLY_SUPPORTED`, or `INSUFFICIENT_EVIDENCE` outcomes.
+- Follow citations to the original persisted Java/Markdown excerpt, inclusive line
+  numbers, Git revision, hashes, and parser provenance.
+- Inspect uncertainty, omitted evidence, model metadata, and invocation diagnostics.
+- Prepare evidence and embedding indexes through explicit local CLI workflows;
+  evaluate retrieval and answers with versioned cases and reproducible reports.
 
-## Local Development
+**A valid citation establishes source identity, not factual correctness.** The model
+can misinterpret correct evidence. Missing evidence does not prove a feature is absent.
 
-Prerequisites: Java 21 (JDK), Git 2.48+ on `PATH` for ingestion/tests, and network
-access for initial Maven dependency downloads. Full `verify` also requires a running
-Docker engine for disposable PostgreSQL integration tests; `./mvnw test` remains
-database-independent.
-The Maven Wrapper downloads Maven 3.9.16; a global Maven installation is not needed.
-Run these commands from the repository root.
+## Application walkthrough
 
-Build and verify:
+These are actual Chrome captures of the accepted UI and local data, not mockups.
+The interface abbreviates the upcoming release as “v0.1”; no GitHub release is implied.
 
-```sh
-./mvnw clean verify
+![Repository Intelligence displays the DDIP BoundedProcessRunner question and its PARTIALLY_SUPPORTED answer](docs/assets/v0.1.0/repository-intelligence-answer.png)
+
+Ask questions about committed code; inspect the answer's status and remaining limitations.
+
+![Repositories dashboard with four repository identities and six immutable publications, including three Parcel Quotes variants](docs/assets/v0.1.0/repositories.png)
+
+Choose an explicit repository publication with its pinned revision and processing scope.
+
+![Supporting Sources shows BoundedProcessRunner.java lines 23–26 alongside the actual partially supported DDIP answer](docs/assets/v0.1.0/supporting-java-source.png)
+
+Inspect original cited Java evidence and its source coordinates.
+
+See the [complete screenshot gallery and capture provenance](docs/assets/v0.1.0/README.md),
+including Overview, Full Answer, and its uncertainty disclosures.
+
+## How Repository Intelligence works
+
+1. An operator publishes an explicit local Git revision. Only committed objects are
+   read; staged, unstaged, and untracked edits are ignored.
+2. Java/Markdown parsers produce bounded evidence chunks with original source
+   coordinates. Unsupported files and incomplete processing remain visible.
+3. PostgreSQL stores an immutable publication. Optional, separately generated Nomic
+   embeddings are indexed by a versioned profile in pgvector.
+4. A question retrieves evidence from the selected publication. Bounded context goes
+   to the local answer model; the application validates returned citation identities.
+5. The read-only API returns the answer, uncertainty, and diagnostics. React displays
+   them and resolves citations through publication-scoped evidence endpoints.
+
+```mermaid
+flowchart LR
+    Git[Local Git revision] --> Publish[Parse, chunk, publish]
+    Publish --> DB[(PostgreSQL evidence)]
+    DB --> Embed[Explicit embedding indexing]
+    Embed --> V[(pgvector)]
+    DB --> Retrieve[Keyword / Vector / Hybrid]
+    V --> Retrieve
+    UI[React workspace] --> API[Read-only REST API]
+    API --> Retrieve
+    Retrieve --> QA[Grounded Q&A + citation checks]
+    QA --> API
+    API --> UI
 ```
 
-Start the application (stop with Ctrl+C):
+One Java modular monolith owns ingestion, persistence, retrieval, and answering.
+The frontend is a presentation layer, not a second retrieval pipeline. Write-enabled
+CLI preparation is separate from the loopback-only HTTP process, which disables
+migrations and CLI execution. See the [architecture](docs/architecture/overview.md)
+and [decisions](docs/adr/README.md).
+
+## Technology stack
+
+| Area | Implemented technology |
+| --- | --- |
+| Backend | Java 21, Spring Boot 4.1.1, Spring AI 2.0.1, Maven Wrapper |
+| Evidence | JavaParser, CommonMark, Spring JDBC, PostgreSQL 17, Flyway |
+| Retrieval | PostgreSQL keyword search, exact pgvector cosine search, reciprocal-rank fusion |
+| Local models | Ollama; `qwen3:4b-instruct` answers, `nomic-embed-text:v1.5` embeddings |
+| Frontend | React, strict TypeScript, Vite, native fetch, Radix accessibility primitives |
+| Verification | JUnit, Testcontainers, Vitest, React Testing Library, Python hygiene checks, GitHub Actions |
+
+## Getting started
+
+Use **JDK 21**, Git 2.48+, Docker with Compose, Ollama, Python 3.9+, and
+**Node 24.19.0 / npm 11** ([pinned runtime](frontend/.nvmrc)). Maven 3.9.16 is downloaded
+by the wrapper. No global Maven installation is required.
+
+### First-time setup
+
+Follow [first-time setup and CLI preparation](docs/getting-started.md) to configure
+PostgreSQL and pgvector, prepare the required local models, initialize the application
+database, and publish a compatible local Git repository. Generate embeddings when
+using Vector or Hybrid, before starting the read-only API.
+
+**Demonstration repository publications are not bundled or automatically seeded into a fresh database.**
+
+### Already configured
+
+For an already prepared database, with its credentials loaded privately and a
+compatible stored embedding profile selected:
 
 ```sh
-./mvnw spring-boot:run
+# API terminal; database and Ollama must already be running.
+: "${EVIDENCE_DB_URL:?Load the existing JDBC URL}"
+: "${EVIDENCE_DB_USER:?Load the existing database user}"
+: "${EVIDENCE_DB_PASSWORD:?Load the existing database password privately}"
+: "${INTELLIGENCE_API_EMBEDDING_PROFILE_ID:?Select the stored compatible profile}"
+export INTELLIGENCE_API_BROWSER_ORIGIN=http://127.0.0.1:5173
+./mvnw spring-boot:run -Dspring-boot.run.profiles=intelligence-api,embeddings
 ```
 
-In another terminal, verify health:
-
 ```sh
-curl http://localhost:8080/actuator/health
-```
-
-Expected: HTTP 200 with a JSON body containing `"status":"UP"` (the default
-response also lists liveness and readiness groups). Only health is exposed over HTTP
-by Actuator's default configuration. Default startup needs no external services or
-credentials. Enable the explicit
-`persistence` profile and follow the [database setup guide](docs/architecture/evidence-persistence.md)
-to connect PostgreSQL and run Flyway migrations.
-
-Run tests, including the health test against an embedded server on a random port:
-
-```sh
-./mvnw test
-```
-
-For opt-in Q&A, use the [local Ollama and CLI guide](docs/architecture/grounded-question-answering.md).
-For HTTP access to existing publications, use the
-[API startup and maintainer smoke-test procedure](docs/architecture/repository-intelligence-api.md).
-The API process never prepares the schema or indexes; keep using the existing
-CLI workflows for that explicit preparation.
-For the React workspace, use Node 24/npm 11 and follow the
-[frontend installation, proxy setup, and live demonstration](docs/architecture/repository-intelligence-workspace.md).
-Start the API with `INTELLIGENCE_API_BROWSER_ORIGIN=http://127.0.0.1:5173`, then:
-
-```sh
+# Frontend terminal, using the pinned Node version.
 npm ci --prefix frontend
 npm run dev --prefix frontend
 ```
 
-Open `http://127.0.0.1:5173/`. Both processes remain loopback-only; no wildcard
-CORS or backend security changes are required. The UI uses the existing five API
-routes and adds no retrieval/model logic or browser persistence.
+Open **http://127.0.0.1:5173/**. The browser origin must match the API configuration.
 
-Default startup and mandatory tests do not require Ollama. Spring AI 2.0.1 is
-managed through its BOM; the initial model is `qwen3:4b-instruct` with an 8,192-token
-context setting and bounded output. Citation validation verifies immutable source
-identity, not semantic support for generated claims. Local model results and human
-review must be recorded separately from deterministic tests.
+The maintainer's local demo contains `parcel-quotes-v1`, `ai-data-explorer`,
+`ai-incident-triage-assistant`, and `distributed-data-intelligence-platform`.
+Change Assurance self-ingestion is planned after M1.9c merges; it is not indexed.
 
-## CI and quality checks
+## Questions to try
 
-The [CI workflow](.github/workflows/ci.yml) runs on pull requests targeting `main`,
-pushes to `main`, and manual dispatch. One Ubuntu job uses Temurin Java 21,
-Maven/npm caching, Node pinned by `frontend/.nvmrc`, read-only repository permissions,
-and a 15-minute timeout. Frontend dependencies install with `npm ci`; type checking,
-deterministic component/API tests, and a production build run in the same job.
-It requires no repository secrets or cloud services. Testcontainers starts disposable
-PostgreSQL through the runner's Docker engine; missing Docker fails verification.
+| Repository / perspective | Example question |
+| --- | --- |
+| DDIP / developer | How does BoundedProcessRunner limit analytics subprocess concurrency and execution time? |
+| AI Data Explorer / reviewer | What approval and SQL checks are required before a query executes? |
+| Incident Triage / architect | How are logs and runbooks bounded in the AI triage prompt? |
+| Parcel Quotes / QA engineer | Which tests cover remote-destination pricing? |
+| Any selected repository / product owner | What capabilities does this repository provide? |
 
-Reproduce its checks from the repository root with Java 21, Git, Python 3.9+,
-Node 24, and npm 11:
+These are questions, not promised answers. The Incident Triage experiment retrieved
+documentation instead of the relevant Java implementation and did not explain its bounds.
+
+## Evaluation: measured results and useful failures
+
+| Evidence population | Recorded result | What it establishes |
+| --- | --- | --- |
+| Controlled Parcel Quotes keyword baseline, K=5 | Macro Recall@5 **0.5714**, MRR@5 **0.6369**; 15 queries, 14 with expected evidence | Lexical evidence retrieval on this small versioned corpus, not answer accuracy |
+| Same baseline latency | Median **1.579 ms**, p95 **2.259 ms**, 150 samples | Historical local retrieval latency; excludes answer generation |
+| Three real-repository publication experiments | AI Data Explorer **1,112/1,112**, Incident Triage **1,649/1,649**, DDIP **1,155/1,155** chunks indexed | Complete indexing of emitted chunks; all three publications retain `PARTIAL` coverage |
+| One VECTOR question per real repository | All three returned `PARTIALLY_SUPPORTED`; **8/8** returned citations matched recorded source identity/excerpts | Functional evidence navigation; no aggregate semantic-correctness score |
+| Fresh DDIP screenshot run | `PARTIALLY_SUPPORTED`, **12.991 s**, Java implementation and test citations | One additional live observation, not a benchmark |
+
+The [committed keyword baseline](evaluation/retrieval/baseline-v1.json) and
+[release results with source-report hashes](docs/releases/v0.1.0-results.md) provide
+provenance and denominators. Controlled-corpus scores are **not** transferred to real
+repositories. Historical live Q&A also confused cents with dollars despite valid
+citations. M1.8 separates capture, deterministic grading, and attributed human review;
+unreviewed answers receive no automatic semantic credit.
+
+## Limitations and security boundary
+
+- Source ingestion currently supports Java source files and Markdown documentation.
+  Python, TypeScript, YAML, SQL, and other formats are not processed as implementation
+  evidence. Java is not compiled and repository tests are not run.
+- Scope exclusions, parser restrictions, chunk limits, and context budgets can omit
+  relevant evidence. Complete indexing does not mean complete repository understanding.
+- Local trusted-operator use only: loopback bindings, restricted Host/Origin, no
+  authentication or RBAC. Do not expose the API or Vite server publicly.
+- Repository content is untrusted data. The UI escapes source text; evidence lookup
+  uses publication/chunk IDs, never browser-provided filesystem paths.
+- No browser answer persistence, full-file browser, conversation history, or streaming.
+- No PR change-impact analysis, contract compatibility validation, cross-service
+  dependency reasoning, automated test execution, autonomous change approval,
+  deployment decisions, or GitHub onboarding. Connection controls are disabled previews.
+
+## Incremental roadmap
+
+| Milestone | State | Direction |
+| --- | --- | --- |
+| M0 — Foundation | Complete | Build, CI, conventions, architecture decisions |
+| M1 — Repository Intelligence | Implemented; upcoming v0.1.0 closeout | Publications, retrieval, cited answers, evaluation, local API/UI |
+| M2 — Contract Intelligence | Planned | Contract and dependency evidence |
+| M3 — Change Footprint | Planned | Change-Impact Analysis across affected components and interfaces |
+| M4 — Assisted Verification | Planned | Controlled investigation and verification guidance; engineering milestone: Controlled Agent |
+| M5 — Production AI Engineering | Planned | Broader observability, security, cost, and limited hosted validation |
+
+See the [roadmap](docs/roadmap.md). The product name expresses the long-term vision;
+agent orchestration is not part of this release.
+
+## Documentation map
+
+| Start here | Engineering detail |
+| --- | --- |
+| [Product overview](docs/product-overview.md) | [Architecture and boundaries](docs/architecture/overview.md) |
+| [Local setup](docs/getting-started.md) | [Ingestion](docs/architecture/git-snapshot-ingestion.md), [processing](docs/architecture/artifact-processing.md), [indexing](docs/architecture/embedding-indexing.md) |
+| [60–90 second demo](docs/demo.md) | [REST API](docs/architecture/repository-intelligence-api.md), [React workspace](docs/architecture/repository-intelligence-workspace.md) |
+| [Release results](docs/releases/v0.1.0-results.md) | [Evaluation definitions](evaluation/README.md), [development conventions](docs/development.md), [ADRs](docs/adr/README.md) |
+
+## Development and testing
 
 ```sh
 python3 scripts/check_repository.py
@@ -160,158 +227,35 @@ npm ci --prefix frontend
 npm run typecheck --prefix frontend
 npm test --prefix frontend
 npm run build --prefix frontend
-./mvnw -B -ntp clean verify
+./mvnw clean verify
+git diff --check
+git diff --cached --check
 ```
 
-The [repository check](scripts/check_repository.py) rejects tracked files matching
-Git ignore rules and verifies the Unix wrapper's executable Git mode. It checks
-all repository Markdown files for LF endings, a final newline, tabs, trailing
-whitespace (allowing two-space hard breaks), and unclosed code fences. It also
-checks relative file targets in inline Markdown links and images outside code.
-New non-ignored files are included locally. This is a small convention check,
-not a complete Markdown linter or secret scanner: reference-style links, HTML
-links, heading anchors, and external URLs are not validated. Use inline relative
-file links for repository documentation. It also validates controlled evaluation
-fixtures and runs validator regression tests; see the [evaluation guide](evaluation/README.md). No network requests are
-made by this check.
+Full Maven verification requires Docker for disposable PostgreSQL tests. Mandatory
+checks use deterministic model doubles, not live Ollama. `./mvnw test` is database-independent;
+plain `./mvnw spring-boot:run` starts only the default health-capable application,
+not the Repository Intelligence API. The [CI workflow](.github/workflows/ci.yml)
+uses the pinned frontend runtime and Java 21. Local verification is not a hosted CI result.
 
-Failures stop the job and appear in the PR checks and Actions step logs, with
-file/line diagnostics where applicable. Maven prints test failures in its log;
-local detailed reports are in `target/surefire-reports/` and `target/failsafe-reports/`.
-Application, ingestion,
-and processing tests run during `verify`, including an HTTP request to a random-port
-embedded server. Ingestion/processing integration tests use local temporary Git
-repositories without network access. PostgreSQL tests run in Failsafe during `verify`
-and need Docker (initial image downloads require network access).
-Check the GitHub-hosted result for the revision being reviewed; local verification
-does not establish a hosted result. The maintainer can require the CI job in
-`main` branch protection.
+The repository checker lints Markdown whitespace/fences, validates inline relative
+links and image targets, checks Git hygiene, and validates evaluation fixtures. It
+is not a complete Markdown linter, external-link checker, or secret scanner.
 
-Dependency updates are reviewed in focused pull requests: update the Spring Boot
-parent to receive managed dependency versions, review release notes and Java
-compatibility, and rerun these checks. Review Maven/Wrapper and GitHub Actions
-versions periodically in the same way. Avoid independent transitive-version
-overrides unless a concrete need is documented. M0 adds no runtime dependencies.
+## AI Assistance & Development Transparency
 
-## Local embedding indexing
+This project is independently developed and maintained with assistance from
+OpenAI's ChatGPT and Codex. ChatGPT supports technical research, architecture,
+trade-off analysis, planning, documentation, and engineering guidance. Codex assists
+with implementation, refactoring, tests, and code review.
 
-M1.7a implements explicit, versioned Ollama embedding generation and pgvector
-persistence for existing publications. See the
-[indexing guide](docs/architecture/embedding-indexing.md) for model/profile setup,
-CLI commands, limits, and recovery. Existing PostgreSQL users must follow its
-export/import instructions: the new Compose volume preserves the old volume but
-does not automatically copy publications. M1.7b adds a separate
-[vector retrieval CLI](docs/architecture/vector-retrieval.md). M1.7c adds
-[KEYWORD/VECTOR/HYBRID Q&A selection](docs/architecture/grounded-question-answering.md). Default startup and CI require no Ollama server.
+AI serves as an engineering assistant, not an autonomous decision-maker. All
+architectural decisions, implementation choices, reviews, testing, and final approvals
+remain the project maintainer's responsibility. AI-generated contributions receive
+the same engineering standards, validation, and review as manually written code.
 
-## Planned capabilities
-
-- Evaluate implemented keyword, vector, and hybrid retrieval against versioned scenarios.
-- Evaluate structured answers for semantic support, completeness, and uncertainty.
-- Analyze API, database, and event contracts alongside dependency relationships.
-- Interpret diffs to identify affected components, compatibility risks, and missing
-  tests or verification steps.
-- Generate evidence-backed change-risk reports grounded in deterministic findings.
-- Use bounded, read-only agent tools with explicit approval requirements.
-- Measure retrieval, answer quality, safety, latency, and cost through repeatable
-  evaluation and observability.
-
-## Initial technical direction
-
-| Area | Planned direction |
-| --- | --- |
-| Application | Java 21, Spring Boot, Maven |
-| AI integration | Spring AI; local LLMs during development |
-| Retrieval and storage | PostgreSQL with pgvector and full-text search |
-| Local environment | Docker Compose |
-| Observability | OpenTelemetry and Micrometer |
-| Hosted validation | Limited AWS Bedrock validation |
-
-The application foundation is implemented, including Actuator's baseline
-Micrometer support, plus PostgreSQL persistence and local database Compose setup.
-The remaining integrations are planned, not finalized
-architecture. Components will be introduced only when a milestone needs them.
-
-## Data strategy
-
-Two complementary corpora support the evaluation direction:
-
-- **Real corpus:** the Distributed Data Intelligence Platform repository, including
-  Java code, tests, documentation, and Git history, to exercise realistic changes.
-- **Controlled corpus:** the included fictional Parcel Quotes Java/Markdown library
-  provides small, versioned evidence scenarios. Broader change-impact cases come later.
-
-The real corpus is not included or ingested. Its access and redistribution permissions
-must be established before inclusion. The controlled corpus is also ingested from a
-temporary commit in tests; no real-corpus ingestion result is claimed.
-
-## Roadmap overview
-
-| Milestone | Focus |
-| --- | --- |
-| M0 — Project Foundation (Complete) | Charter, application bootstrap, CI, and conventions |
-| M1 — Repository Intelligence MVP (Active) | Evaluation-driven Java/Markdown retrieval and cited answers |
-| M2 — Stakeholder and Contract Intelligence | Contracts, entities, dependencies, and compatibility checks |
-| M3 — Change-Impact Analysis | Diff-driven impact analysis and change-risk reports |
-| M4 — Controlled Agent | Bounded tools, MCP integration, trajectories, and approvals |
-| M5 — Production AI Engineering | Observability, versioning, security, cost, and limited AWS validation |
-
-See the [detailed roadmap](docs/roadmap.md) for deliverables and completion criteria.
-The first Repository Intelligence release will focus on evaluation-driven retrieval;
-agent execution and full change-impact reporting come later.
-
-## Development approach
-
-Deterministic analysis establishes facts; AI interprets and explains them. Important
-conclusions must cite evidence, and unsupported conclusions must expose uncertainty.
-Retrieved content is untrusted input. Tool access should be read-only by default
-and use least-privileged execution.
-
-Work proceeds in small, measurable increments with evaluation as a first-class
-subsystem. Favor engineering depth over technology count, preserve provenance and
-version information, and distinguish implemented behavior from roadmap items.
-Future milestones will define reproducible checks and record results before
-claiming completion.
-
-## AI assistance disclosure
-
-This project uses AI tools provided by OpenAI: ChatGPT for architectural
-discussions, technical research, planning, documentation, and engineering guidance;
-Codex for implementation assistance, tests, refactoring, and code review.
-
-The project maintainer owns architectural decisions, engineering validation, and
-publication. AI-assisted changes undergo review and testing appropriate to their
-scope. AI assistance does not establish that a capability is implemented or correct.
-
-This is an independent project, not affiliated with, sponsored by, or endorsed by
-OpenAI.
+This is an independent initiative, not affiliated with, sponsored by, or endorsed by OpenAI.
 
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE).
-
-## AI Assistance & Development Transparency
-
-This project is independently developed and maintained with assistance
-from AI-powered development tools, primarily OpenAI's ChatGPT and Codex.
-
-AI tools are used throughout the development lifecycle, including:
-
-- **ChatGPT:** Technical research, architectural discussions,
-  design trade-off analysis, project planning, documentation,
-  and engineering guidance.
-- **Codex:** Assisting with code implementation, refactoring,
-  test development, and code review.
-
-AI serves as an engineering assistant, not an autonomous
-decision-maker.
-
-All architectural decisions, implementation choices, code reviews,
-testing, and final approvals remain the responsibility of the
-project maintainer.
-
-AI-generated contributions are subject to the same engineering
-standards, validation, and review processes as manually written code.
-
-This project is an independent initiative and is not affiliated
-with, sponsored by, or endorsed by OpenAI.
