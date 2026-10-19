@@ -4,6 +4,7 @@ import type { AnswerResponse, EvidenceReference, EvidenceResponse, PublicationDe
 import { emptyState, type LoadState } from '../state';
 
 export function useWorkspace() {
+    const [repositoryId, setRepositoryId] = useState('');
     const [selected, setSelected] = useState<PublicationReference | null>(null);
     const [detail, setDetail] = useState<LoadState<PublicationDetailResponse>>(emptyState);
     const detailRequest = useRef<AbortController | null>(null);
@@ -16,7 +17,21 @@ export function useWorkspace() {
     const [citation, setCitation] = useState<{ reference: EvidenceReference; key: string | undefined } | null>(null);
     const evidenceRequest = useRef<AbortController | null>(null);
 
+    const clearPublication = useCallback(() => {
+        detailRequest.current?.abort(); detailRequest.current = null;
+        answerRequest.current?.abort(); answerRequest.current = null; answerPending.current = false;
+        evidenceRequest.current?.abort(); evidenceRequest.current = null;
+        selectedId.current = null;
+        setSelected(null); setDetail(emptyState()); setAnswer(emptyState()); setEvidence(emptyState()); setCitation(null);
+    }, []);
+
+    const selectRepository = useCallback((id: string) => {
+        setRepositoryId(id);
+        if (selected?.repositoryId !== id) clearPublication();
+    }, [selected, clearPublication]);
+
     const selectPublication = useCallback(async (publication: PublicationReference) => {
+        setRepositoryId(publication.repositoryId);
         // Failed detail loads have no data, so selecting them again still retries.
         if (selectedId.current === publication.publicationId && detail.data?.publication.publicationId === publication.publicationId) return;
         detailRequest.current?.abort();
@@ -76,7 +91,7 @@ export function useWorkspace() {
     }, []);
 
     useEffect(() => () => { detailRequest.current?.abort(); answerRequest.current?.abort(); evidenceRequest.current?.abort(); }, []);
-    return { selected, detail, selectPublication, question, setQuestion, answer, submit, evidence, citation, openEvidence };
+    return { repositoryId, selectRepository, clearPublication, selected, detail, selectPublication, question, setQuestion, answer, submit, evidence, citation, openEvidence };
 }
 
 // String.length counts UTF-16 code units, exactly like the Java request contract.

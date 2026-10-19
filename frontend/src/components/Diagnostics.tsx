@@ -1,8 +1,10 @@
+import { ContextHelp } from '../help/ContextHelp';
 import type { AnswerResponse, EvidenceReference } from '../api/types';
 import { shortId } from './Common';
 
 export function Diagnostics({ answer, onEvidence }: { answer: AnswerResponse; onEvidence?: (evidence: EvidenceReference, key?: string) => void }) {
     return <details className="diagnostics"><summary>Retrieval & execution details</summary>
+        <p className="small muted">How the answer was produced <ContextHelp about="diagnostics" /></p>
         <dl className="metadata diagnostics-metadata">
             <dt>Requested strategy</dt><dd>{answer.requestedRetrievalStrategy}</dd>
             <dt>Effective strategy</dt><dd className="mono">{answer.retrievalStrategy}</dd>
@@ -29,7 +31,7 @@ export function Diagnostics({ answer, onEvidence }: { answer: AnswerResponse; on
         </li>)}</ol>
         <h3>Context selection</h3><ul className="plain-list">{answer.contextSelection.selected.map(item => <li key={item.key}>
             {item.key} · retrieved rank {item.rank} · <code>{shortId(item.chunkId)}</code></li>)}</ul>
-        <h3>Context omissions</h3>{answer.contextSelection.omissions.length ? <ul className="plain-list">{answer.contextSelection.omissions.map((item, index) =>
+        <h3>Context omissions <ContextHelp about="omissions" /></h3>{answer.contextSelection.omissions.length ? <ul className="plain-list">{answer.contextSelection.omissions.map((item, index) =>
             <li key={index}>Rank {item.rank} · <code>{shortId(item.chunkId)}</code> · {item.reason}</li>)}</ul> : <p className="small muted">No context omissions reported.</p>}
         <h3>Retrieval & context limitations</h3><ul className="plain-list">{[...answer.retrievalLimitations, ...answer.contextSelection.limitations].map((text, i) => <li key={i}>{text}</li>)}</ul>
         <h3>Citation validation statement</h3><p className="validation-statement mono">{answer.validation}</p>

@@ -1,23 +1,17 @@
 # Project roadmap
 
-This roadmap describes planned work for the Agentic Software Change Assurance
-Platform. **M0 — Project Foundation is complete. M1 — Repository Intelligence MVP
-is active.** M1.1 establishes conceptual contracts, controlled fixtures, versioned
-scenarios, and deterministic validation. M1.2 implements read-only local Git
-snapshot ingestion and Java/Markdown artifact discovery. M1.3 implements syntax-aware
-Java/Markdown parsing and deterministic evidence chunks with original provenance.
-M1.4 implements PostgreSQL evidence persistence and reproducible publication readback.
-M1.5 implements publication-scoped keyword retrieval and a measured controlled baseline.
-M1.6 implements opt-in local grounded Q&A over keyword evidence, with citation
-identity validation and a versioned evaluation definition. M1.7a adds explicit
-[versioned embedding indexing](architecture/embedding-indexing.md) and pgvector
-persistence. M1.7b adds [exact vector retrieval](architecture/vector-retrieval.md).
-M1.7c adds [RRF fusion and Q&A strategy selection](architecture/hybrid-retrieval.md). A
-public Q&A API, change analysis, and agents are not implemented. Live-model quality
-and semantic support remain limited to exploratory observations, including the
-[M1.6 acceptance record](../evaluation/qa/live-acceptance-m1-6-v1.md) and sparse
-maintainer-reviewed M1.8b outputs.
-See the [project charter](../README.md) for the product principles and data strategy.
+This roadmap distinguishes implemented evidence workflows from future change-assessment
+capabilities. **M0 is complete. M1 is implemented; upcoming release:
+v0.1.0 — Repository Intelligence Foundation.** M1.9c's UI is visually accepted and
+frozen; release documentation, final verification, merge, tagging, and publication
+remain maintainer-controlled closeout work.
+
+The current product includes local Git ingestion, immutable Java/Markdown evidence,
+Keyword/Vector/Hybrid retrieval, grounded Q&A, source inspection, versioned evaluation,
+and a local read-only REST API with React UI. Contract compatibility, change-impact
+analysis, test execution, controlled agents, and public/authenticated access are not
+implemented. See the [product overview](product-overview.md),
+[measured release results](releases/v0.1.0-results.md), and [demo](demo.md).
 
 Milestones build on one another. Completion requires reproducible evidence, not
 only implementation. For evaluation-based milestones, version the cases, expected
@@ -60,14 +54,14 @@ dependencies, deployment workflows, infrastructure, or datasets.
 
 ## M1 — Repository Intelligence MVP
 
-**Status: Active.**
+**Status: Implemented; v0.1.0 release closeout pending maintainer publication.**
 
 **Objective:** Deliver the first independently usable capability: natural-language repository
 understanding for developers and non-technical stakeholders, with evaluation-driven
 retrieval and evidence-grounded answers over Java and Markdown.
 
-Begin with the scoped local Git source and evaluation work described in the
-[M1 readiness section of the architecture overview](architecture/overview.md).
+The [architecture overview](architecture/overview.md) describes the implemented
+local Git source, evidence boundaries, and evaluation workflow.
 M1.1 provides [conceptual contracts](architecture/repository-intelligence.md) and the
 [evaluation foundation](../evaluation/README.md). M1.2 implements
 [Git Repository Snapshot Ingestion](architecture/git-snapshot-ingestion.md).
@@ -100,6 +94,18 @@ mobile polish, clearer publication/uncertainty presentation, selection reliabili
 and a documented demo preflight without changing retrieval or backend APIs.
 Live UI/API acceptance is separate from deterministic tests; sparse reviews are
 not aggregate correctness evidence.
+
+The Change Assurance shell now provides Overview, Repositories, Repository
+Intelligence, and searchable in-app Help. The catalog groups existing publications;
+connection controls remain disabled previews. The question workflow offers editable
+examples, a Search Method selector, compact answers, and a complete answer dialog
+with source navigation. M2 contract/dependency intelligence, M3 change impact, and
+M4 assisted verification have clearly labeled planned previews only. This frontend
+change does not implement their backend capabilities. The maintainer has visually accepted the current UI, including independent dashboard
+body scrolling. That acceptance is separate from automated verification and does not
+publish a release. Four repository identities are prepared locally: Parcel Quotes,
+AI Data Explorer, Incident Triage, and DDIP. Change Assurance self-ingestion remains
+planned after M1.9c merges.
 
 **Expected capabilities:** Ingestion, provenance-aware chunking, keyword/vector
 retrieval, structured answers, citations, and explicit uncertainty.

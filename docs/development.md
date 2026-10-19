@@ -2,8 +2,8 @@
 
 These conventions guide incremental work on the existing application. See the
 [architecture overview](architecture/overview.md), [ADRs](adr/README.md), and
-[roadmap](roadmap.md) for decisions and milestone scope. Build, run, and CI commands
-are maintained in the [README](../README.md).
+[roadmap](roadmap.md) for decisions and milestone scope. Build and CI commands are maintained in the [README](../README.md);
+first-time local preparation is in [Getting started](getting-started.md).
 
 ## Java and Spring Boot
 
@@ -116,7 +116,10 @@ the Java HTTP DTOs. Use native fetch, local state, and escaped text; do not add
 browser persistence, duplicate retrieval logic, or interpret source as markup.
 Abort requests on selection changes and guard against late responses. Model POSTs
 require deliberate submission, with no automatic retries. Tests use synthetic typed
-fixtures; keep live source/answers out of version control.
+fixtures; keep raw live source/answer bundles out of version control. Release
+documentation may include explicitly reviewed, sanitized screenshots and selected
+result extracts, with provenance and limitations, when authorized by the maintainer.
+The [v0.1.0 capture inventory](assets/v0.1.0/README.md) records that limited exception.
 
 Run `npm ci --prefix frontend`, `npm run typecheck --prefix frontend`,
 `npm test --prefix frontend`, and `npm run build --prefix frontend` in addition to

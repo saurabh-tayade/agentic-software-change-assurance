@@ -1,0 +1,63 @@
+{
+  "captureUtc": "2026-10-19T05:35:10.985Z",
+  "browser": "155.0.8059.85",
+  "viewportCssPixels": [
+    1440,
+    900
+  ],
+  "deviceScaleFactor": 1,
+  "source": "Live application; no mocked API responses; one VECTOR inference",
+  "answerStatus": "PARTIALLY_SUPPORTED",
+  "apiDurationMillis": 12991,
+  "images": [
+    {
+      "file": "answer-uncertainty.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 205760,
+      "sha256": "2413c47a0ee20e50beb8a1cfb5b39b685901dad01259b07949650a3262a98772"
+    },
+    {
+      "file": "full-answer.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 195015,
+      "sha256": "b8487b7adfa00a2b9216d0c70ffca4f497b24c78240904c307e76cc06af4961f"
+    },
+    {
+      "file": "help-center.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 177063,
+      "sha256": "e1fe714f71266a95fb1c59e80f3b3db0ee5d722eae36d74edcbdb7106173a311"
+    },
+    {
+      "file": "overview.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 136837,
+      "sha256": "c674edca14e33054c62a1fb457fcbaa20c4f60a3cd2ac8cdc1e91d77c429deae"
+    },
+    {
+      "file": "repositories.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 94947,
+      "sha256": "8602afedb55fa31684ae5ad2a2d9ff45e1eda49e4a2ff27c2c5a548e3d03380d"
+    },
+    {
+      "file": "repository-intelligence-answer.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 100560,
+      "sha256": "602e49a7411c7f1f39aa3bdc12f37db026d2aa79d29abf31274aa00369e30636"
+    },
+    {
+      "file": "supporting-java-source.png",
+      "width": 1440,
+      "height": 900,
+      "bytes": 144997,
+      "sha256": "65aecc811ee9eec6c71eac54be8e11e369ae0e4a0a389e3b073aecf5c77f68f1"
+    }
+  ]
+}

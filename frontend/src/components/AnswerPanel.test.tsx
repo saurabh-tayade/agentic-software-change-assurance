@@ -1,8 +1,27 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import { AnswerPanel } from './AnswerPanel';
 import { answer, details, limited } from '../test/fixtures';
+import type { AnswerStatus } from '../api/types';
+
+it.each<AnswerStatus>(['SUPPORTED', 'PARTIALLY_SUPPORTED', 'INSUFFICIENT_EVIDENCE'])('keeps the %s preview minimal without changing the original response', async status => {
+    const user = userEvent.setup();
+    const onFullAnswer = vi.fn();
+    const original = { ...answer, status, publication: details(limited) };
+    render(<AnswerPanel answer={original} preview onFullAnswer={onFullAnswer} />);
+    const preview = screen.getByRole('article', { name: 'Answer' });
+    expect(within(preview).getByText(status.replaceAll('_', ' ').toLowerCase())).toBeVisible();
+    expect(preview.querySelector('.answer-text')?.textContent).toBe(original.answer);
+    expect(within(preview).queryByRole('button', { name: /Open citation/ })).not.toBeInTheDocument();
+    expect(within(preview).queryByText(/uncertainty|processing|correctness|validated/i)).not.toBeInTheDocument();
+    const more = within(preview).getByRole('button', { name: 'View full answer' });
+    expect(within(preview).getAllByRole('button')).toEqual([more]);
+    more.focus(); await user.keyboard('{Enter}');
+    expect(onFullAnswer).toHaveBeenCalledTimes(1);
+    expect(original.citations).toEqual(answer.citations);
+    expect(original.uncertainties).toEqual(answer.uncertainties);
+});
 
 it('keeps every reported uncertainty and coverage summary visible while disclosing general policies', async () => {
     const user = userEvent.setup();
@@ -35,7 +54,7 @@ it.each([0, 1, 2])('describes validation accurately for %i citations and preserv
     render(<AnswerPanel answer={{ ...answer, claims: [], citations }} />);
     if (count) {
         expect(screen.getByText('Citation identities validated')).toBeVisible();
-        expect(screen.getByText('Source identity checked; semantic support not independently verified.')).toBeVisible();
+        expect(screen.getByText('Source identity checked; the answer’s interpretation has not been independently verified.')).toBeVisible();
         expect(screen.queryByText('No citations returned.')).not.toBeInTheDocument();
     } else {
         expect(screen.getByText('No citations returned.')).toBeVisible();

@@ -5,8 +5,10 @@ source-artifact responsibilities in the [Git ingestion component](git-snapshot-i
 M1.3 implements [parsing and normalized evidence chunks](artifact-processing.md).
 M1.4 [persists coherent evidence publications](evidence-persistence.md) and supports
 readback by explicit identity. M1.5 implements [keyword retrieval](keyword-retrieval.md)
-with ranked evidence and publication coverage. Vector retrieval and answers remain planned.
-Repository Intelligence is the first independently usable capability planned for
+with ranked evidence and publication coverage. [Grounded answers](grounded-question-answering.md),
+[vector](vector-retrieval.md) and [hybrid retrieval](hybrid-retrieval.md), and the
+[local API/UI](repository-intelligence-workspace.md) are now implemented.
+Repository Intelligence is the first independently usable capability for
 developers and non-technical stakeholders: ask questions
 about existing software and receive evidence-backed answers with verifiable
 citations. It supports the longer-term Change Assurance and Stakeholder Intelligence
@@ -34,7 +36,7 @@ specifies caller-provided identity, literal scope rules, committed-only reads,
 links/submodules, missing objects, and encodings. These implementation details
 refine the conceptual contracts without prescribing later retrieval or parsing.
 
-Before a future answer is accepted, resolve each citation against the selected
+Before an answer is accepted, resolve each citation against the selected
 snapshot, check file and line bounds, and compare cited material with the claim.
 Location validity alone does not prove semantic support. An LLM-generated reference
 is a proposal to validate, not trusted evidence. Preserve failures, conflicting
